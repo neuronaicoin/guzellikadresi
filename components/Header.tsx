@@ -23,7 +23,7 @@ export default function Header() {
         </nav>
 
         <div className="ga-header-actions">
-          <Link href="/giris" className="ga-login">Giriş Yap</Link>
+          <Link href="/giris" className="ga-login">İşletme Girişi</Link>
           <Link href="/isletme-ekle" className="ga-cta-btn">İşletme Ekle</Link>
           {/* hamburger (sadece mobil) */}
           <button className="ga-burger" onClick={() => setOpen(!open)} aria-label="Menü">
@@ -39,7 +39,7 @@ export default function Header() {
           <Link href="/kategoriler" onClick={() => setOpen(false)}>Kategoriler</Link>
           <Link href="/sehirler" onClick={() => setOpen(false)}>Şehirler</Link>
           <Link href="/blog" onClick={() => setOpen(false)}>Blog</Link>
-          <Link href="/giris" onClick={() => setOpen(false)}>Giriş Yap</Link>
+          <Link href="/giris" onClick={() => setOpen(false)}>İşletme Girişi</Link>
           <Link href="/isletme-ekle" className="ga-nav-mobile-cta" onClick={() => setOpen(false)}>İşletme Ekle →</Link>
         </nav>
       )}
