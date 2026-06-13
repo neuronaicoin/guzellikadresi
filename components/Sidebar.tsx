@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Category, Province, District } from '@/lib/types';
 
-const SERVICE_LIMIT = 10; // kategori altında ilk kaç hizmet görünsün
+const SERVICE_LIMIT = 10;
 
 export default function Sidebar({
   categories,
@@ -17,11 +17,9 @@ export default function Sidebar({
   const [openCat, setOpenCat] = useState<number | null>(null);
   const [expandedSvc, setExpandedSvc] = useState<Set<number>>(new Set());
 
-  // mobil panel açma/kapama
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
   const [mobileLocOpen, setMobileLocOpen] = useState(false);
 
-  // konum
   const [city, setCity] = useState<Province | null>(null);
   const [district, setDistrict] = useState<District | null>(null);
   const [districts, setDistricts] = useState<District[]>([]);
@@ -64,6 +62,65 @@ export default function Sidebar({
 
   return (
     <aside className="ga-sidebar">
+      {/* ADRES KUTUSU — EN ÜSTTE */}
+      <div className="ga-box">
+        <div className="ga-box-h ga-box-h-toggle" onClick={() => setMobileLocOpen(!mobileLocOpen)}>
+          <span><span style={{ color: 'var(--gold)' }}>📍</span> Konuma Göre Ara</span>
+          <span className="ga-mobile-caret">{mobileLocOpen ? '▴' : '▾'}</span>
+        </div>
+        <div className={`ga-box-body ${mobileLocOpen ? 'mob-open' : ''}`} style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {/* İl */}
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="ga-ss-btn"
+              onClick={() => { setOpenSS(openSS === 'city' ? null : 'city'); setQ(''); }}
+            >
+              <span style={{ color: city ? 'var(--ink)' : '#9aa1b2' }}>{city ? city.name : 'İl seçin…'}</span>
+              <span style={{ color: 'var(--muted)', fontSize: 11 }}>▾</span>
+            </button>
+            {openSS === 'city' && (
+              <div className="ga-ss-pop">
+                <input autoFocus className="ga-ss-search" placeholder="İl ara… (örn. ist)" value={q} onChange={(e) => setQ(e.target.value)} />
+                <div className="ga-ss-list">
+                  {filteredCities.length ? filteredCities.map((p) => (
+                    <div key={p.id} className="ga-ss-item" onClick={() => pickCity(p)}>{p.name}</div>
+                  )) : <div className="ga-ss-none">Sonuç yok</div>}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* İlçe */}
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="ga-ss-btn"
+              disabled={!city}
+              onClick={() => { setOpenSS(openSS === 'dist' ? null : 'dist'); setQ(''); }}
+              style={{ background: !city ? '#f7f8fa' : '#fff', color: !city ? '#aab1c2' : 'var(--ink)', cursor: !city ? 'not-allowed' : 'pointer' }}
+            >
+              <span style={{ color: district ? 'var(--ink)' : '#9aa1b2' }}>{district ? district.name : (city ? 'İlçe seçin…' : 'Önce il seçin')}</span>
+              <span style={{ color: 'var(--muted)', fontSize: 11 }}>▾</span>
+            </button>
+            {openSS === 'dist' && city && (
+              <div className="ga-ss-pop">
+                <input autoFocus className="ga-ss-search" placeholder="İlçe ara…" value={q} onChange={(e) => setQ(e.target.value)} />
+                <div className="ga-ss-list">
+                  {filteredDists.length ? filteredDists.map((d) => (
+                    <div key={d.id} className="ga-ss-item" onClick={() => { setDistrict(d); setOpenSS(null); setQ(''); }}>{d.name}</div>
+                  )) : <div className="ga-ss-none">Bu il için ilçe verisi yakında</div>}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <button type="button" onClick={doSearch} disabled={!city} className="ga-search-btn" style={{ opacity: city ? 1 : 0.5, cursor: city ? 'pointer' : 'not-allowed' }}>
+            Ara
+          </button>
+        </div>
+      </div>
+
       {/* KATEGORİ AĞACI */}
       <div className="ga-box">
         <div className="ga-box-h ga-box-h-toggle" onClick={() => setMobileCatOpen(!mobileCatOpen)}>
@@ -126,65 +183,6 @@ export default function Sidebar({
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* ADRES KUTUSU */}
-      <div className="ga-box">
-        <div className="ga-box-h ga-box-h-toggle" onClick={() => setMobileLocOpen(!mobileLocOpen)}>
-          <span><span style={{ color: 'var(--gold)' }}>📍</span> Konuma Göre Ara</span>
-          <span className="ga-mobile-caret">{mobileLocOpen ? '▴' : '▾'}</span>
-        </div>
-        <div className={`ga-box-body ${mobileLocOpen ? 'mob-open' : ''}`} style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {/* İl */}
-          <div style={{ position: 'relative' }}>
-            <button
-              type="button"
-              className="ga-ss-btn"
-              onClick={() => { setOpenSS(openSS === 'city' ? null : 'city'); setQ(''); }}
-            >
-              <span style={{ color: city ? 'var(--ink)' : '#9aa1b2' }}>{city ? city.name : 'İl seçin…'}</span>
-              <span style={{ color: 'var(--muted)', fontSize: 11 }}>▾</span>
-            </button>
-            {openSS === 'city' && (
-              <div className="ga-ss-pop">
-                <input autoFocus className="ga-ss-search" placeholder="İl ara… (örn. ist)" value={q} onChange={(e) => setQ(e.target.value)} />
-                <div style={{ maxHeight: 260, overflowY: 'auto' }}>
-                  {filteredCities.length ? filteredCities.map((p) => (
-                    <div key={p.id} className="ga-ss-item" onClick={() => pickCity(p)}>{p.name}</div>
-                  )) : <div style={{ padding: 12, textAlign: 'center', color: 'var(--muted)', fontSize: 12.5 }}>Sonuç yok</div>}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* İlçe */}
-          <div style={{ position: 'relative' }}>
-            <button
-              type="button"
-              className="ga-ss-btn"
-              disabled={!city}
-              onClick={() => { setOpenSS(openSS === 'dist' ? null : 'dist'); setQ(''); }}
-              style={{ background: !city ? '#f7f8fa' : '#fff', color: !city ? '#aab1c2' : 'var(--ink)', cursor: !city ? 'not-allowed' : 'pointer' }}
-            >
-              <span style={{ color: district ? 'var(--ink)' : '#9aa1b2' }}>{district ? district.name : (city ? 'İlçe seçin…' : 'Önce il seçin')}</span>
-              <span style={{ color: 'var(--muted)', fontSize: 11 }}>▾</span>
-            </button>
-            {openSS === 'dist' && city && (
-              <div className="ga-ss-pop">
-                <input autoFocus className="ga-ss-search" placeholder="İlçe ara…" value={q} onChange={(e) => setQ(e.target.value)} />
-                <div style={{ maxHeight: 260, overflowY: 'auto' }}>
-                  {filteredDists.length ? filteredDists.map((d) => (
-                    <div key={d.id} className="ga-ss-item" onClick={() => { setDistrict(d); setOpenSS(null); setQ(''); }}>{d.name}</div>
-                  )) : <div style={{ padding: 12, textAlign: 'center', color: 'var(--muted)', fontSize: 12.5 }}>Bu il için ilçe verisi yakında</div>}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <button type="button" onClick={doSearch} disabled={!city} className="ga-search-btn" style={{ opacity: city ? 1 : 0.5, cursor: city ? 'pointer' : 'not-allowed' }}>
-            Ara
-          </button>
         </div>
       </div>
     </aside>
