@@ -62,8 +62,14 @@ img {
 .ga-ss-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: inherit; font-size: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; cursor: pointer; text-align: left; }
 .ga-ss-btn:hover:not(:disabled) { border-color: var(--gold); }
 .ga-ss-pop { position: absolute; z-index: 60; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(14,33,72,.18); overflow: hidden; }
+.ga-ss-list { max-height: 260px; overflow-y: auto; }
+.ga-ss-none { padding: 12px; text-align: center; color: var(--muted); font-size: 12.5px; }
 .ga-ss-search { width: 100%; border: 0; border-bottom: 1px solid var(--line); padding: 11px 12px; font-size: 13.5px; font-family: inherit; outline: none; }
 .ga-ss-item { padding: 11px 12px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #f3f4f7; }
+
+/* Konum kutusu: dropdown taşabilsin diye overflow görünür */
+.ga-sidebar > .ga-box:first-child { overflow: visible; }
+.ga-sidebar > .ga-box:first-child .ga-box-body { overflow: visible; }
 .ga-ss-item:hover { background: var(--navy-50); }
 .ga-search-btn { background: var(--navy); color: #fff; border: 0; border-radius: 10px; padding: 11px; font-weight: 700; font-size: 14px; font-family: inherit; }
 
@@ -327,3 +333,10 @@ img {
   .ga-cat-grid { grid-template-columns: repeat(2, 1fr); }
   .ga-city-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ============ ARAMA ÇUBUĞU ============ */
+.ga-searchbar { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 4px 6px 4px 14px; }
+.ga-searchbar-icon { color: var(--muted); font-size: 17px; }
+.ga-searchbar input { flex: 1; border: 0; outline: none; font-size: 15px; padding: 11px 4px; background: transparent; font-family: inherit; }
+.ga-searchbar button { background: var(--navy); color: #fff; border-radius: 9px; padding: 10px 22px; font-weight: 700; font-size: 14.5px; border: 0; cursor: pointer; white-space: nowrap; }
+.ga-searchbar button:hover { background: var(--navy-700); }
