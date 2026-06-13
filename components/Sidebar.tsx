@@ -149,7 +149,7 @@ export default function Sidebar({
             {openSS === 'city' && (
               <div className="ga-ss-pop">
                 <input autoFocus className="ga-ss-search" placeholder="İl ara… (örn. ist)" value={q} onChange={(e) => setQ(e.target.value)} />
-                <div style={{ maxHeight: 220, overflowY: 'auto' }}>
+                <div style={{ maxHeight: 260, overflowY: 'auto' }}>
                   {filteredCities.length ? filteredCities.map((p) => (
                     <div key={p.id} className="ga-ss-item" onClick={() => pickCity(p)}>{p.name}</div>
                   )) : <div style={{ padding: 12, textAlign: 'center', color: 'var(--muted)', fontSize: 12.5 }}>Sonuç yok</div>}
@@ -173,7 +173,7 @@ export default function Sidebar({
             {openSS === 'dist' && city && (
               <div className="ga-ss-pop">
                 <input autoFocus className="ga-ss-search" placeholder="İlçe ara…" value={q} onChange={(e) => setQ(e.target.value)} />
-                <div style={{ maxHeight: 220, overflowY: 'auto' }}>
+                <div style={{ maxHeight: 260, overflowY: 'auto' }}>
                   {filteredDists.length ? filteredDists.map((d) => (
                     <div key={d.id} className="ga-ss-item" onClick={() => { setDistrict(d); setOpenSS(null); setQ(''); }}>{d.name}</div>
                   )) : <div style={{ padding: 12, textAlign: 'center', color: 'var(--muted)', fontSize: 12.5 }}>Bu il için ilçe verisi yakında</div>}
