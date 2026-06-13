@@ -31,7 +31,7 @@ export default function MobileNav() {
       </Link>
       <Link href="/giris" className={`ga-mn-item ${isActive('/giris') ? 'active' : ''}`}>
         <span className="ga-mn-icon">👤</span>
-        <span className="ga-mn-label">Giriş</span>
+        <span className="ga-mn-label">İşletmem</span>
       </Link>
     </nav>
   );
