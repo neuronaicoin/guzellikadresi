@@ -47,9 +47,9 @@ export default async function HomePage() {
         <main style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
           {/* HERO */}
           <section className="ga-hero">
-            <span className="ga-eyebrow">✦ Türkiye'nin güzellik & bakım rehberi</span>
+            <span className="ga-eyebrow">✦ Türkiye'nin güzellik & bakım adresi</span>
             <h1 style={{ fontSize: 30, lineHeight: 1.18, letterSpacing: '-.6px', fontWeight: 800, maxWidth: 560, margin: '0 0 0 0' }}>
-              Yakınındaki <span style={{ color: 'var(--gold)' }}>güzellik ve bakım uzmanını</span> dakikalar içinde bul
+              Bölgendeki en iyi <span style={{ color: 'var(--gold)' }}>güzellik ve bakım adreslerini</span> keşfet
             </h1>
             <HeroRotator />
             <div style={{ display: 'flex', gap: 26, marginTop: 22 }}>
