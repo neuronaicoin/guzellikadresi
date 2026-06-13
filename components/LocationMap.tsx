@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 
-// Leaflet'i CDN'den dinamik yükler (bundle'ı şişirmez, hızlı).
 declare global {
   interface Window {
     L?: any;
@@ -11,21 +10,24 @@ declare global {
 
 export default function LocationMap({
   center,
+  query,
   onPick,
 }: {
   center: { lat: number; lng: number };
+  query?: string; // "İlçe, İl, Türkiye" — verilirse Nominatim ile aranır
   onPick: (lat: number, lng: number) => void;
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapObj = useRef<any>(null);
   const markerObj = useRef<any>(null);
+  const lastQuery = useRef<string>('');
 
+  // Haritayı kur (ilk yükleme)
   useEffect(() => {
     let cancelled = false;
 
     async function ensureLeaflet() {
       if (window.L) return;
-      // CSS
       if (!document.getElementById('leaflet-css')) {
         const link = document.createElement('link');
         link.id = 'leaflet-css';
@@ -33,7 +35,6 @@ export default function LocationMap({
         link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
         document.head.appendChild(link);
       }
-      // JS
       await new Promise<void>((resolve) => {
         const s = document.createElement('script');
         s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
@@ -46,20 +47,17 @@ export default function LocationMap({
       await ensureLeaflet();
       if (cancelled || !mapRef.current || !window.L) return;
       const L = window.L;
-
       if (!mapObj.current) {
         mapObj.current = L.map(mapRef.current).setView([center.lat, center.lng], 12);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '© OpenStreetMap',
         }).addTo(mapObj.current);
-
         markerObj.current = L.marker([center.lat, center.lng], { draggable: true }).addTo(mapObj.current);
         markerObj.current.on('dragend', () => {
           const p = markerObj.current.getLatLng();
           onPick(p.lat, p.lng);
         });
-        // haritaya tıklayınca pin oraya gitsin
         mapObj.current.on('click', (e: any) => {
           markerObj.current.setLatLng(e.latlng);
           onPick(e.latlng.lat, e.latlng.lng);
@@ -71,14 +69,43 @@ export default function LocationMap({
     return () => { cancelled = true; };
   }, []);
 
-  // center değişince (il/ilçe seçimi) haritayı oraya taşı
+  // İl merkezi değişince oraya git (koordinat elimizde, anında)
   useEffect(() => {
     if (mapObj.current && markerObj.current) {
-      mapObj.current.setView([center.lat, center.lng], 13);
+      mapObj.current.setView([center.lat, center.lng], 12);
       markerObj.current.setLatLng([center.lat, center.lng]);
       onPick(center.lat, center.lng);
     }
   }, [center.lat, center.lng]);
+
+  // İlçe (query) değişince Nominatim ile bul, oraya uç
+  useEffect(() => {
+    if (!query || query === lastQuery.current) return;
+    lastQuery.current = query;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=tr&q=${encodeURIComponent(query)}`,
+          { headers: { 'Accept-Language': 'tr' } }
+        );
+        const data = await res.json();
+        if (cancelled || !data || !data.length) return;
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+        if (mapObj.current && markerObj.current) {
+          mapObj.current.setView([lat, lng], 14);
+          markerObj.current.setLatLng([lat, lng]);
+          onPick(lat, lng);
+        }
+      } catch {
+        // arama başarısızsa il merkezinde kalır
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [query]);
 
   return (
     <div
