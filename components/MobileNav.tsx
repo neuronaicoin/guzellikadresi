@@ -14,8 +14,8 @@ export default function MobileNav() {
   return (
     <nav className="ga-mobilenav">
       <Link href="/" className={`ga-mn-item ${isActive('/') ? 'active' : ''}`}>
-        <span className="ga-mn-icon">🏠</span>
-        <span className="ga-mn-label">Ana Sayfa</span>
+        <span className="ga-mn-icon">✨</span>
+        <span className="ga-mn-label">Keşfet</span>
       </Link>
       <Link href="/ara" className={`ga-mn-item ${isActive('/ara') ? 'active' : ''}`}>
         <span className="ga-mn-icon">🔍</span>
