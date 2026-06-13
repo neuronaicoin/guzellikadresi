@@ -49,6 +49,8 @@ export default function RegisterForm({
   const [linkedin, setLinkedin] = useState('');
 
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
   const selectedCat = categories.find((c) => c.id === catId) || null;
   const mapCenter = citySlug && CITY_COORDS[citySlug] ? CITY_COORDS[citySlug] : TURKEY_CENTER;
@@ -107,10 +109,53 @@ export default function RegisterForm({
   function next() { if (step < 4) setStep(step + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   function back() { if (step > 1) setStep(step - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-  function submit() {
-    // Kayıt (Supabase'e yazma) Parça 3'te eklenecek.
-    setDone(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  async function submit() {
+    setErrMsg('');
+    // Zorunlu alan kontrolü
+    if (!name.trim()) { setErrMsg('İşletme adı gerekli.'); setStep(1); return; }
+    if (!catId) { setErrMsg('Kategori seçin.'); setStep(1); return; }
+    if (selectedServices.size === 0) { setErrMsg('En az bir hizmet seçin.'); setStep(1); return; }
+    if (!desc.trim()) { setErrMsg('Kısa açıklama gerekli.'); setStep(1); return; }
+    if (photos.length === 0) { setErrMsg('En az bir mekân fotoğrafı ekleyin.'); setStep(2); return; }
+    if (!cityId || !distId) { setErrMsg('İl ve ilçe seçin.'); setStep(3); return; }
+    if (!addr.trim()) { setErrMsg('Cadde/sokak gerekli.'); setStep(3); return; }
+    if (!phone.trim()) { setErrMsg('Telefon gerekli.'); setStep(4); return; }
+
+    setSending(true);
+    try {
+      const fd = new FormData();
+      fd.append('name', name);
+      fd.append('description', desc);
+      fd.append('categoryId', String(catId));
+      fd.append('provinceId', String(cityId));
+      fd.append('districtId', String(distId));
+      fd.append('neighborhood', hood);
+      fd.append('address', addr);
+      if (pin) { fd.append('lat', String(pin.lat)); fd.append('lng', String(pin.lng)); }
+      fd.append('phone', phone);
+      fd.append('whatsapp', whatsapp);
+      fd.append('website', website);
+      fd.append('instagram', instagram);
+      fd.append('facebook', facebook);
+      fd.append('x', xTwitter);
+      fd.append('linkedin', linkedin);
+      fd.append('serviceIds', JSON.stringify(Array.from(selectedServices)));
+      photos.forEach((p, i) => fd.append('photos', new File([p.blob], `gallery-${i}.webp`, { type: 'image/webp' })));
+      works.forEach((p, i) => fd.append('works', new File([p.blob], `work-${i}.webp`, { type: 'image/webp' })));
+
+      const res = await fetch('/api/register', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.ok) {
+        setDone(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setErrMsg(data.error || 'Kayıt sırasında hata oluştu.');
+      }
+    } catch {
+      setErrMsg('Bağlantı hatası. Lütfen tekrar deneyin.');
+    } finally {
+      setSending(false);
+    }
   }
 
   if (done) {
@@ -303,10 +348,11 @@ export default function RegisterForm({
           </div>
         )}
 
+        {errMsg && <div className="ga-err">{errMsg}</div>}
         <div className="ga-reg-nav">
-          {step > 1 && <button type="button" className="ga-btn-back" onClick={back}>← Geri</button>}
+          {step > 1 && <button type="button" className="ga-btn-back" onClick={back} disabled={sending}>← Geri</button>}
           {step < 4 && <button type="button" className="ga-btn-next" onClick={next}>Devam et →</button>}
-          {step === 4 && <button type="button" className="ga-btn-submit" onClick={submit}>Başvuruyu gönder ✓</button>}
+          {step === 4 && <button type="button" className="ga-btn-submit" onClick={submit} disabled={sending}>{sending ? 'Gönderiliyor…' : 'Başvuruyu gönder ✓'}</button>}
         </div>
       </div>
     </div>
