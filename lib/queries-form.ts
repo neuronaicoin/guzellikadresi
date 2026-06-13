@@ -15,7 +15,7 @@ export async function getCategoriesForForm() {
     emoji: c.emoji,
     services: (c.services || [])
       .sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
-      .map((s: any) => ({ id: s.id, name: s.name })),
+      .map((s: any) => ({ id: s.id, name: s.name, slug: s.slug })),
   }));
 }
 
