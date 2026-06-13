@@ -288,8 +288,8 @@ img {
 /* Mobilde ana içerik (main) sidebar'dan ÖNCE gelsin */
 @media (max-width: 880px) {
   .ga-wrap { display: flex; flex-direction: column; }
-  .ga-wrap > main { order: 1; }
-  .ga-wrap > .ga-sidebar { order: 2; }
+  .ga-wrap > main { order: 2; }
+  .ga-wrap > .ga-sidebar { order: 1; }
 }
 
 /* ============ HEADER (hamburger) ============ */
