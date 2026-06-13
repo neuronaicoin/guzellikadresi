@@ -15,7 +15,7 @@ export default function LoginPage() {
         <h1>İşletme Girişi</h1>
         <p className="ga-static-lead">
           İşletme giriş paneli çok yakında! Yakında işletme hesabınıza giriş yapıp
-          profilinizi düzenleyebil, kaç kişinin sizi görüntülediğini ve aradığını takip edebileceksiniz.
+          profilinizi düzenleyebilir, kaç kişinin sizi görüntülediğini ve aradığını takip edebileceksiniz.
         </p>
         <div style={{ background: 'var(--gold-50)', border: '1px solid var(--gold-soft)', borderRadius: 14, padding: 22, marginTop: 20 }}>
           <p style={{ margin: 0, color: '#7a6429', fontWeight: 600 }}>
