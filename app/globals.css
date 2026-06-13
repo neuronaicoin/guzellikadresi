@@ -190,3 +190,53 @@ img {
 
 /* Kayıt hata mesajı */
 .ga-err { background: #fdecea; border: 1px solid #f5b5b5; color: #b3261e; font-size: 13.5px; font-weight: 600; padding: 12px 16px; margin: 0 22px; border-radius: 10px; }
+
+/* ============ İŞLETME PROFİL SAYFASI ============ */
+.ga-biz-wrap { max-width: 1180px; margin: 0 auto; padding: 22px; }
+.ga-biz-crumb { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-weight: 600; }
+.ga-biz-crumb a { color: var(--navy); }
+.ga-biz-crumb a:hover { color: var(--gold); }
+.ga-biz-grid { display: grid; grid-template-columns: 1fr 320px; gap: 26px; align-items: start; }
+
+.ga-biz-head { margin-bottom: 16px; }
+.ga-biz-head h1 { font-size: 27px; font-weight: 800; color: var(--navy); letter-spacing: -.5px; margin: 0 0 8px 0; }
+.ga-biz-meta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.ga-biz-cat { background: var(--navy); color: #fff; font-size: 12.5px; font-weight: 700; padding: 5px 12px; border-radius: 8px; }
+.ga-biz-loc { color: var(--muted); font-size: 14px; font-weight: 600; }
+
+.ga-gallery { margin-bottom: 8px; }
+.ga-gallery-main { position: relative; width: 100%; height: 380px; border-radius: 14px; overflow: hidden; background: var(--navy-50); cursor: zoom-in; border: 1px solid var(--line); }
+.ga-gallery-thumbs { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.ga-gallery-thumb { position: relative; width: 80px; height: 60px; border-radius: 8px; overflow: hidden; cursor: pointer; border: 2px solid transparent; }
+.ga-gallery-thumb.active { border-color: var(--gold); }
+.ga-gallery-empty { height: 200px; border-radius: 14px; background: var(--navy-50); display: grid; place-items: center; color: var(--muted); font-size: 14px; border: 1px dashed var(--line); }
+
+.ga-lightbox { position: fixed; inset: 0; background: rgba(10,18,40,.92); z-index: 100; display: grid; place-items: center; cursor: zoom-out; padding: 30px; }
+.ga-lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 10px; }
+.ga-lightbox-x { position: absolute; top: 20px; right: 28px; color: #fff; font-size: 40px; cursor: pointer; line-height: 1; }
+
+.ga-biz-sec { margin-top: 26px; }
+.ga-biz-sec h2 { font-size: 18px; font-weight: 800; color: var(--navy); margin: 0 0 12px 0; }
+.ga-biz-sec p { color: #444c5e; font-size: 14.5px; line-height: 1.65; margin: 0; }
+.ga-biz-addr { color: var(--muted); font-size: 14px; margin-bottom: 12px !important; }
+.ga-works { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.ga-work { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+
+.ga-biz-contact { position: sticky; top: 84px; }
+.ga-contact-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; box-shadow: 0 1px 3px rgba(14,33,72,.06), 0 8px 24px rgba(14,33,72,.06); }
+.ga-contact-card h3 { font-size: 15px; font-weight: 800; color: var(--navy); margin: 0 0 14px 0; }
+.ga-c-btn { display: block; text-align: center; font-weight: 700; font-size: 14.5px; padding: 12px; border-radius: 10px; margin-bottom: 9px; }
+.ga-c-call { background: var(--navy); color: #fff; }
+.ga-c-wa { background: #25d366; color: #fff; }
+.ga-c-web { background: var(--gold-50); color: #8a6a23; border: 1px solid var(--gold-soft); }
+.ga-socials { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.ga-socials a { font-size: 12.5px; font-weight: 600; color: var(--navy); background: var(--navy-50); padding: 7px 12px; border-radius: 8px; }
+.ga-socials a:hover { background: var(--gold-50); color: #8a6a23; }
+.ga-own-cta { display: block; text-align: center; margin-top: 14px; font-size: 12.5px; color: var(--muted); padding: 12px; border: 1px dashed var(--gold-soft); border-radius: 12px; }
+.ga-own-cta b { color: var(--gold); }
+
+@media (max-width: 880px) {
+  .ga-biz-grid { grid-template-columns: 1fr; }
+  .ga-biz-contact { position: static; }
+  .ga-gallery-main { height: 260px; }
+}
