@@ -404,3 +404,22 @@ img {
   /* footer alt bardan biraz uzak dursun */
   footer { margin-bottom: 0; }
 }
+
+/* ============ ARA — KEŞİF AKIŞI (sahibinden tarzı) ============ */
+.ga-explore-wrap { max-width: 680px; margin: 0 auto; padding: 16px 14px 40px; }
+.ga-explore-title { font-size: 17px; font-weight: 800; color: var(--navy); padding: 14px 6px; }
+.ga-explore-back { background: none; border: none; color: var(--gold); font-weight: 700; font-size: 14px; padding: 8px 6px; cursor: pointer; font-family: inherit; }
+.ga-explore-list { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.ga-explore-row { display: flex; align-items: center; gap: 14px; padding: 16px; background: #fff; border: none; border-bottom: 1px solid var(--line); cursor: pointer; text-align: left; font-family: inherit; width: 100%; }
+.ga-explore-row:last-child { border-bottom: none; }
+.ga-explore-row:active { background: var(--navy-50); }
+.ga-explore-emoji { width: 44px; height: 44px; border-radius: 50%; background: var(--gold-50); display: grid; place-items: center; font-size: 22px; flex: none; }
+.ga-explore-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.ga-explore-name { font-size: 15.5px; font-weight: 700; color: var(--navy); }
+.ga-explore-sub { font-size: 12.5px; color: var(--muted); }
+.ga-explore-arrow { color: #c0c6d4; font-size: 24px; font-weight: 300; }
+.ga-explore-loc { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+.ga-explore-loc label { font-size: 13px; font-weight: 700; color: var(--ink); margin-top: 8px; }
+.ga-explore-loc select { font-family: inherit; font-size: 15px; border: 1px solid var(--line); border-radius: 10px; padding: 13px; background: #fff; }
+.ga-explore-search { margin-top: 16px; background: var(--navy); color: #fff; border: none; border-radius: 11px; padding: 15px; font-size: 15.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.ga-explore-skip { background: none; border: none; color: var(--muted); font-size: 13.5px; padding: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; }
