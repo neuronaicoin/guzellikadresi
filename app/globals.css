@@ -423,3 +423,25 @@ img {
 .ga-explore-loc select { font-family: inherit; font-size: 15px; border: 1px solid var(--line); border-radius: 10px; padding: 13px; background: #fff; }
 .ga-explore-search { margin-top: 16px; background: var(--navy); color: #fff; border: none; border-radius: 11px; padding: 15px; font-size: 15.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
 .ga-explore-skip { background: none; border: none; color: var(--muted); font-size: 13.5px; padding: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; }
+
+/* ============ MOBİL KEŞİF BÖLÜMÜ (ana sayfa, sadece mobil) ============ */
+.ga-discover-mobile-only { display: none; }
+
+@media (max-width: 880px) {
+  .ga-discover-mobile-only { display: block; max-width: 100%; padding: 14px; }
+  .ga-discover { display: flex; flex-direction: column; gap: 12px; }
+  .ga-disc-loc { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 14px; color: var(--ink); }
+  .ga-disc-loc b { color: var(--navy); }
+  .ga-disc-loc button { background: none; border: none; color: var(--gold); font-weight: 700; font-size: 13.5px; cursor: pointer; font-family: inherit; }
+  .ga-disc-citylist { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; max-height: 220px; overflow-y: auto; }
+  .ga-disc-citylist button { background: var(--navy-50); border: none; border-radius: 8px; padding: 9px 4px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; }
+  .ga-disc-citylist button.sel { background: var(--navy); color: #fff; }
+  .ga-disc-cta { background: var(--navy); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 14.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .ga-disc-cats-title { font-size: 15px; font-weight: 800; color: var(--navy); margin-top: 6px; }
+  .ga-disc-cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .ga-disc-cat { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 12px; cursor: pointer; font-family: inherit; text-align: left; }
+  .ga-disc-cat-emoji { font-size: 22px; }
+  .ga-disc-cat-name { font-size: 13.5px; font-weight: 700; color: var(--navy); }
+  /* mobilde sol sidebar'ı gizle (keşif bölümü onun yerini aldı) */
+  .ga-wrap > .ga-sidebar { display: none; }
+}
