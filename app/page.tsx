@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
 import BusinessCard from '@/components/BusinessCard';
+import HeroRotator from '@/components/HeroRotator';
 import {
   getCategoriesWithCounts,
   getProvinces,
@@ -10,7 +11,7 @@ import {
   getTotalBusinessCount,
 } from '@/lib/queries';
 
-export const revalidate = 600;
+export const revalidate = 600; // 10 dk cache (hız)
 
 export default async function HomePage() {
   const [categories, provinces, recent, featured, total] = await Promise.all([
@@ -25,6 +26,7 @@ export default async function HomePage() {
     <>
       <Header />
 
+      {/* ARAMA ŞERİDİ */}
       <div style={{ background: 'linear-gradient(180deg,#fff,var(--navy-50))', borderBottom: '1px solid var(--line)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 22px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '4px 6px 4px 14px' }}>
@@ -38,18 +40,18 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* LAYOUT */}
       <div className="ga-wrap">
         <Sidebar categories={categories} provinces={provinces} />
 
         <main style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+          {/* HERO */}
           <section className="ga-hero">
             <span className="ga-eyebrow">✦ Türkiye'nin güzellik & bakım rehberi</span>
-            <h1 style={{ fontSize: 30, lineHeight: 1.18, letterSpacing: '-.6px', fontWeight: 800, maxWidth: 560, margin: 0 }}>
+            <h1 style={{ fontSize: 30, lineHeight: 1.18, letterSpacing: '-.6px', fontWeight: 800, maxWidth: 560, margin: '0 0 0 0' }}>
               Yakınındaki <span style={{ color: 'var(--gold)' }}>güzellik ve bakım uzmanını</span> dakikalar içinde bul
             </h1>
-            <p style={{ marginTop: 10, color: '#c5cde0', fontSize: 15, maxWidth: 500 }}>
-              Güzellik merkezi, kuaför, tırnak, saç ekimi, medikal estetik ve daha fazlası — ücretsiz ara, karşılaştır, ulaş.
-            </p>
+            <HeroRotator />
             <div style={{ display: 'flex', gap: 26, marginTop: 22 }}>
               <Stat n={total > 0 ? `${total}+` : '—'} l="Kayıtlı işletme" />
               <Stat n="13" l="Hizmet kategorisi" />
@@ -57,6 +59,7 @@ export default async function HomePage() {
             </div>
           </section>
 
+          {/* POPÜLER KATEGORİLER */}
           <section>
             <div className="ga-sec-head"><h2 className="ga-h2">Popüler kategoriler</h2></div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9 }}>
@@ -68,6 +71,7 @@ export default async function HomePage() {
             </div>
           </section>
 
+          {/* AZ ÖNCE EKLENENLER */}
           <section>
             <div className="ga-sec-head">
               <h2 className="ga-h2"><span className="ga-live" /> Az önce eklenenler</h2>
@@ -81,6 +85,7 @@ export default async function HomePage() {
             )}
           </section>
 
+          {/* ÖNE ÇIKANLAR */}
           {featured.length > 0 && (
             <section>
               <div className="ga-sec-head"><h2 className="ga-h2">⭐ Öne çıkan işletmeler</h2></div>
