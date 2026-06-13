@@ -359,3 +359,48 @@ img {
 @media (max-width: 560px) {
   .ga-catfilter select { flex: 1; min-width: 0; }
 }
+
+/* ============ MOBİL ALT NAVİGASYON BARI (sahibinden tarzı) ============ */
+.ga-mobilenav { display: none; }
+
+@media (max-width: 880px) {
+  .ga-mobilenav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -2px 12px rgba(14,33,72,.08);
+    z-index: 90;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+    justify-content: space-around;
+    align-items: flex-end;
+  }
+  .ga-mn-item {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 4px 2px;
+    color: #9aa1b2;
+    font-weight: 600;
+  }
+  .ga-mn-item.active { color: var(--navy); }
+  .ga-mn-icon { font-size: 19px; line-height: 1; }
+  .ga-mn-label { font-size: 10.5px; }
+  /* ortadaki İşletme Ekle - vurgulu yuvarlak */
+  .ga-mn-center { position: relative; }
+  .ga-mn-plus {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(135deg,#c9a24b,#b88a32);
+    color: var(--navy);
+    display: grid; place-items: center;
+    font-size: 28px; font-weight: 700; line-height: 1;
+    margin-top: -18px;
+    box-shadow: 0 4px 12px rgba(201,162,75,.4);
+  }
+  .ga-mn-center .ga-mn-label { color: var(--navy); font-weight: 700; }
+
+  /* Alt bar içeriği örtmesin: body'ye alt boşluk */
+  body { padding-bottom: 68px; }
+  /* footer alt bardan biraz uzak dursun */
+  footer { margin-bottom: 0; }
+}
