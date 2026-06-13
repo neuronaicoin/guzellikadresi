@@ -266,7 +266,15 @@ export default function RegisterForm({
             <div className="ga-field">
               <label>Harita üzerinde tam konumu işaretleyin <span className="req">*</span></label>
               {cityId ? (
-                <LocationMap center={mapCenter} onPick={(lat, lng) => setPin({ lat, lng })} />
+                <LocationMap
+                  center={mapCenter}
+                  query={
+                    distId
+                      ? `${districts.find((d) => d.id === distId)?.name || ''}, ${provinces.find((p) => p.id === cityId)?.name || ''}, Türkiye`
+                      : undefined
+                  }
+                  onPick={(lat, lng) => setPin({ lat, lng })}
+                />
               ) : (
                 <div className="ga-map-ph">📍 Önce il seçin, harita açılsın</div>
               )}
