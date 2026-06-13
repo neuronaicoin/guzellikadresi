@@ -19,6 +19,8 @@ export default function ListingView({
   basePath: string; // pagination linkleri için (örn. /istanbul/kadikoy)
 }) {
   const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const sep = basePath.includes('?') ? '&' : '?';
+  const pageUrl = (p: number) => `${basePath}${sep}sayfa=${p}`;
 
   return (
     <div className="ga-list-wrap">
@@ -42,16 +44,16 @@ export default function ListingView({
 
           {totalPages > 1 && (
             <nav className="ga-pagination">
-              {page > 1 && <a href={`${basePath}?sayfa=${page - 1}`} className="ga-page-btn">← Önceki</a>}
+              {page > 1 && <a href={pageUrl(page - 1)} className="ga-page-btn">← Önceki</a>}
               {Array.from({ length: totalPages }, (_, i) => i + 1)
                 .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 2)
                 .map((p, idx, arr) => (
                   <span key={p} style={{ display: 'contents' }}>
                     {idx > 0 && arr[idx - 1] !== p - 1 && <span className="ga-page-dots">…</span>}
-                    <a href={`${basePath}?sayfa=${p}`} className={`ga-page-btn ${p === page ? 'active' : ''}`}>{p}</a>
+                    <a href={pageUrl(p)} className={`ga-page-btn ${p === page ? 'active' : ''}`}>{p}</a>
                   </span>
                 ))}
-              {page < totalPages && <a href={`${basePath}?sayfa=${page + 1}`} className="ga-page-btn">Sonraki →</a>}
+              {page < totalPages && <a href={pageUrl(page + 1)} className="ga-page-btn">Sonraki →</a>}
             </nav>
           )}
         </>
