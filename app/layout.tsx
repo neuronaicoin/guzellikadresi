@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { siteConfig } from '@/lib/siteConfig';
+import MobileNav from '@/components/MobileNav';
 import './globals.css';
 
 const jakarta = Plus_Jakarta_Sans({
@@ -36,7 +37,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className={jakarta.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <MobileNav />
+      </body>
     </html>
   );
 }
