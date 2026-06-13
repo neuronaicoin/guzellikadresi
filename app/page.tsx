@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
 import BusinessCard from '@/components/BusinessCard';
 import HeroRotator from '@/components/HeroRotator';
+import SearchBar from '@/components/SearchBar';
 import {
   getCategoriesWithCounts,
   getProvinces,
@@ -29,14 +30,7 @@ export default async function HomePage() {
       {/* ARAMA ŞERİDİ */}
       <div style={{ background: 'linear-gradient(180deg,#fff,var(--navy-50))', borderBottom: '1px solid var(--line)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 22px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#fff', border: '1px solid var(--line)', borderRadius: 12, padding: '4px 6px 4px 14px' }}>
-            <span style={{ color: 'var(--muted)', fontSize: 17 }}>🔍</span>
-            <input
-              placeholder="Hizmet, işletme veya semt ara… (örn. lazer epilasyon Kadıköy)"
-              style={{ flex: 1, border: 0, outline: 'none', fontSize: 15, padding: '11px 4px', background: 'transparent', fontFamily: 'inherit' }}
-            />
-            <button style={{ background: 'var(--navy)', color: '#fff', borderRadius: 9, padding: '10px 22px', fontWeight: 700, fontSize: 14.5, border: 0, cursor: 'pointer' }}>Ara</button>
-          </div>
+          <SearchBar />
         </div>
       </div>
 
