@@ -1,11 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { optimizeImage } from '@/lib/imageOptimize';
+import { CITY_COORDS, TURKEY_CENTER } from '@/lib/cityCoords';
+import dynamic from 'next/dynamic';
+
+const LocationMap = dynamic(() => import('@/components/LocationMap'), { ssr: false });
 
 type Svc = { id: number; name: string };
 type Cat = { id: number; name: string; slug: string; emoji: string | null; services: Svc[] };
 type Prov = { id: number; name: string; slug: string };
 type Dist = { id: number; name: string; slug: string };
+type Photo = { url: string; blob: Blob; kind: 'gallery' | 'work' };
 
 export default function RegisterForm({
   categories,
@@ -16,21 +22,24 @@ export default function RegisterForm({
 }) {
   const [step, setStep] = useState(1);
 
-  // form state
   const [name, setName] = useState('');
   const [catId, setCatId] = useState<number | null>(null);
   const [desc, setDesc] = useState('');
   const [selectedServices, setSelectedServices] = useState<Set<number>>(new Set());
   const [showMore, setShowMore] = useState(false);
 
-  // konum
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [works, setWorks] = useState<Photo[]>([]);
+  const [optimizing, setOptimizing] = useState(false);
+
   const [cityId, setCityId] = useState<number | null>(null);
+  const [citySlug, setCitySlug] = useState<string>('');
   const [districts, setDistricts] = useState<Dist[]>([]);
   const [distId, setDistId] = useState<number | null>(null);
   const [hood, setHood] = useState('');
   const [addr, setAddr] = useState('');
+  const [pin, setPin] = useState<{ lat: number; lng: number } | null>(null);
 
-  // iletişim
   const [phone, setPhone] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [website, setWebsite] = useState('');
@@ -42,9 +51,12 @@ export default function RegisterForm({
   const [done, setDone] = useState(false);
 
   const selectedCat = categories.find((c) => c.id === catId) || null;
+  const mapCenter = citySlug && CITY_COORDS[citySlug] ? CITY_COORDS[citySlug] : TURKEY_CENTER;
 
   async function pickCity(id: number) {
     setCityId(id);
+    const prov = provinces.find((p) => p.id === id);
+    setCitySlug(prov?.slug || '');
     setDistId(null);
     setDistricts([]);
     try {
@@ -58,22 +70,45 @@ export default function RegisterForm({
 
   function toggleService(id: number) {
     const next = new Set(selectedServices);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
+    if (next.has(id)) next.delete(id); else next.add(id);
     setSelectedServices(next);
   }
 
   function onPickCategory(id: number) {
     setCatId(id);
-    setSelectedServices(new Set()); // kategori değişince hizmetleri sıfırla
+    setSelectedServices(new Set());
     setShowMore(false);
+  }
+
+  async function handleFiles(files: FileList | null, kind: 'gallery' | 'work') {
+    if (!files || !files.length) return;
+    const max = kind === 'work' ? 12 : 10;
+    const current = kind === 'work' ? works : photos;
+    setOptimizing(true);
+    const added: Photo[] = [];
+    for (const file of Array.from(files)) {
+      if (current.length + added.length >= max) break;
+      if (!file.type.startsWith('image/')) continue;
+      try {
+        const blob = await optimizeImage(file);
+        added.push({ url: URL.createObjectURL(blob), blob, kind });
+      } catch {}
+    }
+    if (kind === 'work') setWorks([...works, ...added]);
+    else setPhotos([...photos, ...added]);
+    setOptimizing(false);
+  }
+
+  function removePhoto(idx: number, kind: 'gallery' | 'work') {
+    if (kind === 'work') setWorks(works.filter((_, i) => i !== idx));
+    else setPhotos(photos.filter((_, i) => i !== idx));
   }
 
   function next() { if (step < 4) setStep(step + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   function back() { if (step > 1) setStep(step - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
   function submit() {
-    // PARÇA 1: sadece arayüz. Kayıt Parça 3'te eklenecek.
+    // Kayıt (Supabase'e yazma) Parça 3'te eklenecek.
     setDone(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -82,30 +117,22 @@ export default function RegisterForm({
     return (
       <div className="ga-reg-done">
         <div className="ga-reg-check">✓</div>
-        <h2>Başvurun alındı!</h2>
-        <p>İşletmen incelendikten sonra (genelde 24 saat içinde) yayına alınacak.</p>
-        <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10 }}>
-          (Not: Şu an form kaydı henüz aktif değil — bu bir önizlemedir. Kayıt işlevi sonraki adımda eklenecek.)
-        </p>
+        <h2>Başvurunuz alındı!</h2>
+        <p>En kısa sürede işletmeniz listelenecek.</p>
       </div>
     );
   }
 
   return (
     <div className="ga-reg">
-      {/* STEPPER */}
       <div className="ga-stepper">
         {[
           { n: 1, t: 'İşletme', s: 'Bilgi & hizmetler' },
           { n: 2, t: 'Fotoğraflar', s: 'Görseller' },
-          { n: 3, t: 'Konum', s: 'Adres' },
+          { n: 3, t: 'Konum', s: 'Adres & harita' },
           { n: 4, t: 'İletişim', s: 'Son adım' },
         ].map((s) => (
-          <div
-            key={s.n}
-            className={`ga-step ${step === s.n ? 'active' : ''} ${step > s.n ? 'done' : ''}`}
-            onClick={() => setStep(s.n)}
-          >
+          <div key={s.n} className={`ga-step ${step === s.n ? 'active' : ''} ${step > s.n ? 'done' : ''}`} onClick={() => setStep(s.n)}>
             <span className="ga-step-num">{step > s.n ? '✓' : s.n}</span>
             <span className="ga-step-lbl">{s.t}<small>{s.s}</small></span>
           </div>
@@ -113,16 +140,13 @@ export default function RegisterForm({
       </div>
 
       <div className="ga-reg-card">
-        {/* ADIM 1 */}
         {step === 1 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">🏠</span><div><h3>İşletme Bilgileri</h3><p>Müşterilerin sizi nasıl göreceğinin temeli</p></div></div>
-
             <div className="ga-field">
               <label>İşletme adı <span className="req">*</span></label>
               <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Örn. Lumière Güzellik Merkezi" />
             </div>
-
             <div className="ga-field">
               <label>İşletme kategorisi <span className="req">*</span></label>
               <select value={catId ?? ''} onChange={(e) => onPickCategory(Number(e.target.value))}>
@@ -130,7 +154,6 @@ export default function RegisterForm({
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
-
             {selectedCat && (
               <div className="ga-field">
                 <label>Verdiğiniz hizmetler <span className="req">*</span></label>
@@ -159,7 +182,6 @@ export default function RegisterForm({
                 )}
               </div>
             )}
-
             <div className="ga-field">
               <label>Kısa açıklama <span className="req">*</span></label>
               <textarea value={desc} maxLength={300} onChange={(e) => setDesc(e.target.value)} placeholder="İşletmenizi kısaca açıklayınız…" />
@@ -168,30 +190,52 @@ export default function RegisterForm({
           </div>
         )}
 
-        {/* ADIM 2 — FOTOĞRAFLAR (Parça 2'de aktif olacak) */}
         {step === 2 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">📷</span><div><h3>İşletme Fotoğrafları</h3><p>Mekânınızı ve örnek işlerinizi gösterin</p></div></div>
+            {optimizing && <div className="ga-opt-note">Fotoğraflar optimize ediliyor…</div>}
+
             <div className="ga-field">
-              <label>Mekân fotoğrafları <span className="req">*</span></label>
-              <div className="ga-drop">
+              <label>Mekân fotoğrafları <span className="req">*</span> <span className="opt">(en fazla 10)</span></label>
+              <label className="ga-drop" style={{ cursor: 'pointer', display: 'block' }}>
+                <input type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={(e) => handleFiles(e.target.files, 'gallery')} />
                 <div style={{ fontSize: 26 }}>🏢</div>
-                <b>Fotoğraf ekleme (yakında)</b>
-                <span>Fotoğraf yükleme ve otomatik optimizasyon sonraki adımda eklenecek</span>
-              </div>
+                <b>Mekân fotoğrafı ekle</b>
+                <span>Tıklayın · Otomatik küçültülür (kalite korunur) · İlk foto vitrin olur</span>
+              </label>
+              {photos.length > 0 && (
+                <div className="ga-thumbs">
+                  {photos.map((p, i) => (
+                    <div key={i} className="ga-thumb" style={{ backgroundImage: `url(${p.url})` }}>
+                      <span className="ga-thumb-x" onClick={() => removePhoto(i, 'gallery')}>×</span>
+                      {i === 0 && <span className="ga-thumb-cover">Vitrin</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="ga-field">
-              <label>Örnek çalışmalar <span className="opt">(opsiyonel)</span></label>
-              <div className="ga-drop">
+
+            <div className="ga-field" style={{ marginTop: 24 }}>
+              <label>Örnek çalışmalar <span className="opt">(opsiyonel, en fazla 12)</span></label>
+              <label className="ga-drop" style={{ cursor: 'pointer', display: 'block' }}>
+                <input type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={(e) => handleFiles(e.target.files, 'work')} />
                 <div style={{ fontSize: 26 }}>✨</div>
-                <b>Örnek iş ekleme (yakında)</b>
-                <span>Önce/sonra çalışmalarınız</span>
-              </div>
+                <b>Örnek iş ekle</b>
+                <span>Önce/sonra, yaptığınız işler — müşteri güvenini artırır</span>
+              </label>
+              {works.length > 0 && (
+                <div className="ga-thumbs">
+                  {works.map((p, i) => (
+                    <div key={i} className="ga-thumb" style={{ backgroundImage: `url(${p.url})` }}>
+                      <span className="ga-thumb-x" onClick={() => removePhoto(i, 'work')}>×</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        {/* ADIM 3 — KONUM */}
         {step === 3 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">📍</span><div><h3>Konum</h3><p>Müşterileriniz size kolayca ulaşsın</p></div></div>
@@ -219,11 +263,18 @@ export default function RegisterForm({
               <label>Cadde / Sokak <span className="req">*</span></label>
               <input value={addr} onChange={(e) => setAddr(e.target.value)} placeholder="Cadde veya sokak adı" />
             </div>
-            <div className="ga-map-ph">📍 Harita (yakında) — tam konum pini sonraki adımda</div>
+            <div className="ga-field">
+              <label>Harita üzerinde tam konumu işaretleyin <span className="req">*</span></label>
+              {cityId ? (
+                <LocationMap center={mapCenter} onPick={(lat, lng) => setPin({ lat, lng })} />
+              ) : (
+                <div className="ga-map-ph">📍 Önce il seçin, harita açılsın</div>
+              )}
+              <div className="ga-hint">Pini sürükleyin veya haritaya tıklayın. Tekerlek ile yakınlaştırabilirsiniz.</div>
+            </div>
           </div>
         )}
 
-        {/* ADIM 4 — İLETİŞİM */}
         {step === 4 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">📞</span><div><h3>İletişim Bilgileri</h3><p>Müşteriler bu kanallardan size ulaşacak</p></div></div>
@@ -240,11 +291,10 @@ export default function RegisterForm({
               <div className="ga-field"><label>X (Twitter) <span className="opt">(opsiyonel)</span></label><input value={xTwitter} onChange={(e) => setXTwitter(e.target.value)} placeholder="@kullaniciadi" /></div>
             </div>
             <div className="ga-field"><label>LinkedIn <span className="opt">(opsiyonel)</span></label><input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="linkedin.com/company/…" /></div>
-            <div className="ga-tip">✦ Bilgileriniz incelendikten sonra (genelde 24 saat) yayına alınır. Kayıt ve listelenme tamamen ücretsizdir.</div>
+            <div className="ga-tip">✦ Bilgileriniz incelendikten sonra yayına alınır. Kayıt ve listelenme tamamen ücretsizdir.</div>
           </div>
         )}
 
-        {/* NAV */}
         <div className="ga-reg-nav">
           {step > 1 && <button type="button" className="ga-btn-back" onClick={back}>← Geri</button>}
           {step < 4 && <button type="button" className="ga-btn-next" onClick={next}>Devam et →</button>}
