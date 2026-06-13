@@ -258,3 +258,32 @@ img {
 .ga-page-btn:hover { border-color: var(--gold); background: var(--gold-50); }
 .ga-page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 .ga-page-dots { color: var(--muted); padding: 0 4px; }
+
+/* ============ MOBİL SIDEBAR ACCORDION + İYİLEŞTİRMELER ============ */
+/* Masaüstü: panel başlığı tıklanabilir görünmesin, body hep açık */
+.ga-box-h-toggle { cursor: default; display: flex; align-items: center; justify-content: space-between; }
+.ga-mobile-caret { display: none; }
+.ga-box-body { display: block; }
+
+@media (max-width: 880px) {
+  /* Mobilde sidebar üstte ama kompakt; paneller kapalı başlar */
+  .ga-sidebar { position: static; gap: 12px; margin-bottom: 4px; }
+  .ga-box-h-toggle { cursor: pointer; }
+  .ga-mobile-caret { display: inline; color: var(--gold); font-size: 14px; }
+  .ga-box-body { display: none; }
+  .ga-box-body.mob-open { display: block; }
+  /* mobilde ilçe/il popup tam genişlik ve scroll */
+  .ga-ss-pop { position: fixed; left: 12px; right: 12px; top: auto; }
+}
+
+/* Mobilde ana içerik sıralaması: arama + içerik önce, sonra sidebar zaten üstte küçük */
+@media (max-width: 880px) {
+  .ga-wrap { gap: 14px; }
+}
+
+/* Mobilde ana içerik (main) sidebar'dan ÖNCE gelsin */
+@media (max-width: 880px) {
+  .ga-wrap { display: flex; flex-direction: column; }
+  .ga-wrap > main { order: 1; }
+  .ga-wrap > .ga-sidebar { order: 2; }
+}
