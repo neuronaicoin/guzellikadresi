@@ -14,6 +14,7 @@ export default function Sidebar({
   const router = useRouter();
   const [openCat, setOpenCat] = useState<number | null>(null);
 
+  // konum seçimi
   const [city, setCity] = useState<Province | null>(null);
   const [district, setDistrict] = useState<District | null>(null);
   const [districts, setDistricts] = useState<District[]>([]);
@@ -25,6 +26,7 @@ export default function Sidebar({
     setDistrict(null);
     setOpenSS(null);
     setQ('');
+    // ilçeleri çek
     try {
       const res = await fetch(`/api/districts?province=${p.id}`);
       const data = await res.json();
@@ -50,6 +52,7 @@ export default function Sidebar({
 
   return (
     <aside className="ga-sidebar">
+      {/* KATEGORİ AĞACI */}
       <div className="ga-box">
         <div className="ga-box-h">
           <span style={{ color: 'var(--gold)' }}>▤</span> Kategoriler
@@ -81,7 +84,7 @@ export default function Sidebar({
               {openCat === c.id && c.services && c.services.length > 0 && (
                 <div style={{ padding: '4px 10px 8px 40px', display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {c.services.map((s) => (
-                    
+                    <a
                       key={s.id}
                       href={`/kategori/${c.slug}?hizmet=${s.slug}`}
                       style={{ fontSize: 12.5, color: 'var(--muted)', padding: '5px 8px', borderRadius: 7, fontWeight: 500 }}
@@ -96,11 +99,13 @@ export default function Sidebar({
         </div>
       </div>
 
+      {/* ADRES KUTUSU */}
       <div className="ga-box">
         <div className="ga-box-h">
           <span style={{ color: 'var(--gold)' }}>📍</span> Konuma Göre Ara
         </div>
         <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {/* İl */}
           <div style={{ position: 'relative' }}>
             <button
               type="button"
@@ -122,6 +127,7 @@ export default function Sidebar({
             )}
           </div>
 
+          {/* İlçe */}
           <div style={{ position: 'relative' }}>
             <button
               type="button"
