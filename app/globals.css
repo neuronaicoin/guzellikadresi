@@ -240,3 +240,21 @@ img {
   .ga-biz-contact { position: static; }
   .ga-gallery-main { height: 260px; }
 }
+
+/* ============ LİSTE / ARAMA SAYFASI ============ */
+.ga-list-wrap { max-width: 1180px; margin: 0 auto; padding: 26px 22px 60px; }
+.ga-list-head { margin-bottom: 22px; }
+.ga-list-head h1 { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -.5px; margin: 0 0 6px 0; }
+.ga-list-head p { color: var(--muted); font-size: 14px; margin: 0; }
+.ga-list-head b { color: var(--navy); }
+
+.ga-list-empty { background: #fff; border: 1px dashed var(--gold-soft); border-radius: 16px; padding: 48px 30px; text-align: center; }
+.ga-list-empty h3 { font-size: 18px; color: var(--navy); font-weight: 800; margin: 0 0 8px 0; }
+.ga-list-empty p { color: var(--muted); font-size: 14px; margin: 0 0 18px 0; }
+.ga-list-cta { display: inline-block; background: var(--gold); color: var(--navy); font-weight: 700; padding: 11px 22px; border-radius: 10px; font-size: 14.5px; }
+
+.ga-pagination { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 30px; flex-wrap: wrap; }
+.ga-page-btn { min-width: 40px; text-align: center; padding: 9px 13px; border-radius: 9px; border: 1px solid var(--line); background: #fff; color: var(--navy); font-weight: 700; font-size: 13.5px; }
+.ga-page-btn:hover { border-color: var(--gold); background: var(--gold-50); }
+.ga-page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.ga-page-dots { color: var(--muted); padding: 0 4px; }
