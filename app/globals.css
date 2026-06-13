@@ -61,9 +61,9 @@ img {
 
 .ga-ss-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: inherit; font-size: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; cursor: pointer; text-align: left; }
 .ga-ss-btn:hover:not(:disabled) { border-color: var(--gold); }
-.ga-ss-pop { position: absolute; z-index: 30; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(14,33,72,.14); overflow: hidden; }
-.ga-ss-search { width: 100%; border: 0; border-bottom: 1px solid var(--line); padding: 10px 12px; font-size: 13.5px; font-family: inherit; outline: none; }
-.ga-ss-item { padding: 9px 12px; font-size: 13.5px; cursor: pointer; }
+.ga-ss-pop { position: absolute; z-index: 60; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(14,33,72,.18); overflow: hidden; }
+.ga-ss-search { width: 100%; border: 0; border-bottom: 1px solid var(--line); padding: 11px 12px; font-size: 13.5px; font-family: inherit; outline: none; }
+.ga-ss-item { padding: 11px 12px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #f3f4f7; }
 .ga-ss-item:hover { background: var(--navy-50); }
 .ga-search-btn { background: var(--navy); color: #fff; border: 0; border-radius: 10px; padding: 11px; font-weight: 700; font-size: 14px; font-family: inherit; }
 
@@ -272,8 +272,6 @@ img {
   .ga-mobile-caret { display: inline; color: var(--gold); font-size: 14px; }
   .ga-box-body { display: none; }
   .ga-box-body.mob-open { display: block; }
-  /* mobilde ilçe/il popup tam genişlik ve scroll */
-  .ga-ss-pop { position: fixed; left: 12px; right: 12px; top: auto; }
 }
 
 /* Mobilde ana içerik sıralaması: arama + içerik önce, sonra sidebar zaten üstte küçük */
@@ -286,4 +284,46 @@ img {
   .ga-wrap { display: flex; flex-direction: column; }
   .ga-wrap > main { order: 1; }
   .ga-wrap > .ga-sidebar { order: 2; }
+}
+
+/* ============ HEADER (hamburger) ============ */
+.ga-header { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 50; }
+.ga-header-inner { max-width: 1280px; margin: 0 auto; padding: 0 18px; height: 60px; display: flex; align-items: center; gap: 20px; }
+.ga-logo { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 19px; flex: none; }
+.ga-logo-badge { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg,#c9a24b,#b88a32); display: grid; place-items: center; color: var(--navy); font-weight: 900; }
+.ga-nav-desktop { display: flex; gap: 20px; font-size: 14.5px; font-weight: 600; color: #c5cde0; }
+.ga-nav-desktop a:hover { color: #fff; }
+.ga-header-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.ga-login { padding: 9px 16px; border-radius: 10px; font-size: 14px; font-weight: 700; border: 1px solid rgba(255,255,255,.22); color: #dfe5f1; }
+.ga-cta-btn { padding: 9px 16px; border-radius: 10px; font-size: 14px; font-weight: 700; background: var(--gold); color: var(--navy); white-space: nowrap; }
+.ga-burger { display: none; background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; padding: 4px 8px; line-height: 1; }
+.ga-nav-mobile { display: none; }
+
+@media (max-width: 880px) {
+  .ga-nav-desktop { display: none; }
+  .ga-login { display: none; }
+  .ga-burger { display: block; }
+  .ga-header-inner { height: 56px; gap: 10px; }
+  .ga-logo { font-size: 17px; }
+  .ga-cta-btn { padding: 8px 12px; font-size: 13px; }
+  .ga-nav-mobile { display: flex; flex-direction: column; background: var(--navy-700); border-top: 1px solid rgba(255,255,255,.1); padding: 8px 18px 16px; }
+  .ga-nav-mobile a { padding: 12px 4px; font-size: 15px; font-weight: 600; color: #dfe5f1; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .ga-nav-mobile-cta { color: var(--gold) !important; font-weight: 800 !important; border-bottom: none !important; }
+}
+
+/* ============ KATEGORİLER & ŞEHİRLER SAYFALARI ============ */
+.ga-cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+.ga-cat-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; transition: .15s; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
+.ga-cat-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(14,33,72,.1); }
+.ga-cat-card-emoji { font-size: 32px; }
+.ga-cat-card-name { font-size: 14.5px; font-weight: 700; color: var(--navy); }
+.ga-cat-card-count { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+.ga-city-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.ga-city-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: 14px; font-weight: 600; color: var(--navy); transition: .12s; }
+.ga-city-card:hover { border-color: var(--gold); background: var(--gold-50); }
+
+@media (max-width: 560px) {
+  .ga-cat-grid { grid-template-columns: repeat(2, 1fr); }
+  .ga-city-grid { grid-template-columns: repeat(2, 1fr); }
 }
