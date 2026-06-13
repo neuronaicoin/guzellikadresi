@@ -12,10 +12,12 @@ export default function LocationMap({
   center,
   query,
   onPick,
+  readonly = false,
 }: {
   center: { lat: number; lng: number };
   query?: string; // "İlçe, İl, Türkiye" — verilirse Nominatim ile aranır
-  onPick: (lat: number, lng: number) => void;
+  onPick?: (lat: number, lng: number) => void;
+  readonly?: boolean;
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapObj = useRef<any>(null);
@@ -48,21 +50,23 @@ export default function LocationMap({
       if (cancelled || !mapRef.current || !window.L) return;
       const L = window.L;
       if (!mapObj.current) {
-        mapObj.current = L.map(mapRef.current).setView([center.lat, center.lng], 12);
+        mapObj.current = L.map(mapRef.current, { scrollWheelZoom: !readonly }).setView([center.lat, center.lng], readonly ? 15 : 12);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '© OpenStreetMap',
         }).addTo(mapObj.current);
-        markerObj.current = L.marker([center.lat, center.lng], { draggable: true }).addTo(mapObj.current);
-        markerObj.current.on('dragend', () => {
-          const p = markerObj.current.getLatLng();
-          onPick(p.lat, p.lng);
-        });
-        mapObj.current.on('click', (e: any) => {
-          markerObj.current.setLatLng(e.latlng);
-          onPick(e.latlng.lat, e.latlng.lng);
-        });
-        onPick(center.lat, center.lng);
+        markerObj.current = L.marker([center.lat, center.lng], { draggable: !readonly }).addTo(mapObj.current);
+        if (!readonly) {
+          markerObj.current.on('dragend', () => {
+            const p = markerObj.current.getLatLng();
+            onPick?.(p.lat, p.lng);
+          });
+          mapObj.current.on('click', (e: any) => {
+            markerObj.current.setLatLng(e.latlng);
+            onPick?.(e.latlng.lat, e.latlng.lng);
+          });
+          onPick?.(center.lat, center.lng);
+        }
       }
     })();
 
@@ -74,7 +78,7 @@ export default function LocationMap({
     if (mapObj.current && markerObj.current) {
       mapObj.current.setView([center.lat, center.lng], 12);
       markerObj.current.setLatLng([center.lat, center.lng]);
-      onPick(center.lat, center.lng);
+      onPick?.(center.lat, center.lng);
     }
   }, [center.lat, center.lng]);
 
@@ -97,7 +101,7 @@ export default function LocationMap({
         if (mapObj.current && markerObj.current) {
           mapObj.current.setView([lat, lng], 14);
           markerObj.current.setLatLng([lat, lng]);
-          onPick(lat, lng);
+          onPick?.(lat, lng);
         }
       } catch {
         // arama başarısızsa il merkezinde kalır
