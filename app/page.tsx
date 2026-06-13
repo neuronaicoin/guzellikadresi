@@ -4,6 +4,7 @@ import Sidebar from '@/components/Sidebar';
 import BusinessCard from '@/components/BusinessCard';
 import HeroRotator from '@/components/HeroRotator';
 import SearchBar from '@/components/SearchBar';
+import DiscoverMobile from '@/components/DiscoverMobile';
 import {
   getCategoriesWithCounts,
   getProvinces,
@@ -32,6 +33,11 @@ export default async function HomePage() {
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 22px' }}>
           <SearchBar />
         </div>
+      </div>
+
+      {/* MOBİL KEŞİF — sadece mobilde görünür (konum + kategoriler) */}
+      <div className="ga-discover-mobile-only">
+        <DiscoverMobile categories={categories} provinces={provinces} />
       </div>
 
       {/* LAYOUT */}
