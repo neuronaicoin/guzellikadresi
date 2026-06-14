@@ -576,3 +576,7 @@ img {
 .ga-photo-del:hover { background: #dc2626; }
 .ga-photo-add { width: 90px; height: 90px; border-radius: 10px; border: 2px dashed var(--gold-soft); display: grid; place-items: center; cursor: pointer; color: var(--gold); font-weight: 700; font-size: 13px; background: var(--gold-50); }
 .ga-photo-add:hover { border-color: var(--gold); }
+
+/* ============ YOL TARİFİ BUTONU ============ */
+.ga-directions-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14.5px; padding: 12px 22px; border-radius: 11px; transition: .15s; }
+.ga-directions-btn:hover { background: var(--gold); color: var(--navy); }
