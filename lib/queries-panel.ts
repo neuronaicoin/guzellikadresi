@@ -169,3 +169,48 @@ export async function getBusinessStats(businessId: string): Promise<BizStats> {
     return empty;
   }
 }
+
+// ---- FOTOĞRAF YÖNETİMİ ----
+export type BizPhoto = { id: number; url: string; kind: string; is_cover: boolean; sort_order: number };
+
+export async function getBusinessPhotos(businessId: string): Promise<BizPhoto[]> {
+  const { data } = await supabaseAuth
+    .from('business_photos')
+    .select('id, url, kind, is_cover, sort_order')
+    .eq('business_id', businessId)
+    .order('sort_order', { ascending: true });
+  return (data || []) as BizPhoto[];
+}
+
+// Storage'a yükle + business_photos'a satır ekle
+export async function addBusinessPhoto(
+  businessId: string,
+  blob: Blob,
+  kind: 'gallery' | 'work'
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const fileName = `${businessId}/${kind}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+    const { error: upErr } = await supabaseAuth.storage
+      .from('business-photos')
+      .upload(fileName, blob, { contentType: 'image/webp', upsert: false });
+    if (upErr) return { ok: false, error: upErr.message };
+
+    const { data: pub } = supabaseAuth.storage.from('business-photos').getPublicUrl(fileName);
+    const url = pub.publicUrl;
+
+    const { error: insErr } = await supabaseAuth
+      .from('business_photos')
+      .insert({ business_id: businessId, url, kind, is_cover: false, sort_order: 99 });
+    if (insErr) return { ok: false, error: insErr.message };
+
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, error: e?.message || 'Yükleme hatası' };
+  }
+}
+
+export async function deleteBusinessPhoto(photoId: number): Promise<{ ok: boolean; error?: string }> {
+  const { error } = await supabaseAuth.from('business_photos').delete().eq('id', photoId);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
