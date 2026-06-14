@@ -4,9 +4,15 @@ import { post as sacEkimi } from './sac-ekimi-rehberi';
 import { post as kaliciMakyaj } from './kalici-makyaj-microblading';
 import { post as salonMusteri } from './guzellik-salonu-musteri-cekme';
 import { post as ciltBakimi } from './profesyonel-cilt-bakimi';
+import { post as beylikduzuGuzellik } from './beylikduzu-guzellik-merkezi';
+import { post as beylikduzuLazer } from './beylikduzu-lazer-epilasyon';
+import { post as beylikduzuSacEkimi } from './beylikduzu-sac-ekimi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  beylikduzuGuzellik,
+  beylikduzuLazer,
+  beylikduzuSacEkimi,
   lazerEpilasyon,
   sacEkimi,
   kaliciMakyaj,
