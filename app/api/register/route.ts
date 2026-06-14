@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     const facebook = String(form.get('facebook') || '').trim();
     const xTwitter = String(form.get('x') || '').trim();
     const linkedin = String(form.get('linkedin') || '').trim();
+    const ownerId = String(form.get('ownerId') || '').trim();
     const serviceIds = JSON.parse(String(form.get('serviceIds') || '[]')) as number[];
 
     // Zorunlu alan kontrolü
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
         linkedin: linkedin || null,
         status: 'approved',
         is_featured: false,
+        owner_id: ownerId || null,
       })
       .select('id')
       .single();
