@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseAuth } from '@/lib/supabase-auth';
 
@@ -9,9 +9,20 @@ export default function AuthForm({ mode }: { mode: 'login' | 'register' }) {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [pw2, setPw2] = useState('');
+  const [showPw, setShowPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [info, setInfo] = useState('');
+
+  // Giriş modunda kayıtlı maili hatırla
+  useEffect(() => {
+    if (mode === 'login') {
+      try {
+        const saved = localStorage.getItem('ga_remember_email');
+        if (saved) setEmail(saved);
+      } catch {}
+    }
+  }, [mode]);
 
   async function submit() {
     setErr(''); setInfo('');
@@ -30,6 +41,7 @@ export default function AuthForm({ mode }: { mode: 'login' | 'register' }) {
       } else {
         const { error } = await supabaseAuth.auth.signInWithPassword({ email: email.trim(), password: pw });
         if (error) { setErr(cevirHata(error.message)); setBusy(false); return; }
+        try { localStorage.setItem('ga_remember_email', email.trim()); } catch {}
         router.push('/panel');
       }
     } catch {
@@ -59,11 +71,18 @@ export default function AuthForm({ mode }: { mode: 'login' | 'register' }) {
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="ornek@mail.com" autoComplete="email" />
       </div>
       <div className="ga-field"><label>Şifre</label>
-        <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="••••••" autoComplete={mode === 'register' ? 'new-password' : 'current-password'} />
+        <div className="ga-pw-wrap">
+          <input type={showPw ? 'text' : 'password'} value={pw} onChange={(e) => setPw(e.target.value)} placeholder="••••••" autoComplete={mode === 'register' ? 'new-password' : 'current-password'} />
+          <button type="button" className="ga-pw-eye" onClick={() => setShowPw(!showPw)} aria-label="Şifreyi göster/gizle">
+            {showPw ? '🙈' : '👁'}
+          </button>
+        </div>
       </div>
       {mode === 'register' && (
         <div className="ga-field"><label>Şifre (tekrar)</label>
-          <input type="password" value={pw2} onChange={(e) => setPw2(e.target.value)} placeholder="••••••" autoComplete="new-password" />
+          <div className="ga-pw-wrap">
+            <input type={showPw ? 'text' : 'password'} value={pw2} onChange={(e) => setPw2(e.target.value)} placeholder="••••••" autoComplete="new-password" />
+          </div>
         </div>
       )}
 
