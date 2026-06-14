@@ -508,7 +508,7 @@ img {
 /* ============ PANEL İSTATİSTİKLERİ ============ */
 .ga-mybiz-card-wrap { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
 .ga-mybiz-card-wrap .ga-mybiz-card { border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--line); }
-.ga-stats { display: grid; grid-template-columns: repeat(4, 1fr); }
+.ga-stats { display: grid; grid-template-columns: repeat(5, 1fr); }
 .ga-stat { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px; text-align: center; border-right: 1px solid var(--line); }
 .ga-stat:last-child { border-right: none; }
 .ga-stat-num { font-size: 22px; font-weight: 800; color: var(--navy); line-height: 1.1; }
