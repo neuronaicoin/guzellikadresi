@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { optimizeImage } from '@/lib/imageOptimize';
 import { CITY_COORDS, TURKEY_CENTER } from '@/lib/cityCoords';
+import { useAuth } from '@/lib/useAuth';
+import { supabaseAuth } from '@/lib/supabase-auth';
 import dynamic from 'next/dynamic';
 
 const LocationMap = dynamic(() => import('@/components/LocationMap'), { ssr: false });
@@ -20,7 +22,17 @@ export default function RegisterForm({
   categories: Cat[];
   provinces: Prov[];
 }) {
-  const [step, setStep] = useState(1);
+  const { user, loading: authLoading } = useAuth();
+  // Giriş yapmamışsa hesap adımı gerekir
+  const needsAccount = !user;
+
+  // step: 0 = hesap (sadece needsAccount ise), 1-4 = mevcut adımlar
+  const [step, setStep] = useState(0);
+
+  // Hesap alanları
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [pw2, setPw2] = useState('');
 
   const [name, setName] = useState('');
   const [catId, setCatId] = useState<number | null>(null);
@@ -106,11 +118,36 @@ export default function RegisterForm({
     else setPhotos(photos.filter((_, i) => i !== idx));
   }
 
-  function next() { if (step < 4) setStep(step + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  function back() { if (step > 1) setStep(step - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  // Giriş yapmış kullanıcı için hesap adımını atla (ilk adım 1)
+  const minStep = needsAccount ? 0 : 1;
+  const curStep = step < minStep ? minStep : step;
+
+  function next() {
+    // Hesap adımındaysa önce doğrula
+    if (curStep === 0 && needsAccount) {
+      if (!validateAccount()) return;
+    }
+    if (curStep < 4) setStep(curStep + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function back() {
+    if (curStep > minStep) setStep(curStep - 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function validateAccount(): boolean {
+    if (needsAccount) {
+      if (!email.trim()) { setErrMsg('E-posta adresi gerekli.'); setStep(0); return false; }
+      if (pw.length < 6) { setErrMsg('Şifre en az 6 karakter olmalı.'); setStep(0); return false; }
+      if (pw !== pw2) { setErrMsg('Şifreler eşleşmiyor.'); setStep(0); return false; }
+    }
+    return true;
+  }
 
   async function submit() {
     setErrMsg('');
+    // Hesap kontrolü (giriş yoksa)
+    if (!validateAccount()) return;
     // Zorunlu alan kontrolü
     if (!name.trim()) { setErrMsg('İşletme adı gerekli.'); setStep(1); return; }
     if (!catId) { setErrMsg('Kategori seçin.'); setStep(1); return; }
@@ -123,6 +160,30 @@ export default function RegisterForm({
 
     setSending(true);
     try {
+      // 1) Gerekiyorsa hesap oluştur ve giriş yap
+      let ownerId: string | null = user?.id ?? null;
+      if (needsAccount) {
+        const { data: signUpData, error: signUpErr } = await supabaseAuth.auth.signUp({
+          email: email.trim(),
+          password: pw,
+        });
+        if (signUpErr) {
+          const m = signUpErr.message.toLowerCase();
+          if (m.includes('already') || m.includes('exists')) {
+            setErrMsg('Bu e-posta zaten kayıtlı. Lütfen giriş yapıp işletme ekleyin veya farklı e-posta kullanın.');
+          } else if (m.includes('password')) {
+            setErrMsg('Şifre çok kısa (en az 6 karakter).');
+          } else {
+            setErrMsg('Hesap oluşturulamadı: ' + signUpErr.message);
+          }
+          setStep(0);
+          setSending(false);
+          return;
+        }
+        ownerId = signUpData.user?.id ?? null;
+      }
+
+      // 2) İşletmeyi kaydet
       const fd = new FormData();
       fd.append('name', name);
       fd.append('description', desc);
@@ -139,6 +200,7 @@ export default function RegisterForm({
       fd.append('facebook', facebook);
       fd.append('x', xTwitter);
       fd.append('linkedin', linkedin);
+      if (ownerId) fd.append('ownerId', ownerId);
       fd.append('serviceIds', JSON.stringify(Array.from(selectedServices)));
       photos.forEach((p, i) => fd.append('photos', new File([p.blob], `gallery-${i}.webp`, { type: 'image/webp' })));
       works.forEach((p, i) => fd.append('works', new File([p.blob], `work-${i}.webp`, { type: 'image/webp' })));
@@ -162,30 +224,63 @@ export default function RegisterForm({
     return (
       <div className="ga-reg-done">
         <div className="ga-reg-check">✓</div>
-        <h2>Başvurunuz alındı!</h2>
-        <p>En kısa sürede işletmeniz listelenecek.</p>
+        <h2>İşletmeniz eklendi!</h2>
+        <p>İşletmeniz yayında. {needsAccount && 'Oluşturduğunuz e-posta ve şifre ile giriş yaparak işletmenizi yönetebilirsiniz.'}</p>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 18, flexWrap: 'wrap' }}>
+          <a href="/panel" className="ga-list-cta">Panele Git →</a>
+          <a href="/" className="ga-logout-btn" style={{ textDecoration: 'none', display: 'inline-block' }}>Ana Sayfa</a>
+        </div>
       </div>
     );
+  }
+
+  if (authLoading) {
+    return <div className="ga-reg-done"><p>Yükleniyor…</p></div>;
   }
 
   return (
     <div className="ga-reg">
       <div className="ga-stepper">
         {[
+          ...(needsAccount ? [{ n: 0, t: 'Hesap', s: 'E-posta & şifre' }] : []),
           { n: 1, t: 'İşletme', s: 'Bilgi & hizmetler' },
           { n: 2, t: 'Fotoğraflar', s: 'Görseller' },
           { n: 3, t: 'Konum', s: 'Adres & harita' },
           { n: 4, t: 'İletişim', s: 'Son adım' },
         ].map((s) => (
-          <div key={s.n} className={`ga-step ${step === s.n ? 'active' : ''} ${step > s.n ? 'done' : ''}`} onClick={() => setStep(s.n)}>
-            <span className="ga-step-num">{step > s.n ? '✓' : s.n}</span>
+          <div key={s.n} className={`ga-step ${curStep === s.n ? 'active' : ''} ${curStep > s.n ? 'done' : ''}`} onClick={() => setStep(s.n)}>
+            <span className="ga-step-num">{curStep > s.n ? '✓' : (s.n === 0 ? '🔑' : s.n)}</span>
             <span className="ga-step-lbl">{s.t}<small>{s.s}</small></span>
           </div>
         ))}
       </div>
 
       <div className="ga-reg-card">
-        {step === 1 && (
+        {needsAccount && curStep === 0 && (
+          <div className="ga-reg-body">
+            <div className="ga-reg-head"><span className="ga-reg-tag">🔑</span><div><h3>Hesap Oluşturun</h3><p>İşletmenizi yönetmek için bir hesap</p></div></div>
+            <div className="ga-account-warn">
+              ⚠️ <b>Önemli:</b> İşletme girişiniz buraya gireceğiniz <b>e-posta ve şifre</b> ile olacaktır. Daha sonra işletmenizi bu bilgilerle yönetecek, ziyaretçi ve arama istatistiklerinizi göreceksiniz. Lütfen bilgilerinizi not alın.
+            </div>
+            <div className="ga-field">
+              <label>E-posta <span className="req">*</span></label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="ornek@mail.com" autoComplete="email" />
+            </div>
+            <div className="ga-grid2">
+              <div className="ga-field">
+                <label>Şifre <span className="req">*</span></label>
+                <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="En az 6 karakter" autoComplete="new-password" />
+              </div>
+              <div className="ga-field">
+                <label>Şifre (tekrar) <span className="req">*</span></label>
+                <input type="password" value={pw2} onChange={(e) => setPw2(e.target.value)} placeholder="Şifreyi tekrar girin" autoComplete="new-password" />
+              </div>
+            </div>
+            <div className="ga-tip">Zaten hesabınız var mı? <a href="/giris" style={{ color: 'var(--gold)', fontWeight: 700 }}>Giriş yapın</a>, sonra işletme ekleyin.</div>
+          </div>
+        )}
+
+        {curStep === 1 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">🏠</span><div><h3>İşletme Bilgileri</h3><p>Müşterilerin sizi nasıl göreceğinin temeli</p></div></div>
             <div className="ga-field">
@@ -235,7 +330,7 @@ export default function RegisterForm({
           </div>
         )}
 
-        {step === 2 && (
+        {curStep === 2 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">📷</span><div><h3>İşletme Fotoğrafları</h3><p>Mekânınızı ve örnek işlerinizi gösterin</p></div></div>
             {optimizing && <div className="ga-opt-note">Fotoğraflar optimize ediliyor…</div>}
@@ -281,7 +376,7 @@ export default function RegisterForm({
           </div>
         )}
 
-        {step === 3 && (
+        {curStep === 3 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">📍</span><div><h3>Konum</h3><p>Müşterileriniz size kolayca ulaşsın</p></div></div>
             <div className="ga-grid2">
@@ -328,7 +423,7 @@ export default function RegisterForm({
           </div>
         )}
 
-        {step === 4 && (
+        {curStep === 4 && (
           <div className="ga-reg-body">
             <div className="ga-reg-head"><span className="ga-reg-tag">📞</span><div><h3>İletişim Bilgileri</h3><p>Müşteriler bu kanallardan size ulaşacak</p></div></div>
             <div className="ga-grid2">
@@ -350,9 +445,9 @@ export default function RegisterForm({
 
         {errMsg && <div className="ga-err">{errMsg}</div>}
         <div className="ga-reg-nav">
-          {step > 1 && <button type="button" className="ga-btn-back" onClick={back} disabled={sending}>← Geri</button>}
-          {step < 4 && <button type="button" className="ga-btn-next" onClick={next}>Devam et →</button>}
-          {step === 4 && <button type="button" className="ga-btn-submit" onClick={submit} disabled={sending}>{sending ? 'Gönderiliyor…' : 'Başvuruyu gönder ✓'}</button>}
+          {curStep > minStep && <button type="button" className="ga-btn-back" onClick={back} disabled={sending}>← Geri</button>}
+          {curStep < 4 && <button type="button" className="ga-btn-next" onClick={next}>Devam et →</button>}
+          {curStep === 4 && <button type="button" className="ga-btn-submit" onClick={submit} disabled={sending}>{sending ? 'Gönderiliyor…' : 'Başvuruyu gönder ✓'}</button>}
         </div>
       </div>
     </div>
