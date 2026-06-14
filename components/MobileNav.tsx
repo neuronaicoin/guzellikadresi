@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/useAuth';
 
 export default function MobileNav() {
   const path = usePathname();
+  const { user } = useAuth();
 
   const isActive = (href: string) => {
     if (href === '/') return path === '/';
@@ -29,7 +31,7 @@ export default function MobileNav() {
         <span className="ga-mn-icon">▤</span>
         <span className="ga-mn-label">Kategoriler</span>
       </Link>
-      <Link href="/giris" className={`ga-mn-item ${isActive('/giris') ? 'active' : ''}`}>
+      <Link href={user ? '/panel' : '/giris'} className={`ga-mn-item ${(isActive('/giris') || isActive('/panel')) ? 'active' : ''}`}>
         <span className="ga-mn-icon">👤</span>
         <span className="ga-mn-label">İşletmem</span>
       </Link>
