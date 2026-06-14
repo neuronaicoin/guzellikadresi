@@ -2,9 +2,13 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAuth } from '@/lib/useAuth';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+  const girisHref = user ? '/panel' : '/giris';
+  const girisLabel = user ? 'Panelim' : 'İşletme Girişi';
 
   return (
     <header className="ga-header">
@@ -23,7 +27,7 @@ export default function Header() {
         </nav>
 
         <div className="ga-header-actions">
-          <Link href="/giris" className="ga-login">İşletme Girişi</Link>
+          <Link href={girisHref} className="ga-login">{girisLabel}</Link>
           <Link href="/isletme-ekle" className="ga-cta-btn">İşletme Ekle</Link>
           {/* hamburger (sadece mobil) */}
           <button className="ga-burger" onClick={() => setOpen(!open)} aria-label="Menü">
@@ -39,7 +43,7 @@ export default function Header() {
           <Link href="/kategoriler" onClick={() => setOpen(false)}>Kategoriler</Link>
           <Link href="/sehirler" onClick={() => setOpen(false)}>Şehirler</Link>
           <Link href="/blog" onClick={() => setOpen(false)}>Blog</Link>
-          <Link href="/giris" onClick={() => setOpen(false)}>İşletme Girişi</Link>
+          <Link href={girisHref} onClick={() => setOpen(false)}>{girisLabel}</Link>
           <Link href="/isletme-ekle" className="ga-nav-mobile-cta" onClick={() => setOpen(false)}>İşletme Ekle →</Link>
         </nav>
       )}
