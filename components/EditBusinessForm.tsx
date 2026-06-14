@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/useAuth';
-import { getMyBusinessDetail, updateMyBusiness, type EditableBusiness } from '@/lib/queries-panel';
+import { optimizeImage } from '@/lib/imageOptimize';
+import {
+  getMyBusinessDetail, updateMyBusiness, type EditableBusiness,
+  getBusinessPhotos, addBusinessPhoto, deleteBusinessPhoto, type BizPhoto,
+} from '@/lib/queries-panel';
 
 type Svc = { id: number; name: string };
 type Cat = { id: number; name: string; slug: string; emoji: string | null; services: Svc[] };
@@ -37,6 +41,41 @@ export default function EditBusinessForm({
   const [saved, setSaved] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
+  // Fotoğraflar
+  const [photos, setPhotos] = useState<BizPhoto[]>([]);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoMsg, setPhotoMsg] = useState('');
+
+  async function loadPhotos() {
+    const ph = await getBusinessPhotos(businessId);
+    setPhotos(ph);
+  }
+
+  async function onAddPhotos(files: FileList | null, kind: 'gallery' | 'work') {
+    if (!files || files.length === 0) return;
+    setPhotoBusy(true); setPhotoMsg('');
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const blob = await optimizeImage(files[i]);
+        const res = await addBusinessPhoto(businessId, blob, kind);
+        if (!res.ok) { setPhotoMsg('Bir fotoğraf yüklenemedi: ' + (res.error || '')); }
+      }
+      await loadPhotos();
+    } catch {
+      setPhotoMsg('Fotoğraf yüklenirken hata oluştu.');
+    } finally {
+      setPhotoBusy(false);
+    }
+  }
+
+  async function onDeletePhoto(id: number) {
+    setPhotoBusy(true); setPhotoMsg('');
+    const res = await deleteBusinessPhoto(id);
+    if (res.ok) await loadPhotos();
+    else setPhotoMsg('Silinemedi: ' + (res.error || ''));
+    setPhotoBusy(false);
+  }
+
   useEffect(() => {
     if (!loading && !user) { router.push('/giris'); return; }
     if (user) {
@@ -55,6 +94,7 @@ export default function EditBusinessForm({
         setLinkedin(data.linkedin || '');
         setSelectedServices(new Set(data.serviceIds));
         setChecking(false);
+        loadPhotos();
       });
     }
   }, [loading, user, businessId, router]);
@@ -134,6 +174,42 @@ export default function EditBusinessForm({
       </div>
 
       <div className="ga-edit-card">
+        <h3>Fotoğraflar</h3>
+        <p className="ga-svc-note">Mekan fotoğrafları ve örnek çalışmalarınız. Fotoğrafa tıklayıp silebilir, yeni ekleyebilirsiniz.</p>
+
+        <div className="ga-photo-group-label">Mekan Fotoğrafları</div>
+        <div className="ga-edit-photos">
+          {photos.filter((p) => p.kind !== 'work').map((p) => (
+            <div key={p.id} className="ga-edit-photo">
+              <img src={p.url} alt="" />
+              <button type="button" className="ga-photo-del" onClick={() => onDeletePhoto(p.id)} disabled={photoBusy} aria-label="Sil">✕</button>
+            </div>
+          ))}
+          <label className="ga-photo-add">
+            <input type="file" accept="image/*" multiple hidden onChange={(e) => onAddPhotos(e.target.files, 'gallery')} disabled={photoBusy} />
+            <span>+ Ekle</span>
+          </label>
+        </div>
+
+        <div className="ga-photo-group-label" style={{ marginTop: 16 }}>Örnek Çalışmalar</div>
+        <div className="ga-edit-photos">
+          {photos.filter((p) => p.kind === 'work').map((p) => (
+            <div key={p.id} className="ga-edit-photo">
+              <img src={p.url} alt="" />
+              <button type="button" className="ga-photo-del" onClick={() => onDeletePhoto(p.id)} disabled={photoBusy} aria-label="Sil">✕</button>
+            </div>
+          ))}
+          <label className="ga-photo-add">
+            <input type="file" accept="image/*" multiple hidden onChange={(e) => onAddPhotos(e.target.files, 'work')} disabled={photoBusy} />
+            <span>+ Ekle</span>
+          </label>
+        </div>
+
+        {photoBusy && <div className="ga-svc-note" style={{ marginTop: 10 }}>İşleniyor…</div>}
+        {photoMsg && <div className="ga-err" style={{ marginTop: 10 }}>{photoMsg}</div>}
+      </div>
+
+      <div className="ga-edit-card">
         <h3>İletişim</h3>
         <div className="ga-grid2">
           <div className="ga-field"><label>Telefon <span className="req">*</span></label><input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0 5XX XXX XX XX" /></div>
@@ -151,7 +227,7 @@ export default function EditBusinessForm({
       </div>
 
       <div className="ga-edit-note">
-        Not: Fotoğraf, konum ve adres düzenleme yakında eklenecek. Şu an bilgi, hizmet ve iletişim güncelleyebilirsiniz.
+        Not: Konum ve adres düzenleme yakında eklenecek. Şu an işletme bilgisi, hizmetler, fotoğraflar ve iletişim bilgilerinizi güncelleyebilirsiniz.
       </div>
 
       {errMsg && <div className="ga-err">{errMsg}</div>}
