@@ -504,3 +504,21 @@ img {
 .ga-edit-card h3 { font-size: 16px; font-weight: 800; color: var(--navy); margin: 0 0 14px 0; }
 .ga-edit-note { font-size: 12.5px; color: var(--muted); background: var(--navy-50); border-radius: 10px; padding: 12px 14px; }
 .ga-edit-actions { display: flex; justify-content: flex-end; }
+
+/* ============ PANEL İSTATİSTİKLERİ ============ */
+.ga-mybiz-card-wrap { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
+.ga-mybiz-card-wrap .ga-mybiz-card { border: none; border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--line); }
+.ga-stats { display: grid; grid-template-columns: repeat(4, 1fr); }
+.ga-stat { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px; text-align: center; border-right: 1px solid var(--line); }
+.ga-stat:last-child { border-right: none; }
+.ga-stat-num { font-size: 22px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+.ga-stat-lbl { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 4px; display: flex; flex-direction: column; }
+.ga-stat-lbl small { font-size: 9.5px; color: #aab1c2; font-weight: 500; }
+.ga-stat-hl { background: var(--gold-50); }
+.ga-stat-hl .ga-stat-num { color: #8a6a23; }
+
+@media (max-width: 560px) {
+  .ga-stats { grid-template-columns: repeat(2, 1fr); }
+  .ga-stat:nth-child(2) { border-right: none; }
+  .ga-stat:nth-child(1), .ga-stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+}
