@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Gallery from '@/components/Gallery';
 import BackButton from '@/components/BackButton';
+import BusinessContact from '@/components/BusinessContact';
 import { getBusinessBySlug } from '@/lib/queries-business';
 
 const LocationMap = dynamic(() => import('@/components/LocationMap'), { ssr: false });
@@ -115,18 +116,16 @@ export default async function BusinessPage({ params }: { params: { slug: string 
 
           {/* SAĞ: iletişim kartı */}
           <aside className="ga-biz-contact">
-            <div className="ga-contact-card">
-              <h3>İletişim</h3>
-              {b.phone && <a href={`tel:${b.phone}`} className="ga-c-btn ga-c-call">📞 {b.phone}</a>}
-              {b.whatsapp && <a href={`https://wa.me/${b.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener" className="ga-c-btn ga-c-wa">💬 WhatsApp</a>}
-              {b.website && <a href={b.website} target="_blank" rel="noopener" className="ga-c-btn ga-c-web">🌐 Web Sitesi</a>}
-              <div className="ga-socials">
-                {b.instagram && <a href={normalizeSocial(b.instagram, 'instagram')} target="_blank" rel="noopener">Instagram</a>}
-                {b.facebook && <a href={normalizeSocial(b.facebook, 'facebook')} target="_blank" rel="noopener">Facebook</a>}
-                {b.x_twitter && <a href={normalizeSocial(b.x_twitter, 'x')} target="_blank" rel="noopener">X</a>}
-                {b.linkedin && <a href={normalizeSocial(b.linkedin, 'linkedin')} target="_blank" rel="noopener">LinkedIn</a>}
-              </div>
-            </div>
+            <BusinessContact
+              businessId={b.id}
+              phone={b.phone}
+              whatsapp={b.whatsapp}
+              website={b.website}
+              instagram={b.instagram}
+              facebook={b.facebook}
+              x_twitter={b.x_twitter}
+              linkedin={b.linkedin}
+            />
             <a href="/isletme-ekle" className="ga-own-cta">Bu sizin işletmeniz mi? <b>Ücretsiz ekleyin →</b></a>
           </aside>
         </div>
@@ -135,17 +134,4 @@ export default async function BusinessPage({ params }: { params: { slug: string 
       <Footer />
     </>
   );
-}
-
-function normalizeSocial(val: string, type: string): string {
-  const v = val.trim();
-  if (v.startsWith('http')) return v;
-  const handle = v.replace(/^@/, '');
-  switch (type) {
-    case 'instagram': return `https://instagram.com/${handle}`;
-    case 'facebook': return `https://facebook.com/${handle}`;
-    case 'x': return `https://x.com/${handle}`;
-    case 'linkedin': return v.includes('/') ? `https://${v.replace(/^https?:\/\//, '')}` : `https://linkedin.com/company/${handle}`;
-    default: return v;
-  }
 }
