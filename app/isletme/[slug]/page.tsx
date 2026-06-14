@@ -107,9 +107,31 @@ export default async function BusinessPage({ params }: { params: { slug: string 
               <h2>Konum</h2>
               {b.address && <p className="ga-biz-addr">📍 {b.address}{loc ? `, ${loc}` : ''}</p>}
               {b.lat && b.lng ? (
-                <LocationMap center={{ lat: b.lat, lng: b.lng }} readonly />
+                <>
+                  <LocationMap center={{ lat: b.lat, lng: b.lng }} readonly />
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}`}
+                    target="_blank"
+                    rel="noopener"
+                    className="ga-directions-btn"
+                  >
+                    🧭 Yol Tarifi Al
+                  </a>
+                </>
               ) : (
-                <div className="ga-map-ph">Konum bilgisi eklenmemiş</div>
+                <>
+                  <div className="ga-map-ph">Konum bilgisi eklenmemiş</div>
+                  {(b.address || loc) && (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([b.address, loc].filter(Boolean).join(', '))}`}
+                      target="_blank"
+                      rel="noopener"
+                      className="ga-directions-btn"
+                    >
+                      🧭 Haritada Ara
+                    </a>
+                  )}
+                </>
               )}
             </section>
           </div>
