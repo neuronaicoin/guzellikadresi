@@ -129,3 +129,43 @@ export async function updateMyBusiness(id: string, fields: {
 
   return { ok: true };
 }
+
+// İşletme istatistikleri (son 30 gün + toplam). Sadece owner okuyabilir (RLS).
+export type BizStats = {
+  views30: number;
+  phone30: number;
+  whatsapp30: number;
+  viewsTotal: number;
+};
+
+export async function getBusinessStats(businessId: string): Promise<BizStats> {
+  const since = new Date();
+  since.setDate(since.getDate() - 30);
+  const sinceIso = since.toISOString();
+
+  const empty: BizStats = { views30: 0, phone30: 0, whatsapp30: 0, viewsTotal: 0 };
+
+  try {
+    const { data: recent } = await supabaseAuth
+      .from('business_events')
+      .select('type')
+      .eq('business_id', businessId)
+      .gte('created_at', sinceIso);
+
+    const { count: totalViews } = await supabaseAuth
+      .from('business_events')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .eq('type', 'view');
+
+    const stats = { ...empty, viewsTotal: totalViews || 0 };
+    (recent || []).forEach((e: any) => {
+      if (e.type === 'view') stats.views30++;
+      else if (e.type === 'phone_click') stats.phone30++;
+      else if (e.type === 'whatsapp_click') stats.whatsapp30++;
+    });
+    return stats;
+  } catch {
+    return empty;
+  }
+}
