@@ -1,0 +1,27 @@
+import type { BlogPost } from './types';
+import { post as lazerEpilasyon } from './lazer-epilasyon-rehberi';
+import { post as sacEkimi } from './sac-ekimi-rehberi';
+import { post as kaliciMakyaj } from './kalici-makyaj-microblading';
+import { post as salonMusteri } from './guzellik-salonu-musteri-cekme';
+import { post as ciltBakimi } from './profesyonel-cilt-bakimi';
+
+// Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
+export const allPosts: BlogPost[] = [
+  lazerEpilasyon,
+  sacEkimi,
+  kaliciMakyaj,
+  salonMusteri,
+  ciltBakimi,
+];
+
+export function getAllPosts(): BlogPost[] {
+  return [...allPosts].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+}
+
+export function getPostBySlug(slug: string): BlogPost | null {
+  return allPosts.find((p) => p.slug === slug) || null;
+}
+
+export function getRecentPosts(n: number): BlogPost[] {
+  return getAllPosts().slice(0, n);
+}
