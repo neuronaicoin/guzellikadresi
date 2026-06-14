@@ -45,12 +45,12 @@ export default function BusinessContact(p: Props) {
           💬 WhatsApp
         </a>
       )}
-      {p.website && <a href={p.website} target="_blank" rel="noopener" className="ga-c-btn ga-c-web">🌐 Web Sitesi</a>}
+      {p.website && <a href={p.website} target="_blank" rel="noopener" className="ga-c-btn ga-c-web" onClick={() => trackEvent(p.businessId, 'website_click')}>🌐 Web Sitesi</a>}
       <div className="ga-socials">
-        {p.instagram && <a href={normalizeSocial(p.instagram, 'instagram')} target="_blank" rel="noopener">Instagram</a>}
-        {p.facebook && <a href={normalizeSocial(p.facebook, 'facebook')} target="_blank" rel="noopener">Facebook</a>}
-        {p.x_twitter && <a href={normalizeSocial(p.x_twitter, 'x')} target="_blank" rel="noopener">X</a>}
-        {p.linkedin && <a href={normalizeSocial(p.linkedin, 'linkedin')} target="_blank" rel="noopener">LinkedIn</a>}
+        {p.instagram && <a href={normalizeSocial(p.instagram, 'instagram')} target="_blank" rel="noopener" onClick={() => trackEvent(p.businessId, 'instagram_click')}>Instagram</a>}
+        {p.facebook && <a href={normalizeSocial(p.facebook, 'facebook')} target="_blank" rel="noopener" onClick={() => trackEvent(p.businessId, 'facebook_click')}>Facebook</a>}
+        {p.x_twitter && <a href={normalizeSocial(p.x_twitter, 'x')} target="_blank" rel="noopener" onClick={() => trackEvent(p.businessId, 'x_click')}>X</a>}
+        {p.linkedin && <a href={normalizeSocial(p.linkedin, 'linkedin')} target="_blank" rel="noopener" onClick={() => trackEvent(p.businessId, 'linkedin_click')}>LinkedIn</a>}
       </div>
     </div>
   );
