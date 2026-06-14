@@ -461,3 +461,32 @@ img {
 /* ============ KAYIT FORMU HESAP ADIMI UYARISI ============ */
 .ga-account-warn { background: var(--gold-50); border: 1px solid var(--gold-soft); border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.6; color: #7a6429; margin-bottom: 18px; }
 .ga-account-warn b { color: #5f4d1f; }
+
+/* ============ PANEL — İŞLETMELERİM ============ */
+.ga-panel-wrap { max-width: 820px; margin: 0 auto; padding: 30px 22px 60px; }
+.ga-panel-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+.ga-panel-top h1 { font-size: 26px; font-weight: 800; color: var(--navy); margin: 0 0 4px 0; }
+.ga-panel-mail { color: var(--muted); font-size: 14px; margin: 0; }
+.ga-panel-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.ga-panel-section-head h2 { font-size: 18px; font-weight: 800; color: var(--navy); margin: 0; }
+.ga-panel-add { background: var(--gold); color: var(--navy); font-weight: 700; font-size: 13.5px; padding: 9px 16px; border-radius: 9px; }
+.ga-mybiz-list { display: flex; flex-direction: column; gap: 14px; }
+.ga-mybiz-card { display: flex; gap: 14px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; align-items: center; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
+.ga-mybiz-cover { width: 80px; height: 80px; border-radius: 10px; background-size: cover; background-position: center; background-color: var(--navy-50); flex: none; display: grid; place-items: center; font-size: 26px; }
+.ga-mybiz-info { flex: 1; min-width: 0; }
+.ga-mybiz-name { font-size: 16px; font-weight: 800; color: var(--navy); }
+.ga-mybiz-meta { font-size: 13px; color: var(--muted); margin: 3px 0 7px; }
+.ga-mybiz-status { font-size: 12px; font-weight: 700; }
+.ga-mybiz-status.ok { color: #16a34a; }
+.ga-mybiz-status.pending { color: #d97706; }
+.ga-mybiz-actions { display: flex; flex-direction: column; gap: 7px; flex: none; }
+.ga-mybiz-btn { font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 9px; border: 1px solid var(--line); color: var(--navy); text-align: center; white-space: nowrap; }
+.ga-mybiz-btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+.ga-mybiz-btn:hover { border-color: var(--gold); }
+
+@media (max-width: 560px) {
+  .ga-mybiz-card { flex-wrap: wrap; }
+  .ga-mybiz-cover { width: 60px; height: 60px; }
+  .ga-mybiz-actions { flex-direction: row; width: 100%; }
+  .ga-mybiz-btn { flex: 1; }
+}
