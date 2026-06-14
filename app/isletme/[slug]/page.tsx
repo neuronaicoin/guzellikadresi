@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Gallery from '@/components/Gallery';
+import BackButton from '@/components/BackButton';
 import { getBusinessBySlug } from '@/lib/queries-business';
 
 const LocationMap = dynamic(() => import('@/components/LocationMap'), { ssr: false });
@@ -51,6 +52,7 @@ export default async function BusinessPage({ params }: { params: { slug: string 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <div className="ga-biz-wrap">
+        <BackButton />
         {/* breadcrumb */}
         <div className="ga-biz-crumb">
           <a href="/">Ana Sayfa</a> ›{' '}
