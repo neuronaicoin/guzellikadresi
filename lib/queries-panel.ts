@@ -156,6 +156,7 @@ export type BizStats = {
   views30: number;
   phone30: number;
   whatsapp30: number;
+  social30: number;
   viewsTotal: number;
 };
 
@@ -164,7 +165,7 @@ export async function getBusinessStats(businessId: string): Promise<BizStats> {
   since.setDate(since.getDate() - 30);
   const sinceIso = since.toISOString();
 
-  const empty: BizStats = { views30: 0, phone30: 0, whatsapp30: 0, viewsTotal: 0 };
+  const empty: BizStats = { views30: 0, phone30: 0, whatsapp30: 0, social30: 0, viewsTotal: 0 };
 
   try {
     const { data: recent } = await supabaseAuth
@@ -184,6 +185,7 @@ export async function getBusinessStats(businessId: string): Promise<BizStats> {
       if (e.type === 'view') stats.views30++;
       else if (e.type === 'phone_click') stats.phone30++;
       else if (e.type === 'whatsapp_click') stats.whatsapp30++;
+      else if (e.type === 'website_click' || e.type === 'instagram_click' || e.type === 'facebook_click' || e.type === 'x_click' || e.type === 'linkedin_click') stats.social30++;
     });
     return stats;
   } catch {
