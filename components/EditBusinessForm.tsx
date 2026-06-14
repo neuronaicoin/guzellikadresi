@@ -177,6 +177,13 @@ export default function EditBusinessForm({
   }
   if (!biz) return null;
 
+  // Seçili il/ilçe adından harita arama sorgusu (il/ilçe değişince harita oraya gider)
+  const selProv = provinces.find((p) => p.id === cityId);
+  const selDist = districts.find((d) => d.id === distId);
+  const mapQuery = selProv
+    ? (selDist ? `${selDist.name}, ${selProv.name}, Türkiye` : `${selProv.name}, Türkiye`)
+    : undefined;
+
   return (
     <div className="ga-edit">
       {saved && <div className="ga-info-ok" style={{ marginBottom: 16 }}>✓ Değişiklikler kaydedildi.</div>}
@@ -276,6 +283,7 @@ export default function EditBusinessForm({
           <div style={{ height: 280, borderRadius: 12, overflow: 'hidden', border: '1px solid var(--line)' }}>
             <LocationMap
               center={pin || { lat: 39.0, lng: 35.0 }}
+              query={mapQuery}
               onPick={(lat, lng) => setPin({ lat, lng })}
             />
           </div>
