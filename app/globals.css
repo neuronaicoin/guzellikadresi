@@ -445,3 +445,15 @@ img {
   /* mobilde sol sidebar'ı gizle (keşif bölümü onun yerini aldı) */
   .ga-wrap > .ga-sidebar { display: none; }
 }
+
+/* ============ AUTH (giriş/kayıt/panel) ============ */
+.ga-auth-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 24px; box-shadow: 0 1px 3px rgba(14,33,72,.06); display: flex; flex-direction: column; gap: 14px; }
+.ga-auth-btn { background: var(--navy); color: #fff; border: none; border-radius: 11px; padding: 14px; font-size: 15.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.ga-auth-btn:disabled { opacity: .6; cursor: not-allowed; }
+.ga-auth-links { display: flex; flex-direction: column; gap: 8px; align-items: center; margin-top: 4px; }
+.ga-auth-link { background: none; border: none; color: var(--navy); font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; text-decoration: underline; }
+.ga-auth-link:hover { color: var(--gold); }
+.ga-info-ok { background: #ecfdf3; border: 1px solid #abefc6; color: #067647; border-radius: 10px; padding: 11px 14px; font-size: 13.5px; }
+.ga-panel-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 24px; margin: 20px 0; }
+.ga-logout-btn { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 10px; padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.ga-logout-btn:hover { border-color: #ef4444; color: #ef4444; }
