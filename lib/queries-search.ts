@@ -1,11 +1,65 @@
 import { supabase } from '@/lib/supabase';
 import type { BusinessCard } from '@/lib/types';
 
-// İşletme adı / açıklama / hizmet adına göre arama
+// İşletme adı, açıklama, HİZMET, KATEGORİ ve KONUM (il/ilçe) üzerinde arama
 export async function searchBusinesses(term: string): Promise<BusinessCard[]> {
-  if (!term.trim()) return [];
+  const q = term.trim();
+  if (!q) return [];
+  const like = `%${q}%`;
 
-  // İşletme adı veya açıklamada ara
+  // Eşleşen işletme id'lerini topla (birden çok kaynaktan)
+  const ids = new Set<string>();
+
+  // 1) İşletme adı / açıklama
+  try {
+    const { data } = await supabase
+      .from('businesses')
+      .select('id')
+      .eq('status', 'approved')
+      .or(`name.ilike.${like},description.ilike.${like},address.ilike.${like}`)
+      .limit(60);
+    (data || []).forEach((r: any) => ids.add(r.id));
+  } catch {}
+
+  // 2) Hizmet adına göre (services -> business_services -> businesses)
+  try {
+    const { data: svc } = await supabase.from('services').select('id').ilike('name', like).limit(40);
+    const svcIds = (svc || []).map((s: any) => s.id);
+    if (svcIds.length) {
+      const { data: bs } = await supabase.from('business_services').select('business_id').in('service_id', svcIds).limit(200);
+      (bs || []).forEach((r: any) => ids.add(r.business_id));
+    }
+  } catch {}
+
+  // 3) Kategori adına göre
+  try {
+    const { data: cat } = await supabase.from('categories').select('id').ilike('name', like).limit(20);
+    const catIds = (cat || []).map((c: any) => c.id);
+    if (catIds.length) {
+      const { data: bizByCat } = await supabase.from('businesses').select('id').eq('status', 'approved').in('category_id', catIds).limit(60);
+      (bizByCat || []).forEach((r: any) => ids.add(r.id));
+    }
+  } catch {}
+
+  // 4) Konum: il veya ilçe adına göre
+  try {
+    const { data: prov } = await supabase.from('provinces').select('id').ilike('name', like).limit(10);
+    const provIds = (prov || []).map((p: any) => p.id);
+    if (provIds.length) {
+      const { data: bizByProv } = await supabase.from('businesses').select('id').eq('status', 'approved').in('province_id', provIds).limit(60);
+      (bizByProv || []).forEach((r: any) => ids.add(r.id));
+    }
+    const { data: dist } = await supabase.from('districts').select('id').ilike('name', like).limit(20);
+    const distIds = (dist || []).map((d: any) => d.id);
+    if (distIds.length) {
+      const { data: bizByDist } = await supabase.from('businesses').select('id').eq('status', 'approved').in('district_id', distIds).limit(60);
+      (bizByDist || []).forEach((r: any) => ids.add(r.id));
+    }
+  } catch {}
+
+  if (ids.size === 0) return [];
+
+  // Eşleşen işletmelerin detaylarını çek
   const { data } = await supabase
     .from('businesses')
     .select(`
@@ -17,8 +71,9 @@ export async function searchBusinesses(term: string): Promise<BusinessCard[]> {
       business_services(services(name))
     `)
     .eq('status', 'approved')
-    .or(`name.ilike.%${term}%,description.ilike.%${term}%`)
-    .limit(40);
+    .in('id', Array.from(ids))
+    .order('created_at', { ascending: false })
+    .limit(60);
 
   const items: BusinessCard[] = (data || []).map((b: any) => {
     const cover = (b.business_photos || []).find((p: any) => p.is_cover) || (b.business_photos || [])[0];
