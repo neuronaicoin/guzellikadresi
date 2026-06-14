@@ -2,7 +2,7 @@
 
 import { supabase } from '@/lib/supabase';
 
-type EventType = 'view' | 'phone_click' | 'whatsapp_click';
+type EventType = 'view' | 'phone_click' | 'whatsapp_click' | 'website_click' | 'instagram_click' | 'facebook_click' | 'x_click' | 'linkedin_click';
 
 // Olay kaydet (ziyaretçi anon olarak ekler). Hata sessizce yutulur — istatistik kritik değil.
 export async function trackEvent(businessId: string, type: EventType) {
