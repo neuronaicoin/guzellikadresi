@@ -522,3 +522,47 @@ img {
   .ga-stat:nth-child(2) { border-right: none; }
   .ga-stat:nth-child(1), .ga-stat:nth-child(2) { border-bottom: 1px solid var(--line); }
 }
+
+/* ============ REHBER (BLOG) ============ */
+.ga-rehber-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.ga-rehber-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(14,33,72,.05); transition: .15s; display: flex; flex-direction: column; }
+.ga-rehber-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(14,33,72,.1); border-color: var(--gold-soft); }
+.ga-rehber-img { height: 170px; background-size: cover; background-position: center; background-color: var(--navy-50); position: relative; }
+.ga-rehber-cat { position: absolute; bottom: 10px; left: 10px; background: rgba(14,33,72,.85); color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 11px; border-radius: 7px; }
+.ga-rehber-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+.ga-rehber-body h2 { font-size: 16.5px; font-weight: 800; color: var(--navy); line-height: 1.35; margin: 0; }
+.ga-rehber-body p { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin: 0; flex: 1; }
+.ga-rehber-meta { font-size: 12px; color: var(--gold); font-weight: 700; margin-top: 4px; }
+
+/* yazı sayfası */
+.ga-post-wrap { max-width: 760px; margin: 0 auto; padding: 24px 22px 40px; }
+.ga-post-cat { display: inline-block; background: var(--gold-50); color: #8a6a23; font-size: 12.5px; font-weight: 700; padding: 5px 13px; border-radius: 8px; margin-bottom: 12px; }
+.ga-post-title { font-size: 30px; font-weight: 800; color: var(--navy); line-height: 1.25; letter-spacing: -.5px; margin: 0 0 10px 0; }
+.ga-post-meta { font-size: 13.5px; color: var(--muted); margin-bottom: 20px; }
+.ga-post-hero { width: 100%; height: 340px; border-radius: 16px; background-size: cover; background-position: center; background-color: var(--navy-50); margin-bottom: 26px; }
+.ga-post-content { font-size: 16px; line-height: 1.75; color: #2f3845; }
+.ga-post-content h2 { font-size: 21px; font-weight: 800; color: var(--navy); margin: 30px 0 12px; letter-spacing: -.3px; }
+.ga-post-content p { margin: 0 0 16px; }
+.ga-post-content ul { margin: 0 0 16px; padding-left: 22px; }
+.ga-post-content li { margin-bottom: 8px; }
+.ga-post-content a { color: var(--gold); font-weight: 700; text-decoration: underline; }
+.ga-post-content a:hover { color: #8a6a23; }
+.ga-post-content strong { color: var(--navy); }
+
+.ga-post-faq { margin-top: 38px; border-top: 1px solid var(--line); padding-top: 26px; }
+.ga-post-faq h2 { font-size: 22px; font-weight: 800; color: var(--navy); margin: 0 0 18px; }
+.ga-faq-item { margin-bottom: 18px; }
+.ga-faq-item h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin: 0 0 6px; }
+.ga-faq-item p { font-size: 14.5px; line-height: 1.65; color: #444c5e; margin: 0; }
+
+.ga-post-cta { margin-top: 36px; background: var(--navy); border-radius: 16px; padding: 28px; text-align: center; }
+.ga-post-cta h3 { color: #fff; font-size: 19px; font-weight: 800; margin: 0 0 8px; }
+.ga-post-cta p { color: #c5cde0; font-size: 14.5px; margin: 0 0 16px; }
+
+.ga-related-title { font-size: 20px; font-weight: 800; color: var(--navy); margin: 0 0 18px; }
+
+@media (max-width: 560px) {
+  .ga-post-title { font-size: 24px; }
+  .ga-post-hero { height: 220px; }
+  .ga-post-content { font-size: 15.5px; }
+}
