@@ -497,3 +497,10 @@ img {
 .ga-pw-eye { position: absolute; right: 8px; background: none; border: none; cursor: pointer; font-size: 17px; padding: 6px; line-height: 1; }
 .ga-back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-weight: 700; font-size: 14px; padding: 8px 0; margin-bottom: 8px; }
 .ga-back-link:hover { color: var(--gold); }
+
+/* ============ İŞLETME DÜZENLEME ============ */
+.ga-edit { display: flex; flex-direction: column; gap: 18px; }
+.ga-edit-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
+.ga-edit-card h3 { font-size: 16px; font-weight: 800; color: var(--navy); margin: 0 0 14px 0; }
+.ga-edit-note { font-size: 12.5px; color: var(--muted); background: var(--navy-50); border-radius: 10px; padding: 12px 14px; }
+.ga-edit-actions { display: flex; justify-content: flex-end; }
