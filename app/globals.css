@@ -490,3 +490,10 @@ img {
   .ga-mybiz-actions { flex-direction: row; width: 100%; }
   .ga-mybiz-btn { flex: 1; }
 }
+
+/* ============ ŞİFRE GÖZ İKONU + GERİ BUTONU ============ */
+.ga-pw-wrap { position: relative; display: flex; align-items: center; }
+.ga-pw-wrap input { width: 100%; padding-right: 44px; }
+.ga-pw-eye { position: absolute; right: 8px; background: none; border: none; cursor: pointer; font-size: 17px; padding: 6px; line-height: 1; }
+.ga-back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); font-weight: 700; font-size: 14px; padding: 8px 0; margin-bottom: 8px; }
+.ga-back-link:hover { color: var(--gold); }
