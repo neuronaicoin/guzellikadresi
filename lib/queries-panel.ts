@@ -55,6 +55,11 @@ export type EditableBusiness = {
   facebook: string | null;
   x_twitter: string | null;
   linkedin: string | null;
+  province_id: number | null;
+  district_id: number | null;
+  address: string | null;
+  lat: number | null;
+  lng: number | null;
   serviceIds: number[];
 };
 
@@ -65,6 +70,7 @@ export async function getMyBusinessDetail(id: string): Promise<EditableBusiness 
     .select(`
       id, owner_id, name, description,
       phone, whatsapp, website, instagram, facebook, x_twitter, linkedin,
+      province_id, district_id, address, lat, lng,
       business_services(service_id)
     `)
     .eq('id', id)
@@ -84,6 +90,11 @@ export async function getMyBusinessDetail(id: string): Promise<EditableBusiness 
     facebook: b.facebook,
     x_twitter: b.x_twitter,
     linkedin: b.linkedin,
+    province_id: b.province_id,
+    district_id: b.district_id,
+    address: b.address,
+    lat: b.lat,
+    lng: b.lng,
     serviceIds: (b.business_services || []).map((s: any) => s.service_id),
   };
 }
@@ -99,6 +110,11 @@ export async function updateMyBusiness(id: string, fields: {
   facebook: string;
   x_twitter: string;
   linkedin: string;
+  province_id: number | null;
+  district_id: number | null;
+  address: string;
+  lat: number | null;
+  lng: number | null;
   serviceIds: number[];
 }): Promise<{ ok: boolean; error?: string }> {
   // 1) Ana bilgiler
@@ -114,6 +130,11 @@ export async function updateMyBusiness(id: string, fields: {
       facebook: fields.facebook || null,
       x_twitter: fields.x_twitter || null,
       linkedin: fields.linkedin || null,
+      province_id: fields.province_id,
+      district_id: fields.district_id,
+      address: fields.address || null,
+      lat: fields.lat,
+      lng: fields.lng,
     })
     .eq('id', id);
 
