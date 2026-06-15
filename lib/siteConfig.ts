@@ -6,10 +6,10 @@
 
 export const siteConfig = {
   // Marka
-  brandName: 'GüzellikAdresi',
-  title: 'GüzellikAdresi — Güzelliğin Doğru Adresi',
+  brandName: 'GüzellikAdresin',
+  title: 'Bölgendeki Güzellik ve Bakım Merkezlerini Bul | GüzellikAdresin',
   description:
-    "Türkiye'nin güzellik ve bakım adresi. Yakınınızdaki güzellik merkezi, kuaför, berber, medikal estetik, tırnak stüdyosu, saç ekimi ve daha fazlasını ücretsiz bulun, karşılaştırın, ulaşın.",
+    'Yakınındaki en iyi güzellik adresini bul. Güzellik merkezi, lazer epilasyon, saç ekimi, kuaför ve daha fazlası — adresleri, telefonları ve konumlarıyla tek yerde, ücretsiz.',
 
   // Renkler (marka kimliği)
   colors: {
