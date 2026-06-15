@@ -8,9 +8,11 @@ import { post as beylikduzuGuzellik } from './beylikduzu-guzellik-merkezi';
 import { post as beylikduzuLazer } from './beylikduzu-lazer-epilasyon';
 import { post as beylikduzuSacEkimi } from './beylikduzu-sac-ekimi';
 import { post as beylikduzuCiltBakimi } from './beylikduzu-cilt-bakimi';
+import { post as beylikduzuSpaMasaj } from './beylikduzu-spa-masaj';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  beylikduzuSpaMasaj,
   beylikduzuCiltBakimi,
   beylikduzuGuzellik,
   beylikduzuLazer,
