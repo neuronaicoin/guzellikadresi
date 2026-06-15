@@ -20,11 +20,11 @@ export default function ContactForm() {
     setSending(true);
     try {
       const { error } = await supabase.from('contact_messages').insert({
-        isim: f.isim.trim(),
-        soyisim: f.soyisim.trim() || null,
-        telefon: f.telefon.trim() || null,
-        mail: f.mail.trim(),
-        mesaj: f.mesaj.trim(),
+        first_name: f.isim.trim(),
+        last_name: f.soyisim.trim() || null,
+        phone: f.telefon.trim() || null,
+        email: f.mail.trim(),
+        message: f.mesaj.trim(),
       });
       if (error) setErr('Gönderilemedi. Lütfen tekrar deneyin.');
       else setDone(true);
