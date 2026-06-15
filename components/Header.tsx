@@ -14,7 +14,13 @@ export default function Header() {
     <header className="ga-header">
       <div className="ga-header-inner">
         <Link href="/" className="ga-logo" onClick={() => setOpen(false)}>
-          <span className="ga-logo-badge">G</span>
+          <span className="ga-logo-badge" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30 5 C16 5 5 16 5 30 C5 48 30 75 30 75 C30 75 55 48 55 30 C55 16 44 5 30 5 Z" fill="#0e2148"/>
+              <path d="M30 20 L33 28 L41 30 L33 32 L30 40 L27 32 L19 30 L27 28 Z" fill="#c9a24b"/>
+              <circle cx="30" cy="30" r="3.5" fill="#c9a24b"/>
+            </svg>
+          </span>
           <span>Güzellik<span style={{ color: 'var(--gold)' }}>Adresin</span></span>
         </Link>
 
