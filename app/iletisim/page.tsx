@@ -4,7 +4,7 @@ import ContactForm from '@/components/ContactForm';
 
 export const metadata = {
   title: 'İletişim',
-  description: 'GüzellikAdresi ile iletişime geçin. Soru, öneri ve işbirliği talepleriniz için bize ulaşın.',
+  description: 'GüzellikAdresin ile iletişime geçin. Soru, öneri ve işbirliği talepleriniz için bize ulaşın.',
 };
 
 export default function ContactPage() {
