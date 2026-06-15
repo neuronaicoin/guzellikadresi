@@ -11,7 +11,7 @@ export default function PrivacyPage() {
         <h1>Gizlilik Politikası</h1>
         <p className="ga-static-lead">Son güncelleme: {new Date().getFullYear()}</p>
 
-        <p>GüzellikAdresi olarak gizliliğinize önem veriyoruz. Bu politika, platformumuzu kullanırken hangi verilerin toplandığını ve nasıl kullanıldığını açıklar.</p>
+        <p>GüzellikAdresin olarak gizliliğinize önem veriyoruz. Bu politika, platformumuzu kullanırken hangi verilerin toplandığını ve nasıl kullanıldığını açıklar.</p>
 
         <h2>Toplanan Bilgiler</h2>
         <p>İşletme kaydı sırasında işletme adı, kategori, konum, iletişim bilgileri ve fotoğraflar gibi sizin tarafınızdan sağlanan bilgileri toplarız. Ayrıca platformu iyileştirmek amacıyla anonim kullanım verileri (ziyaret edilen sayfalar gibi) toplanabilir.</p>
