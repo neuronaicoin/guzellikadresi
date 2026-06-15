@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
-export default function ContactForm({ formspreeId }: { formspreeId: string }) {
+export default function ContactForm() {
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState('');
@@ -16,19 +17,17 @@ export default function ContactForm({ formspreeId }: { formspreeId: string }) {
       setErr('Lütfen isim, e-posta ve mesaj alanlarını doldurun.');
       return;
     }
-    if (!formspreeId) {
-      setErr('İletişim formu henüz aktif değil. Lütfen daha sonra tekrar deneyin.');
-      return;
-    }
     setSending(true);
     try {
-      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(f),
+      const { error } = await supabase.from('contact_messages').insert({
+        isim: f.isim.trim(),
+        soyisim: f.soyisim.trim() || null,
+        telefon: f.telefon.trim() || null,
+        mail: f.mail.trim(),
+        mesaj: f.mesaj.trim(),
       });
-      if (res.ok) setDone(true);
-      else setErr('Gönderilemedi. Lütfen tekrar deneyin.');
+      if (error) setErr('Gönderilemedi. Lütfen tekrar deneyin.');
+      else setDone(true);
     } catch {
       setErr('Bağlantı hatası. Lütfen tekrar deneyin.');
     } finally {
