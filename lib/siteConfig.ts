@@ -27,7 +27,7 @@ export const siteConfig = {
 
   // İletişim
   email: '',           // sonra eklenecek
-  formspreeId: '',     // Formspree form ID'si (contact için, sonra)
+  formspreeId: 'maqzvwoy',     // Formspree form ID'si (iletişim formu)
 
   // Sosyal medya (lansmanda doldurulacak)
   social: {
