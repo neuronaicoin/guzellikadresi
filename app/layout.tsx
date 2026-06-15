@@ -22,6 +22,9 @@ export const metadata: Metadata = {
     : { index: false, follow: false },
   verification: {
     google: 'EGmSKxrHUFZx_OuPsiB_3w8NJfLxpxwFeG64hfM573o',
+    other: {
+      'msvalidate.01': '9CB03E8E93C7289160D5677D71AB3ACB',
+    },
   },
   ...(siteConfig.url ? { metadataBase: new URL(siteConfig.url) } : {}),
   openGraph: {
