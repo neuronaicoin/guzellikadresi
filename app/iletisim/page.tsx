@@ -1,7 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
-import { siteConfig } from '@/lib/siteConfig';
 
 export const metadata = {
   title: 'İletişim',
@@ -15,7 +14,7 @@ export default function ContactPage() {
       <div className="ga-static-wrap">
         <h1>İletişim</h1>
         <p className="ga-static-lead">Soru, öneri veya işbirliği talepleriniz için aşağıdaki formu doldurun, en kısa sürede dönüş yapalım.</p>
-        <ContactForm formspreeId={siteConfig.formspreeId} />
+        <ContactForm />
       </div>
       <Footer />
     </>
