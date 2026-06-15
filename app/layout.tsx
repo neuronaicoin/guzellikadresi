@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   robots: siteConfig.allowIndexing
     ? { index: true, follow: true }
     : { index: false, follow: false },
+  verification: {
+    google: 'EGmSKxrHUFZx_OuPsiB_3w8NJfLxpxwFeG64hfM573o',
+  },
   ...(siteConfig.url ? { metadataBase: new URL(siteConfig.url) } : {}),
   openGraph: {
     title: siteConfig.title,
