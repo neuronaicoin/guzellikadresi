@@ -15,7 +15,7 @@ export default function Header() {
       <div className="ga-header-inner">
         <Link href="/" className="ga-logo" onClick={() => setOpen(false)}>
           <span className="ga-logo-badge">G</span>
-          <span>Güzellik<span style={{ color: 'var(--gold)' }}>Adresi</span></span>
+          <span>Güzellik<span style={{ color: 'var(--gold)' }}>Adresin</span></span>
         </Link>
 
         {/* masaüstü menü */}
