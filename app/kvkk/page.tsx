@@ -12,7 +12,7 @@ export default function KvkkPage() {
         <p className="ga-static-lead">6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında bilgilendirme</p>
 
         <h2>Veri Sorumlusu</h2>
-        <p>GüzellikAdresi, kişisel verilerinizin işlenmesi süreçlerinde veri sorumlusu olarak hareket eder.</p>
+        <p>GüzellikAdresin, kişisel verilerinizin işlenmesi süreçlerinde veri sorumlusu olarak hareket eder.</p>
 
         <h2>İşlenen Kişisel Veriler</h2>
         <p>İşletme kaydı sırasında ad-soyad, telefon, e-posta, işletme bilgileri ve konum bilgileri gibi veriler işlenebilir.</p>
