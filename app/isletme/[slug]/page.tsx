@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const loc = [b.district?.name, b.province?.name].filter(Boolean).join(', ');
   return {
     title: `${b.name} — ${loc}`,
-    description: b.description || `${b.name}, ${loc}. ${b.category?.name || ''} hizmetleri. GüzellikAdresi'nde keşfedin.`,
+    description: b.description || `${b.name}, ${loc}. ${b.category?.name || ''} hizmetleri. GüzellikAdresinn'de keşfedin.`,
   };
 }
 
