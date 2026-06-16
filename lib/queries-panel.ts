@@ -158,6 +158,9 @@ export type BizStats = {
   whatsapp30: number;
   social30: number;
   viewsTotal: number;
+  phoneTotal: number;
+  whatsappTotal: number;
+  reachTotal: number;
 };
 
 export async function getBusinessStats(businessId: string): Promise<BizStats> {
@@ -165,7 +168,7 @@ export async function getBusinessStats(businessId: string): Promise<BizStats> {
   since.setDate(since.getDate() - 30);
   const sinceIso = since.toISOString();
 
-  const empty: BizStats = { views30: 0, phone30: 0, whatsapp30: 0, social30: 0, viewsTotal: 0 };
+  const empty: BizStats = { views30: 0, phone30: 0, whatsapp30: 0, social30: 0, viewsTotal: 0, phoneTotal: 0, whatsappTotal: 0, reachTotal: 0 };
 
   try {
     const { data: recent } = await supabaseAuth
@@ -174,13 +177,20 @@ export async function getBusinessStats(businessId: string): Promise<BizStats> {
       .eq('business_id', businessId)
       .gte('created_at', sinceIso);
 
-    const { count: totalViews } = await supabaseAuth
+    // Tüm zaman: type bazında say
+    const { data: allEv } = await supabaseAuth
       .from('business_events')
-      .select('*', { count: 'exact', head: true })
-      .eq('business_id', businessId)
-      .eq('type', 'view');
+      .select('type')
+      .eq('business_id', businessId);
 
-    const stats = { ...empty, viewsTotal: totalViews || 0 };
+    const stats = { ...empty };
+    (allEv || []).forEach((e: any) => {
+      if (e.type === 'view') stats.viewsTotal++;
+      else if (e.type === 'phone_click') stats.phoneTotal++;
+      else if (e.type === 'whatsapp_click') stats.whatsappTotal++;
+    });
+    stats.reachTotal = stats.phoneTotal + stats.whatsappTotal;
+
     (recent || []).forEach((e: any) => {
       if (e.type === 'view') stats.views30++;
       else if (e.type === 'phone_click') stats.phone30++;
