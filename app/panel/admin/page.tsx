@@ -12,6 +12,11 @@ type AdminData = {
   provinceDist: { name: string; count: number }[];
   categoryDist: { name: string; count: number }[];
   recentBiz: { name: string; slug: string; district: string; province: string; category: string; created_at: string }[];
+  topSearches: { q: string; count: number }[];
+  emptySearches: { q: string; count: number }[];
+  totalSearches: number;
+  topCategories: { name: string; count: number }[];
+  topLocations: { name: string; count: number }[];
 };
 
 export default function AdminPanelPage() {
@@ -132,10 +137,63 @@ export default function AdminPanelPage() {
           )}
         </div>
 
+        {/* ARAMA İSTATİSTİKLERİ */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 18, marginBottom: 18 }}>
+          {/* En çok aranan */}
+          <div style={card}>
+            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 4 }}>En Çok Aranan Kelimeler</h2>
+            <p style={{ fontSize: 12, color: '#999', marginBottom: 12 }}>Son 30 gün · Toplam {data.totalSearches} arama</p>
+            {data.topSearches.length === 0 ? (
+              <p style={{ color: '#999', fontSize: 14 }}>Henüz arama verisi yok.</p>
+            ) : data.topSearches.map((s, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, borderBottom: '1px solid #f5f5f5' }}>
+                <span>{s.q}</span><b style={{ color: '#0e2148' }}>{s.count}</b>
+              </div>
+            ))}
+          </div>
+
+          {/* Sonuç çıkmayan aramalar (KARŞILANMAMIŞ TALEP) */}
+          <div style={{ ...card, border: '1px solid #f0d9b5', background: '#fffdf7' }}>
+            <h2 style={{ fontSize: 16, color: '#b8860b', marginBottom: 4 }}>⚠ Sonuç Çıkmayan Aramalar</h2>
+            <p style={{ fontSize: 12, color: '#999', marginBottom: 12 }}>Talep var, işletme yok — fırsat alanları</p>
+            {data.emptySearches.length === 0 ? (
+              <p style={{ color: '#999', fontSize: 14 }}>Sonuçsuz arama yok.</p>
+            ) : data.emptySearches.map((s, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, borderBottom: '1px solid #f5ecd5' }}>
+                <span>{s.q}</span><b style={{ color: '#b8860b' }}>{s.count}</b>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SAYFA GÖRÜNTÜLEME (neye bakıldı) */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 18, marginBottom: 18 }}>
+          <div style={card}>
+            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 14 }}>En Çok Bakılan Kategoriler</h2>
+            {data.topCategories.length === 0 ? (
+              <p style={{ color: '#999', fontSize: 14 }}>Henüz veri yok.</p>
+            ) : data.topCategories.map((c, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, borderBottom: '1px solid #f5f5f5' }}>
+                <span>{c.name}</span><b style={{ color: '#0e2148' }}>{c.count}</b>
+              </div>
+            ))}
+          </div>
+          <div style={card}>
+            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 14 }}>En Çok Bakılan Bölgeler</h2>
+            {data.topLocations.length === 0 ? (
+              <p style={{ color: '#999', fontSize: 14 }}>Henüz veri yok.</p>
+            ) : data.topLocations.map((l, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, borderBottom: '1px solid #f5f5f5' }}>
+                <span>{l.name}</span><b style={{ color: '#0e2148' }}>{l.count}</b>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 18, marginBottom: 18 }}>
           {/* Şehir dağılımı */}
           <div style={card}>
-            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 14 }}>Şehir Dağılımı</h2>
+            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 14 }}>İşletme · Şehir Dağılımı</h2>
             {data.provinceDist.slice(0, 12).map((p, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, borderBottom: '1px solid #f5f5f5' }}>
                 <span>{p.name}</span><b style={{ color: '#0e2148' }}>{p.count}</b>
@@ -145,7 +203,7 @@ export default function AdminPanelPage() {
 
           {/* Kategori dağılımı */}
           <div style={card}>
-            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 14 }}>Kategori Dağılımı</h2>
+            <h2 style={{ fontSize: 16, color: '#0e2148', marginBottom: 14 }}>İşletme · Kategori Dağılımı</h2>
             {data.categoryDist.slice(0, 12).map((c, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, borderBottom: '1px solid #f5f5f5' }}>
                 <span>{c.name}</span><b style={{ color: '#0e2148' }}>{c.count}</b>
