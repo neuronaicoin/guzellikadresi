@@ -580,3 +580,14 @@ img {
 /* ============ YOL TARİFİ BUTONU ============ */
 .ga-directions-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; background: var(--navy); color: #fff; font-weight: 700; font-size: 14.5px; padding: 12px 22px; border-radius: 11px; transition: .15s; }
 .ga-directions-btn:hover { background: var(--gold); color: var(--navy); }
+
+/* ============ SKELETON / YÜKLENİYOR ============ */
+@keyframes ga-shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+.ga-sk { background: #eef0f5; background-image: linear-gradient(90deg, #eef0f5 0px, #f6f7fa 200px, #eef0f5 400px); background-size: 800px 100%; animation: ga-shimmer 1.3s linear infinite; border-radius: 8px; }
+.ga-sk-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.ga-sk-cover { width: 100%; aspect-ratio: 16/10; }
+.ga-sk-line { height: 13px; margin: 10px 14px; }
+.ga-sk-line.sm { width: 50%; }
+.ga-sk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.ga-sk-wrap { max-width: 1280px; margin: 0 auto; padding: 22px; }
+.ga-sk-title { height: 26px; width: 220px; margin-bottom: 18px; }
