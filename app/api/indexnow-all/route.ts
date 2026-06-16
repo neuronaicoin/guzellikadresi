@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { notifyIndexNow } from '@/lib/indexnow';
+import { getAllPosts } from '@/lib/data/blog';
 
 export const runtime = 'nodejs';
 
@@ -43,6 +44,12 @@ export async function POST(req: NextRequest) {
     try {
       const { data: cats } = await supabaseAdmin.from('categories').select('slug');
       (cats || []).forEach((c: any) => { if (c.slug) urls.push(`/kategori/${c.slug}`); });
+    } catch {}
+
+    // Blog yazıları (rehber)
+    try {
+      urls.push('/rehber');
+      getAllPosts().forEach((p) => { if (p.slug) urls.push(`/rehber/${p.slug}`); });
     } catch {}
 
     await notifyIndexNow(urls);
