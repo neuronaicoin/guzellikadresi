@@ -4,6 +4,7 @@ import BusinessCard from '@/components/BusinessCard';
 import SearchExplorer from '@/components/SearchExplorer';
 import { searchBusinesses } from '@/lib/queries-search';
 import { getCategoriesForForm, getProvincesForForm } from '@/lib/queries-form';
+import { trackSearch } from '@/lib/track-server';
 
 export const metadata = {
   title: 'Ara',
@@ -16,6 +17,8 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
   // Arama terimi varsa: sonuçları göster
   if (term) {
     const items = await searchBusinesses(term);
+    // Arama takibi (sonuç sayısıyla — 0 ise karşılanmamış talep)
+    await trackSearch(term, items.length);
     return (
       <>
         <Header />
