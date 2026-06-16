@@ -8,6 +8,7 @@ import {
   getCategoryBySlug,
   getBusinessList,
 } from '@/lib/queries-list';
+import { trackPage } from '@/lib/track-server';
 
 export const revalidate = 600;
 
@@ -59,6 +60,8 @@ export default async function ServiceInDistrictPage({
 
   // DOLU-SAYFA FİLTRESİ: bu ilçede bu hizmette hiç işletme yoksa, boş sayfa basma (404)
   if (total === 0) notFound();
+
+  await trackPage('hizmet', `${dist.name} ${cat.name}`, `${prov.slug}/${dist.slug}/${cat.slug}`);
 
   const catLower = cat.name.toLocaleLowerCase('tr-TR');
 
