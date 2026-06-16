@@ -118,7 +118,11 @@ export default function PanelPage() {
                   </div>
                   <div className="ga-stat ga-stat-hl">
                     <span className="ga-stat-num">{st ? (st.phone30 + st.whatsapp30) : '…'}</span>
-                    <span className="ga-stat-lbl">Siteden ulaşan<small>tahmini ilgi</small></span>
+                    <span className="ga-stat-lbl">Siteden ulaşan<small>son 30 gün</small></span>
+                  </div>
+                  <div className="ga-stat ga-stat-hl">
+                    <span className="ga-stat-num">{st ? st.reachTotal : '…'}</span>
+                    <span className="ga-stat-lbl">Toplam ulaşan<small>tüm zamanlar</small></span>
                   </div>
                 </div>
               </div>
