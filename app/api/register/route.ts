@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { slugify, shortId } from '@/lib/slugify';
+import { notifyIndexNow } from '@/lib/indexnow';
 
 export const runtime = 'nodejs';
 
@@ -106,6 +107,9 @@ export async function POST(req: NextRequest) {
     for (let i = 0; i < workEntries.length; i++) {
       await uploadOne(workEntries[i], false, 'work');
     }
+
+    // IndexNow: yeni işletme sayfasını + ana sayfayı arama motorlarına anında bildir
+    notifyIndexNow([`/isletme/${slug}`, '/']);
 
     return NextResponse.json({ ok: true, slug });
   } catch (e: any) {
