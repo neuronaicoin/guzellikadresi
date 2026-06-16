@@ -29,13 +29,18 @@ export default async function BusinessPage({ params }: { params: { slug: string 
   const loc = [b.district?.name, b.province?.name].filter(Boolean).join(', ');
 
   // LocalBusiness schema (Google zengin sonuç)
+  const pageUrl = `https://guzellikadresin.com/isletme/${b.slug}`;
+  const sameAs = [b.instagram, b.facebook, b.website].filter(Boolean);
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'HealthAndBeautyBusiness',
+    '@id': pageUrl,
     name: b.name,
     description: b.description || undefined,
     image: b.coverUrl || undefined,
     telephone: b.phone || undefined,
+    url: pageUrl,
+    ...(b.category?.name ? { knowsAbout: b.category.name } : {}),
     address: {
       '@type': 'PostalAddress',
       streetAddress: b.address || undefined,
@@ -44,13 +49,26 @@ export default async function BusinessPage({ params }: { params: { slug: string 
       addressCountry: 'TR',
     },
     ...(b.lat && b.lng ? { geo: { '@type': 'GeoCoordinates', latitude: b.lat, longitude: b.lng } } : {}),
-    ...(b.website ? { url: b.website } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+  };
+
+  // Breadcrumb schema (Google'da yol gösterimi)
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://guzellikadresin.com/' },
+      ...(b.province ? [{ '@type': 'ListItem', position: 2, name: b.province.name, item: `https://guzellikadresin.com/${b.province.slug}` }] : []),
+      ...(b.category ? [{ '@type': 'ListItem', position: 3, name: b.category.name, item: `https://guzellikadresin.com/kategori/${b.category.slug}` }] : []),
+      { '@type': 'ListItem', position: 4, name: b.name },
+    ],
   };
 
   return (
     <>
       <Header />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       <div className="ga-biz-wrap">
         <BackButton />
