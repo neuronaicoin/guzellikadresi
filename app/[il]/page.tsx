@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ListingView from '@/components/ListingView';
 import { getProvinceBySlug, getBusinessList } from '@/lib/queries-list';
+import { trackPage } from '@/lib/track-server';
 
 export const revalidate = 600;
 
@@ -24,6 +25,8 @@ export default async function ProvincePage({
 }) {
   const prov = await getProvinceBySlug(params.il);
   if (!prov) notFound();
+
+  await trackPage('il', prov.name, prov.slug);
 
   const page = Number(searchParams.sayfa) || 1;
   const { items, total, perPage } = await getBusinessList({ provinceId: prov.id, page });
