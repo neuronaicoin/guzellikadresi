@@ -10,9 +10,11 @@ import { post as beylikduzuSacEkimi } from './beylikduzu-sac-ekimi';
 import { post as beylikduzuCiltBakimi } from './beylikduzu-cilt-bakimi';
 import { post as beylikduzuSpaMasaj } from './beylikduzu-spa-masaj';
 import { post as protezTirnak } from './protez-tirnak-rehberi';
+import { post as dovmePiercing } from './dovme-piercing-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  dovmePiercing,
   protezTirnak,
   beylikduzuSpaMasaj,
   beylikduzuCiltBakimi,
