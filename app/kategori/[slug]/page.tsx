@@ -13,7 +13,7 @@ import { getProvinces } from '@/lib/queries';
 import { supabase } from '@/lib/supabase';
 import { trackPage } from '@/lib/track-server';
 
-export const revalidate = 600;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params, searchParams }: { params: { slug: string }; searchParams: { il?: string; ilce?: string } }) {
   const cat = await getCategoryBySlug(params.slug);
