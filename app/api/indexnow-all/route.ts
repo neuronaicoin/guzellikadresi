@@ -14,25 +14,36 @@ export async function POST(req: NextRequest) {
 
     const urls: string[] = ['/'];
 
-    // İşletmeler + dolu programatik kombinasyonlar
+    // İşletmeler (önce basit sorgu - slug'lar garanti gelsin)
     const { data: biz } = await supabaseAdmin
       .from('businesses')
-      .select('slug, provinces(slug), districts(slug), categories(slug)')
+      .select('slug')
       .eq('status', 'approved');
-
-    const seen = new Set<string>();
     (biz || []).forEach((b: any) => {
-      urls.push(`/isletme/${b.slug}`);
-      const il = b.provinces?.slug, ilce = b.districts?.slug, hizmet = b.categories?.slug;
-      if (il && ilce && hizmet) {
-        const k = `/${il}/${ilce}/${hizmet}`;
-        if (!seen.has(k)) { seen.add(k); urls.push(k); }
-      }
+      if (b.slug) urls.push(`/isletme/${b.slug}`);
     });
 
+    // Dolu programatik kombinasyonlar (ayrı sorgu - join hatası işletmeleri etkilemesin)
+    try {
+      const { data: bizLoc } = await supabaseAdmin
+        .from('businesses')
+        .select('provinces(slug), districts(slug), categories(slug)')
+        .eq('status', 'approved');
+      const seen = new Set<string>();
+      (bizLoc || []).forEach((b: any) => {
+        const il = b.provinces?.slug, ilce = b.districts?.slug, hizmet = b.categories?.slug;
+        if (il && ilce && hizmet) {
+          const k = `/${il}/${ilce}/${hizmet}`;
+          if (!seen.has(k)) { seen.add(k); urls.push(k); }
+        }
+      });
+    } catch {}
+
     // Kategoriler
-    const { data: cats } = await supabaseAdmin.from('categories').select('slug');
-    (cats || []).forEach((c: any) => urls.push(`/kategori/${c.slug}`));
+    try {
+      const { data: cats } = await supabaseAdmin.from('categories').select('slug');
+      (cats || []).forEach((c: any) => { if (c.slug) urls.push(`/kategori/${c.slug}`); });
+    } catch {}
 
     await notifyIndexNow(urls);
 
