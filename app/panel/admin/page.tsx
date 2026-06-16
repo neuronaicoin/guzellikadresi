@@ -24,6 +24,27 @@ export default function AdminPanelPage() {
   const [data, setData] = useState<AdminData | null>(null);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');
+  const [indexMsg, setIndexMsg] = useState('');
+  const [indexing, setIndexing] = useState(false);
+
+  async function pingIndexNow() {
+    setIndexMsg('');
+    setIndexing(true);
+    try {
+      const res = await fetch('/api/indexnow-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key }),
+      });
+      const json = await res.json();
+      if (json.ok) setIndexMsg(`${json.count} sayfa arama motorlarına bildirildi ✓`);
+      else setIndexMsg('Bildirim başarısız.');
+    } catch {
+      setIndexMsg('Bağlantı hatası.');
+    } finally {
+      setIndexing(false);
+    }
+  }
 
   async function login() {
     setErr('');
@@ -92,6 +113,17 @@ export default function AdminPanelPage() {
       <Header />
       <div style={{ maxWidth: 1000, margin: '24px auto 60px', padding: '0 18px', lineHeight: 1.5 }}>
         <h1 style={{ fontSize: 24, color: '#0e2148', marginBottom: 20 }}>Yönetim Paneli</h1>
+
+        <div style={{ marginBottom: 20, padding: 14, background: '#f7f8fa', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <button
+            onClick={pingIndexNow}
+            disabled={indexing}
+            style={{ padding: '10px 16px', background: '#0e2148', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', opacity: indexing ? 0.6 : 1 }}
+          >
+            {indexing ? 'Bildiriliyor…' : '🔄 Tüm sayfaları arama motorlarına bildir'}
+          </button>
+          {indexMsg && <span style={{ fontSize: 13, color: '#27ae60', fontWeight: 600 }}>{indexMsg}</span>}
+        </div>
 
         {/* İşletme özeti */}
         <div style={{ ...card, marginBottom: 18 }}>
