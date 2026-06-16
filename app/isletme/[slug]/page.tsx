@@ -158,6 +158,8 @@ export default async function BusinessPage({ params }: { params: { slug: string 
           <aside className="ga-biz-contact">
             <BusinessContact
               businessId={b.id}
+              name={b.name}
+              slug={b.slug}
               phone={b.phone}
               whatsapp={b.whatsapp}
               website={b.website}
