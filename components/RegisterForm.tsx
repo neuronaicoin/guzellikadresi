@@ -5,6 +5,7 @@ import { optimizeImage } from '@/lib/imageOptimize';
 import { CITY_COORDS, TURKEY_CENTER } from '@/lib/cityCoords';
 import { useAuth } from '@/lib/useAuth';
 import { supabaseAuth } from '@/lib/supabase-auth';
+import { trackGA } from '@/lib/track';
 import dynamic from 'next/dynamic';
 
 const LocationMap = dynamic(() => import('@/components/LocationMap'), { ssr: false });
@@ -208,6 +209,9 @@ export default function RegisterForm({
       const res = await fetch('/api/register', { method: 'POST', body: fd });
       const data = await res.json();
       if (data.ok) {
+        // GA: işletme ekleme tamamlandı (+ yeni hesap oluştuysa üye kaydı)
+        trackGA('isletme_ekleme', { method: needsAccount ? 'yeni_hesap' : 'mevcut_hesap' });
+        if (needsAccount) trackGA('uye_kaydi');
         setDone(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
