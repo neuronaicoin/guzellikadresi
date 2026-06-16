@@ -14,9 +14,11 @@ import { post as dovmePiercing } from './dovme-piercing-rehberi';
 import { post as pilates } from './pilates-rehberi';
 import { post as medikalEstetik } from './medikal-estetik-rehberi';
 import { post as erkekKuaforu } from './erkek-kuaforu-rehberi';
+import { post as bayanKuaforu } from './bayan-kuaforu-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  bayanKuaforu,
   erkekKuaforu,
   medikalEstetik,
   pilates,
