@@ -17,9 +17,13 @@ import { post as erkekKuaforu } from './erkek-kuaforu-rehberi';
 import { post as bayanKuaforu } from './bayan-kuaforu-rehberi';
 import { post as bolgeselIncelme } from './bolgesel-incelme-rehberi';
 import { post as spaMasaj } from './spa-masaj-rehberi';
+import { post as solaryum } from './solaryum-rehberi';
+import { post as sauna } from './sauna-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  sauna,
+  solaryum,
   spaMasaj,
   bolgeselIncelme,
   bayanKuaforu,
