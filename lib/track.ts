@@ -6,6 +6,15 @@ type EventType = 'view' | 'phone_click' | 'whatsapp_click' | 'website_click' | '
 
 // Olay kaydet (ziyaretçi anon olarak ekler). Hata sessizce yutulur — istatistik kritik değil.
 export async function trackEvent(businessId: string, type: EventType) {
+  // GA'ya da gönder (gtag varsa)
+  try {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === 'function') {
+      w.gtag('event', type, { business_id: businessId });
+    }
+  } catch {
+    // sessiz
+  }
   try {
     await supabase.from('business_events').insert({ business_id: businessId, type });
   } catch {
