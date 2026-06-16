@@ -11,6 +11,7 @@ import {
 } from '@/lib/queries-list';
 import { getProvinces } from '@/lib/queries';
 import { supabase } from '@/lib/supabase';
+import { trackPage } from '@/lib/track-server';
 
 export const revalidate = 600;
 
@@ -43,6 +44,9 @@ export default async function CategoryPage({
 }) {
   const cat = await getCategoryBySlug(params.slug);
   if (!cat) notFound();
+
+  // Sayfa takibi (sadece filtresiz ana kategori görüntülemesi)
+  if (!searchParams.il) await trackPage('kategori', cat.name, cat.slug);
 
   const page = Number(searchParams.sayfa) || 1;
   const provinces = await getProvinces();
