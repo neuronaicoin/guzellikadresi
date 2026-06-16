@@ -10,7 +10,7 @@ import {
 } from '@/lib/queries-list';
 import { trackPage } from '@/lib/track-server';
 
-export const revalidate = 600;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
