@@ -106,6 +106,54 @@ export async function POST(req: NextRequest) {
       created_at: b.created_at,
     }));
 
+    // ---- ARAMA İSTATİSTİKLERİ ----
+    const { data: searches } = await supabaseAdmin
+      .from('search_events')
+      .select('query, results_count')
+      .gte('created_at', sinceIso);
+
+    const queryCount: Record<string, number> = {};
+    const emptyQueryCount: Record<string, number> = {};
+    (searches || []).forEach((s: any) => {
+      const q = (s.query || '').toLocaleLowerCase('tr-TR').trim();
+      if (!q) return;
+      queryCount[q] = (queryCount[q] || 0) + 1;
+      if (s.results_count === 0) emptyQueryCount[q] = (emptyQueryCount[q] || 0) + 1;
+    });
+    const topSearches = Object.entries(queryCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15)
+      .map(([q, count]) => ({ q, count }));
+    const emptySearches = Object.entries(emptyQueryCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15)
+      .map(([q, count]) => ({ q, count }));
+    const totalSearches = (searches || []).length;
+
+    // ---- SAYFA GÖRÜNTÜLEME İSTATİSTİKLERİ ----
+    const { data: pages } = await supabaseAdmin
+      .from('page_events')
+      .select('page_type, page_label')
+      .gte('created_at', sinceIso);
+
+    const catViews: Record<string, number> = {};
+    const locViews: Record<string, number> = {};
+    (pages || []).forEach((p: any) => {
+      if (p.page_type === 'kategori') {
+        catViews[p.page_label] = (catViews[p.page_label] || 0) + 1;
+      } else if (p.page_type === 'il' || p.page_type === 'ilce' || p.page_type === 'hizmet') {
+        locViews[p.page_label] = (locViews[p.page_label] || 0) + 1;
+      }
+    });
+    const topCategories = Object.entries(catViews)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 12)
+      .map(([name, count]) => ({ name, count }));
+    const topLocations = Object.entries(locViews)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 12)
+      .map(([name, count]) => ({ name, count }));
+
     return NextResponse.json({
       ok: true,
       data: {
@@ -116,6 +164,11 @@ export async function POST(req: NextRequest) {
         provinceDist,
         categoryDist,
         recentBiz,
+        topSearches,
+        emptySearches,
+        totalSearches,
+        topCategories,
+        topLocations,
       },
     });
   } catch (e: any) {
