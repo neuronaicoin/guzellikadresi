@@ -24,3 +24,15 @@ export async function trackView(businessId: string) {
     await trackEvent(businessId, 'view');
   }
 }
+
+// Google Analytics'e özel event gönder (gtag varsa). Params opsiyonel.
+export function trackGA(eventName: string, params?: Record<string, unknown>) {
+  try {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === 'function') {
+      w.gtag('event', eventName, params || {});
+    }
+  } catch {
+    // sessiz
+  }
+}
