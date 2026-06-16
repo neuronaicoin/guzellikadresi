@@ -21,7 +21,7 @@ export default function TermsPage() {
         <p>Kullanıcılar, platformu yalnızca yasalara uygun amaçlarla kullanmayı kabul eder. İşletmelerle yapılan görüşme ve işlemler kullanıcının kendi sorumluluğundadır.</p>
 
         <h2>İçerik ve Telif</h2>
-        <p>Platformdaki tüm içerik ve tasarım GüzellikAdresinn'e aittir. İzinsiz kopyalanamaz veya çoğaltılamaz. İşletmelerin yüklediği fotoğraf ve içeriklerin sorumluluğu ilgili işletmeye aittir.</p>
+        <p>Platformdaki tüm içerik ve tasarım GüzellikAdresin'e aittir. İzinsiz kopyalanamaz veya çoğaltılamaz. İşletmelerin yüklediği fotoğraf ve içeriklerin sorumluluğu ilgili işletmeye aittir.</p>
 
         <h2>Değişiklikler</h2>
         <p>GüzellikAdresin, bu şartları önceden haber vermeksizin güncelleme hakkını saklı tutar.</p>
