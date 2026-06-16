@@ -64,23 +64,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // İşletmeler (yayında olanlar)
   let businessEntries: MetadataRoute.Sitemap = [];
+  // Programatik: dolu il/ilçe/hizmet kombinasyonları
+  let comboEntries: MetadataRoute.Sitemap = [];
   try {
     const { data: biz } = await supabase
       .from('businesses')
-      .select('slug, updated_at')
+      .select('slug, updated_at, provinces(slug), districts(slug), categories(slug)')
       .eq('status', 'approved');
-    businessEntries = (biz || []).map((b) => ({
+
+    businessEntries = (biz || []).map((b: any) => ({
       url: `${base}/isletme/${b.slug}`,
       lastModified: b.updated_at ? new Date(b.updated_at) : now,
       changeFrequency: 'weekly',
       priority: 0.7,
     }));
+
+    // Benzersiz dolu kombinasyonları topla (il/ilçe/hizmet)
+    const seen = new Set<string>();
+    for (const b of biz || []) {
+      const il = (b as any).provinces?.slug;
+      const ilce = (b as any).districts?.slug;
+      const hizmet = (b as any).categories?.slug;
+      if (il && ilce && hizmet) {
+        const key = `${il}/${ilce}/${hizmet}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          comboEntries.push({
+            url: `${base}/${key}`,
+            lastModified: now,
+            changeFrequency: 'weekly',
+            priority: 0.8,
+          });
+        }
+      }
+    }
   } catch {}
 
   return [
     ...staticEntries,
     ...categoryEntries,
     ...provinceEntries,
+    ...comboEntries,
     ...businessEntries,
     ...blogEntries,
   ];
