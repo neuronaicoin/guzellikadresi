@@ -12,9 +12,11 @@ import { post as beylikduzuSpaMasaj } from './beylikduzu-spa-masaj';
 import { post as protezTirnak } from './protez-tirnak-rehberi';
 import { post as dovmePiercing } from './dovme-piercing-rehberi';
 import { post as pilates } from './pilates-rehberi';
+import { post as medikalEstetik } from './medikal-estetik-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  medikalEstetik,
   pilates,
   dovmePiercing,
   protezTirnak,
