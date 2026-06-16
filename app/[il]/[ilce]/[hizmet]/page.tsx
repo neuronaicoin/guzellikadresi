@@ -28,11 +28,16 @@ export async function generateMetadata({
   const description = `${dist.name} (${prov.name}) bölgesinde ${cat.name.toLocaleLowerCase('tr-TR')} hizmeti veren işletmeleri keşfedin. Adresleri, telefonları ve konumlarıyla ${dist.name}'deki en iyi ${cat.name.toLocaleLowerCase('tr-TR')} adresleri burada.`;
   const url = `/${prov.slug}/${dist.slug}/${cat.slug}`;
 
+  // Bu kombinasyonda işletme var mı? Yoksa Google sıralamasın (noindex)
+  const { total } = await getBusinessList({ provinceId: prov.id, districtId: dist.id, categoryId: cat.id, page: 1 });
+  const robots = total === 0 ? { index: false, follow: true } : undefined;
+
   return {
     title,
     description,
     alternates: { canonical: url },
     openGraph: { title, description, url, type: 'website' },
+    ...(robots ? { robots } : {}),
   };
 }
 
@@ -58,8 +63,8 @@ export default async function ServiceInDistrictPage({
     page,
   });
 
-  // DOLU-SAYFA FİLTRESİ: bu ilçede bu hizmette hiç işletme yoksa, boş sayfa basma (404)
-  if (total === 0) notFound();
+  // DOLU/BOŞ DURUMU: total===0 ise 404 yerine "henüz yok" mesajı gösterilecek (aşağıda)
+  const isEmpty = total === 0;
 
   await trackPage('hizmet', `${dist.name} ${cat.name}`, `${prov.slug}/${dist.slug}/${cat.slug}`);
 
@@ -98,6 +103,29 @@ export default async function ServiceInDistrictPage({
         page={page}
         basePath={`/${prov.slug}/${dist.slug}/${cat.slug}`}
       />
+
+      {isEmpty && (
+        <section style={{ maxWidth: 700, margin: '0 auto', padding: '30px 20px', textAlign: 'center' }}>
+          <p style={{ fontSize: 18, color: '#0e2148', fontWeight: 700, marginBottom: 10 }}>
+            {dist.name}&apos;de henüz {catLower} işletmesi eklenmemiş
+          </p>
+          <p style={{ fontSize: 15, color: '#666', marginBottom: 20 }}>
+            Bu bölgede {catLower} hizmeti veren bir işletme misiniz? Ücretsiz ekleyin,
+            müşterileriniz sizi kolayca bulsun.
+          </p>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="/isletme-ekle" style={{ padding: '11px 20px', background: '#c9a24b', color: '#0e2148', borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+              İşletmeni ücretsiz ekle →
+            </a>
+            <a href={`/kategori/${cat.slug}`} style={{ padding: '11px 20px', background: '#f0f0f0', color: '#0e2148', borderRadius: 10, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
+              Tüm {cat.name} işletmeleri
+            </a>
+            <a href={`/${prov.slug}`} style={{ padding: '11px 20px', background: '#f0f0f0', color: '#0e2148', borderRadius: 10, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
+              {prov.name} geneli
+            </a>
+          </div>
+        </section>
+      )}
 
       {/* SEO içerik bloğu */}
       <section className="ga-seo-block" style={{ maxWidth: 900, margin: '0 auto', padding: '24px 20px 48px', lineHeight: 1.7, color: '#333' }}>
