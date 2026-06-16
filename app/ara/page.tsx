@@ -6,6 +6,8 @@ import { searchBusinesses } from '@/lib/queries-search';
 import { getCategoriesForForm, getProvincesForForm } from '@/lib/queries-form';
 import { trackSearch } from '@/lib/track-server';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Ara',
   robots: { index: false },
