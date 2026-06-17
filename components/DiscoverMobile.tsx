@@ -165,6 +165,9 @@ export default function DiscoverMobile({
       {/* ADIM 1: İL */}
       {step === 1 && (
         <>
+          <div style={{ background: 'var(--gold)', color: 'var(--navy)', padding: '12px 14px', borderRadius: 12, fontWeight: 800, fontSize: 15, marginBottom: 12, textAlign: 'center' }}>
+            📍 Önce bölgeni seç
+          </div>
           {detectedIl && (
             <button onClick={() => chooseIl(detectedIl)}
               style={{ width: '100%', padding: '12px', background: 'var(--navy)', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: 'pointer', marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
@@ -175,7 +178,7 @@ export default function DiscoverMobile({
             placeholder="İl ara… (örn. Ordu)"
             value={ilQuery}
             onChange={(e) => setIlQuery(e.target.value)}
-            style={inputStyle}
+            style={{ ...inputStyle, border: '2px solid var(--gold)', borderRadius: 12 }}
           />
           {!ilQuery && popularProvs.length > 0 && (
             <>
