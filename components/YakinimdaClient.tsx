@@ -2,15 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 type Prov = { id: number; name: string; slug: string };
+type Dist = { id: number; name: string; slug: string };
+type Cat = { id: number; name: string; slug: string; emoji: string | null };
 
-export default function YakinimdaClient({ provinces }: { provinces: Prov[] }) {
+export default function YakinimdaClient({ provinces, categories }: { provinces: Prov[]; categories: Cat[] }) {
   const router = useRouter();
-  const [status, setStatus] = useState<'loading' | 'found' | 'notfound'>('loading');
-  const [ilAdi, setIlAdi] = useState('');
 
+  // Adım: 1=il, 2=ilçe, 3=kategori
+  const [step, setStep] = useState(1);
+  const [il, setIl] = useState<Prov | null>(null);
+  const [ilce, setIlce] = useState<Dist | null>(null);
+  const [districts, setDistricts] = useState<Dist[]>([]);
+  const [ilQuery, setIlQuery] = useState('');
+  const [ilceQuery, setIlceQuery] = useState('');
+  const [geoStatus, setGeoStatus] = useState<'loading' | 'done'>('loading');
+
+  // Açılışta IP'den il tahmini
   useEffect(() => {
     let done = false;
     fetch('/api/geo', { cache: 'no-store' })
@@ -18,58 +27,134 @@ export default function YakinimdaClient({ provinces }: { provinces: Prov[] }) {
       .then((d) => {
         if (done) return;
         if (d.ok && d.ilSlug) {
-          // Slug gerçekten il listemizde var mı kontrol et
           const match = provinces.find((p) => p.slug === d.ilSlug);
-          if (match) {
-            setIlAdi(match.name);
-            setStatus('found');
-            // 1 sn sonra il sayfasına yönlendir
-            setTimeout(() => router.push(`/${match.slug}`), 900);
-            return;
-          }
+          if (match) { chooseIl(match); setGeoStatus('done'); return; }
         }
-        setStatus('notfound');
+        setGeoStatus('done');
       })
-      .catch(() => { if (!done) setStatus('notfound'); });
+      .catch(() => { if (!done) setGeoStatus('done'); });
     return () => { done = true; };
-  }, [provinces, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (status === 'loading') {
-    return (
-      <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <div style={{ fontSize: 40, marginBottom: 16 }}>📍</div>
-        <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--navy)', margin: '0 0 8px' }}>Konumun belirleniyor…</h1>
-        <p style={{ fontSize: 14, color: '#778' }}>Sana en yakın işletmeleri bulalım</p>
-      </div>
-    );
+  function loadDistricts(provId: number) {
+    fetch(`/api/districts?province=${provId}`)
+      .then((r) => r.json())
+      .then((d) => setDistricts(d.districts || d || []))
+      .catch(() => setDistricts([]));
   }
 
-  if (status === 'found') {
-    return (
-      <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <div style={{ fontSize: 40, marginBottom: 16 }}>✨</div>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--navy)', margin: '0 0 8px' }}>{ilAdi}</h1>
-        <p style={{ fontSize: 14, color: '#778' }}>{ilAdi} işletmelerine yönlendiriliyorsun…</p>
-      </div>
-    );
+  function chooseIl(p: Prov) {
+    setIl(p);
+    setIlce(null);
+    loadDistricts(p.id);
+    setStep(2);
+  }
+  function chooseIlce(d: Dist) {
+    setIlce(d);
+    setStep(3);
+  }
+  function chooseCat(c: Cat) {
+    if (il && ilce) router.push(`/${il.slug}/${ilce.slug}/${c.slug}`);
   }
 
-  // Bulunamadı: kullanıcı kendi ilini seçsin
+  const norm = (s: string) => s.toLocaleLowerCase('tr-TR').replace(/i̇/g, 'i');
+  const ilList = ilQuery ? provinces.filter((p) => norm(p.name).includes(norm(ilQuery))) : provinces;
+  const ilceList = ilceQuery ? districts.filter((d) => norm(d.name).includes(norm(ilceQuery))) : districts;
+
+  const popularIl = ['istanbul', 'ankara', 'izmir', 'antalya', 'bursa'];
+
+  const inputStyle: React.CSSProperties = { width: '100%', padding: '12px 14px', fontSize: 14, border: '2px solid var(--gold)', borderRadius: 12, fontFamily: 'inherit', boxSizing: 'border-box', marginBottom: 12 };
+  const chipBtn: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'left', padding: '13px 14px', background: '#fff', border: '1px solid var(--line)', borderRadius: 10, fontSize: 14, fontWeight: 600, color: 'var(--navy)', cursor: 'pointer', fontFamily: 'inherit', marginBottom: 8 };
+
   return (
-    <div style={{ padding: '30px 20px', maxWidth: 600, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <div style={{ fontSize: 40, marginBottom: 12 }}>📍</div>
-        <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--navy)', margin: '0 0 8px' }}>Bölgeni seç</h1>
-        <p style={{ fontSize: 14, color: '#778' }}>Konumunu belirleyemedik. İlini seçersen oradaki işletmeleri gösterelim.</p>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-        {provinces.map((p) => (
-          <Link key={p.id} href={`/${p.slug}`}
-            style={{ display: 'block', padding: '14px 12px', background: '#fff', border: '1.5px solid var(--gold)', borderRadius: 12, textDecoration: 'none', color: 'var(--navy)', fontWeight: 700, fontSize: 14, textAlign: 'center' }}>
-            {p.name}
-          </Link>
+    <div style={{ padding: '20px 16px', maxWidth: 600, margin: '0 auto' }}>
+      {/* Adım göstergesi */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
+        {[1, 2, 3].map((s) => (
+          <div key={s} style={{ flex: 1, height: 5, borderRadius: 3, background: step >= s ? 'var(--gold)' : 'var(--line)' }} />
         ))}
       </div>
+
+      {/* Geri + seçim özeti */}
+      {step > 1 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <button onClick={() => setStep(step - 1)}
+            style={{ background: 'none', border: 'none', color: 'var(--navy)', fontWeight: 700, fontSize: 14, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+            ‹ Geri
+          </button>
+          <div style={{ fontSize: 13, color: '#778' }}>
+            {il && <b style={{ color: 'var(--navy)' }}>{il.name}</b>}
+            {ilce && <> / <b style={{ color: 'var(--navy)' }}>{ilce.name}</b></>}
+          </div>
+        </div>
+      )}
+
+      {/* ADIM 1: İL */}
+      {step === 1 && (
+        <>
+          <div style={{ background: 'var(--gold)', color: 'var(--navy)', padding: '12px 14px', borderRadius: 12, fontWeight: 800, fontSize: 15, marginBottom: 12, textAlign: 'center' }}>
+            📍 1. Bölgeni seç
+          </div>
+          {geoStatus === 'loading' && (
+            <p style={{ fontSize: 13, color: '#778', textAlign: 'center', marginBottom: 12 }}>Konumun belirleniyor…</p>
+          )}
+          <input placeholder="İl ara… (örn. Ordu)" value={ilQuery} onChange={(e) => setIlQuery(e.target.value)} style={inputStyle} />
+          {!ilQuery && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+              {popularIl.map((slug) => {
+                const p = provinces.find((x) => x.slug === slug);
+                if (!p) return null;
+                return (
+                  <button key={slug} onClick={() => chooseIl(p)}
+                    style={{ background: '#fff', border: '1.5px solid var(--gold)', borderRadius: 999, padding: '8px 14px', fontSize: 13, fontWeight: 700, color: 'var(--navy)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    {p.name}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          <div style={{ maxHeight: 360, overflowY: 'auto' }}>
+            {ilList.map((p) => (
+              <button key={p.id} onClick={() => chooseIl(p)} style={chipBtn}>{p.name}</button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* ADIM 2: İLÇE */}
+      {step === 2 && (
+        <>
+          <div style={{ background: 'var(--gold)', color: 'var(--navy)', padding: '12px 14px', borderRadius: 12, fontWeight: 800, fontSize: 15, marginBottom: 12, textAlign: 'center' }}>
+            📍 2. İlçeni seç
+          </div>
+          <input placeholder="İlçe ara…" value={ilceQuery} onChange={(e) => setIlceQuery(e.target.value)} style={inputStyle} />
+          <div style={{ maxHeight: 420, overflowY: 'auto' }}>
+            {ilceList.length === 0 && <p style={{ fontSize: 13, color: '#889', textAlign: 'center', padding: 20 }}>İlçeler yükleniyor…</p>}
+            {ilceList.map((d) => (
+              <button key={d.id} onClick={() => chooseIlce(d)} style={chipBtn}>{d.name}</button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* ADIM 3: KATEGORİ */}
+      {step === 3 && (
+        <>
+          <div style={{ background: 'var(--gold)', color: 'var(--navy)', padding: '12px 14px', borderRadius: 12, fontWeight: 800, fontSize: 15, marginBottom: 12, textAlign: 'center' }}>
+            ✨ 3. Hangi hizmet?
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+            {categories.map((c) => (
+              <button key={c.id} onClick={() => chooseCat(c)}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#fff', border: '1.5px solid var(--gold)', borderRadius: 12, padding: '14px 12px', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' }}>
+                <span style={{ fontSize: 22 }}>{c.emoji}</span>
+                <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--navy)' }}>{c.name}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
