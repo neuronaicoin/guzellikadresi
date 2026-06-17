@@ -1,4 +1,5 @@
 import BusinessCard from '@/components/BusinessCard';
+import BackButton from '@/components/BackButton';
 import type { BusinessCard as BizCard } from '@/lib/types';
 
 export default function ListingView({
@@ -24,6 +25,9 @@ export default function ListingView({
 
   return (
     <div className="ga-list-wrap">
+      <div style={{ marginBottom: 10 }}>
+        <BackButton />
+      </div>
       <div className="ga-list-head">
         <h1>{title}</h1>
         <p>{subtitle} · <b>{total}</b> işletme</p>
