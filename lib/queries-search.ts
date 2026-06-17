@@ -2,7 +2,8 @@ import { supabase } from '@/lib/supabase';
 import type { BusinessCard } from '@/lib/types';
 
 // İşletme adı, açıklama, HİZMET, KATEGORİ ve KONUM (il/ilçe) üzerinde arama
-export async function searchBusinesses(term: string): Promise<BusinessCard[]> {
+// Opsiyonel: provinceId / districtId ile sonuçları belirli il/ilçeye daraltır
+export async function searchBusinesses(term: string, opts?: { provinceId?: number; districtId?: number }): Promise<BusinessCard[]> {
   const q = term.trim();
   if (!q) return [];
   const like = `%${q}%`;
@@ -60,7 +61,7 @@ export async function searchBusinesses(term: string): Promise<BusinessCard[]> {
   if (ids.size === 0) return [];
 
   // Eşleşen işletmelerin detaylarını çek
-  const { data } = await supabase
+  let detailQuery = supabase
     .from('businesses')
     .select(`
       id, name, slug, created_at,
@@ -71,7 +72,13 @@ export async function searchBusinesses(term: string): Promise<BusinessCard[]> {
       business_services(services(name))
     `)
     .eq('status', 'approved')
-    .in('id', Array.from(ids))
+    .in('id', Array.from(ids));
+
+  // İl/ilçe filtresi (varsa)
+  if (opts?.provinceId) detailQuery = detailQuery.eq('province_id', opts.provinceId);
+  if (opts?.districtId) detailQuery = detailQuery.eq('district_id', opts.districtId);
+
+  const { data } = await detailQuery
     .order('created_at', { ascending: false })
     .limit(60);
 
