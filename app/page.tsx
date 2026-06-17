@@ -37,7 +37,7 @@ export default async function HomePage() {
 
       {/* MOBİL KEŞİF — sadece mobilde görünür (konum + kategoriler) */}
       <div className="ga-discover-mobile-only">
-        <DiscoverMobile categories={categories} provinces={provinces} />
+        <DiscoverMobile categories={categories} provinces={provinces} total={total} />
       </div>
 
       {/* LAYOUT */}
@@ -45,8 +45,8 @@ export default async function HomePage() {
         <Sidebar categories={categories} provinces={provinces} />
 
         <main style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-          {/* HERO */}
-          <section className="ga-hero">
+          {/* HERO (masaüstü — mobilde DiscoverMobile gösteriyor) */}
+          <section className="ga-hero ga-desktop-only-sec">
             <span className="ga-eyebrow">✦ Türkiye'nin güzellik & bakım adresi</span>
             <h1 style={{ fontSize: 30, lineHeight: 1.18, letterSpacing: '-.6px', fontWeight: 800, maxWidth: 560, margin: '0 0 0 0' }}>
               Bölgendeki <span style={{ color: 'var(--gold)' }}>güzellik ve bakım merkezlerini</span> keşfet
@@ -59,8 +59,8 @@ export default async function HomePage() {
             </div>
           </section>
 
-          {/* POPÜLER KATEGORİLER */}
-          <section>
+          {/* POPÜLER KATEGORİLER (masaüstü — mobilde DiscoverMobile gösteriyor) */}
+          <section className="ga-desktop-only-sec">
             <div className="ga-sec-head"><h2 className="ga-h2">Popüler kategoriler</h2></div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 9 }}>
               {categories.slice(0, 10).map((c) => (
