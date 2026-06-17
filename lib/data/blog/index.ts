@@ -21,9 +21,11 @@ import { post as solaryum } from './solaryum-rehberi';
 import { post as sauna } from './sauna-rehberi';
 import { post as bakirkoyTirnak } from './bakirkoy-tirnak-studyosu';
 import { post as bakirkoyLazer } from './bakirkoy-lazer-epilasyon';
+import { post as bakirkoyGuzellik } from './bakirkoy-guzellik-merkezi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  bakirkoyGuzellik,
   bakirkoyLazer,
   bakirkoyTirnak,
   sauna,
