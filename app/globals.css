@@ -429,6 +429,7 @@ img {
 
 @media (max-width: 880px) {
   .ga-discover-mobile-only { display: block; max-width: 100%; padding: 14px; }
+  .ga-searchbar-strip { display: none; }
   .ga-discover { display: flex; flex-direction: column; gap: 12px; }
   .ga-disc-loc { display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 14px; color: var(--ink); }
   .ga-disc-loc b { color: var(--navy); }
