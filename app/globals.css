@@ -81,7 +81,7 @@ img {
 .ga-live { width: 8px; height: 8px; border-radius: 50%; background: #1f9d6b; box-shadow: 0 0 0 0 rgba(31,157,107,.5); animation: ga-pulse 1.8s infinite; display: inline-block; }
 @keyframes ga-pulse { 70% { box-shadow: 0 0 0 8px rgba(31,157,107,0); } 100% { box-shadow: 0 0 0 0 rgba(31,157,107,0); } }
 
-.ga-qchip { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: var(--ink); transition: .12s; }
+.ga-qchip { display: flex; align-items: center; gap: 7px; background: #fff; border: 1.5px solid var(--gold); border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: var(--ink); transition: .12s; }
 .ga-qchip:hover { border-color: var(--gold); background: var(--gold-50); }
 
 .ga-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -351,7 +351,7 @@ img {
 
 /* ============ KATEGORİ FİLTRESİ ============ */
 .ga-catfilter-wrap { max-width: 1180px; margin: 0 auto; padding: 18px 22px 0; }
-.ga-catfilter { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
+.ga-catfilter { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: #fff; border: 2px solid var(--gold); border-radius: 12px; padding: 12px 16px; box-shadow: 0 1px 3px rgba(14,33,72,.05); }
 .ga-catfilter-label { font-size: 13.5px; font-weight: 700; color: var(--navy); }
 .ga-catfilter select { font-family: inherit; font-size: 14px; color: var(--ink); border: 1px solid var(--line); border-radius: 9px; padding: 9px 12px; background: #fff; cursor: pointer; min-width: 150px; }
 .ga-catfilter select:focus { outline: 0; border-color: var(--gold); }
