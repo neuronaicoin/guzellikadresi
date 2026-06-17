@@ -19,9 +19,11 @@ import { post as bolgeselIncelme } from './bolgesel-incelme-rehberi';
 import { post as spaMasaj } from './spa-masaj-rehberi';
 import { post as solaryum } from './solaryum-rehberi';
 import { post as sauna } from './sauna-rehberi';
+import { post as bakirkoyTirnak } from './bakirkoy-tirnak-studyosu';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  bakirkoyTirnak,
   sauna,
   solaryum,
   spaMasaj,
