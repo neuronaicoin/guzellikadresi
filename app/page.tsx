@@ -28,8 +28,8 @@ export default async function HomePage() {
     <>
       <Header />
 
-      {/* ARAMA ŞERİDİ */}
-      <div style={{ background: 'linear-gradient(180deg,#fff,var(--navy-50))', borderBottom: '1px solid var(--line)' }}>
+      {/* ARAMA ŞERİDİ — masaüstünde görünür, mobilde gizli (mobilde keşfet akışı var) */}
+      <div className="ga-searchbar-strip" style={{ background: 'linear-gradient(180deg,#fff,var(--navy-50))', borderBottom: '1px solid var(--line)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 22px' }}>
           <SearchBar />
         </div>
