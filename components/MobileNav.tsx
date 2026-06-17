@@ -27,9 +27,9 @@ export default function MobileNav() {
         <span className="ga-mn-plus">+</span>
         <span className="ga-mn-label">İşletme Ekle</span>
       </Link>
-      <Link href="/kategoriler" className={`ga-mn-item ${isActive('/kategoriler') ? 'active' : ''}`}>
-        <span className="ga-mn-icon">▤</span>
-        <span className="ga-mn-label">Kategoriler</span>
+      <Link href="/yakinimda" className={`ga-mn-item ${isActive('/yakinimda') ? 'active' : ''}`}>
+        <span className="ga-mn-icon">📍</span>
+        <span className="ga-mn-label">Yakınımda</span>
       </Link>
       <Link href={user ? '/panel' : '/giris'} className={`ga-mn-item ${(isActive('/giris') || isActive('/panel')) ? 'active' : ''}`}>
         <span className="ga-mn-icon">👤</span>
