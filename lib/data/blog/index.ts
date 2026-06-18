@@ -23,9 +23,11 @@ import { post as bakirkoyTirnak } from './bakirkoy-tirnak-studyosu';
 import { post as bakirkoyLazer } from './bakirkoy-lazer-epilasyon';
 import { post as bakirkoyGuzellik } from './bakirkoy-guzellik-merkezi';
 import { post as bakirkoyMedikal } from './bakirkoy-medikal-estetik';
+import { post as sisliMedikal } from './sisli-medikal-estetik';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  sisliMedikal,
   bakirkoyMedikal,
   bakirkoyGuzellik,
   bakirkoyLazer,
