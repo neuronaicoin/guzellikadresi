@@ -152,11 +152,8 @@ export default function RegisterForm({
     // Zorunlu alan kontrolü
     if (!name.trim()) { setErrMsg('İşletme adı gerekli.'); setStep(1); return; }
     if (!catId) { setErrMsg('Kategori seçin.'); setStep(1); return; }
-    if (selectedServices.size === 0) { setErrMsg('En az bir hizmet seçin.'); setStep(1); return; }
-    if (!desc.trim()) { setErrMsg('Kısa açıklama gerekli.'); setStep(1); return; }
-    if (photos.length === 0) { setErrMsg('En az bir mekân fotoğrafı ekleyin.'); setStep(2); return; }
+    // Hizmet, açıklama, fotoğraf ve adres artık opsiyonel — sonradan panelden eklenebilir.
     if (!cityId || !distId) { setErrMsg('İl ve ilçe seçin.'); setStep(3); return; }
-    if (!addr.trim()) { setErrMsg('Cadde/sokak gerekli.'); setStep(3); return; }
     if (!phone.trim()) { setErrMsg('Telefon gerekli.'); setStep(4); return; }
 
     setSending(true);
@@ -300,7 +297,7 @@ export default function RegisterForm({
             </div>
             {selectedCat && (
               <div className="ga-field">
-                <label>Verdiğiniz hizmetler <span className="req">*</span></label>
+                <label>Verdiğiniz hizmetler <span className="opt">(opsiyonel)</span></label>
                 <div className="ga-svc-note"><b>{selectedCat.name}</b> hizmetlerinden sunduklarınızı işaretleyin. Profilde fiyat gösterilmez.</div>
                 <div className="ga-chips">
                   {selectedCat.services.map((s) => (
@@ -327,7 +324,7 @@ export default function RegisterForm({
               </div>
             )}
             <div className="ga-field">
-              <label>Kısa açıklama <span className="req">*</span></label>
+              <label>Kısa açıklama <span className="opt">(opsiyonel)</span></label>
               <textarea value={desc} maxLength={300} onChange={(e) => setDesc(e.target.value)} placeholder="İşletmenizi kısaca açıklayınız…" />
               <div className="ga-counter">{desc.length}/300</div>
             </div>
@@ -340,7 +337,7 @@ export default function RegisterForm({
             {optimizing && <div className="ga-opt-note">Fotoğraflar optimize ediliyor…</div>}
 
             <div className="ga-field">
-              <label>Mekân fotoğrafları <span className="req">*</span> <span className="opt">(en fazla 10)</span></label>
+              <label>Mekân fotoğrafları <span className="opt">(opsiyonel · en fazla 10)</span></label>
               <label className="ga-drop" style={{ cursor: 'pointer', display: 'block' }}>
                 <input type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={(e) => handleFiles(e.target.files, 'gallery')} />
                 <div style={{ fontSize: 26 }}>🏢</div>
@@ -404,11 +401,11 @@ export default function RegisterForm({
               <input value={hood} onChange={(e) => setHood(e.target.value)} placeholder="Mahalle adı" />
             </div>
             <div className="ga-field">
-              <label>Cadde / Sokak <span className="req">*</span></label>
+              <label>Cadde / Sokak <span className="opt">(opsiyonel)</span></label>
               <input value={addr} onChange={(e) => setAddr(e.target.value)} placeholder="Cadde veya sokak adı" />
             </div>
             <div className="ga-field">
-              <label>Harita üzerinde tam konumu işaretleyin <span className="req">*</span></label>
+              <label>Harita üzerinde tam konumu işaretleyin <span className="opt">(opsiyonel)</span></label>
               {cityId ? (
                 <LocationMap
                   center={mapCenter}
