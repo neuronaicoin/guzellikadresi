@@ -19,6 +19,8 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.brandName}`,
   },
   description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  applicationName: siteConfig.brandName,
   // Google indekslemesi: env false ise siteyi gizle (geçici subdomain)
   robots: siteConfig.allowIndexing
     ? { index: true, follow: true }
@@ -58,8 +60,71 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const base = siteConfig.url || 'https://guzellikadresin.com';
+
+  // Organization + WebSite schema (Google + AI taban)
+  // alternateName ile "GüzellikAdresi" diye arayan da markayı bulur.
+  const orgSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${base}/#organization`,
+        name: siteConfig.brandName,
+        alternateName: [siteConfig.alternateName, 'güzellik adresin', 'güzellik adresi'],
+        url: base,
+        logo: `${base}/og-image.png`,
+        description: siteConfig.description,
+        areaServed: {
+          '@type': 'Country',
+          name: siteConfig.areaServed,
+        },
+        knowsAbout: [
+          'Güzellik merkezi',
+          'Medikal estetik',
+          'Bayan kuaförü',
+          'Erkek kuaförü',
+          'Tırnak studyosu',
+          'Spa ve masaj',
+          'Kalıcı makyaj',
+          'Saç ekimi',
+          'Solaryum',
+          'Dövme ve piercing',
+          'Zayıflama ve bölgesel incelme',
+          'Sauna',
+          'Pilates',
+          'Lazer epilasyon',
+        ],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${base}/#website`,
+        name: siteConfig.brandName,
+        alternateName: siteConfig.alternateName,
+        url: base,
+        description: siteConfig.description,
+        inLanguage: 'tr-TR',
+        publisher: { '@id': `${base}/#organization` },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${base}/ara?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+    ],
+  };
+
   return (
     <html lang="tr" className={jakarta.variable}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+        />
+      </head>
       <body>
         {children}
         <MobileNav />
