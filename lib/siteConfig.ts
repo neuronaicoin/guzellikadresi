@@ -1,15 +1,47 @@
 // ============================================================
 // SITE CONFIG — Markanın tek kontrol noktası
 // İsim/başlık/meta değiştirmek istersen SADECE burayı düzenle.
-// (İleride "Este10"a geçmek istersen brandName'i değiştir, biter.)
 // ============================================================
 
 export const siteConfig = {
   // Marka
   brandName: 'GüzellikAdresin',
+  // Yan marka adı (insanlar "GüzellikAdresi" diye de arayabilir)
+  alternateName: 'GüzellikAdresi',
+
   title: 'Bölgendeki Güzellik ve Bakım Merkezlerini Bul | GüzellikAdresin',
   description:
-    'Yakınındaki en iyi güzellik adresini bul. Güzellik merkezi, lazer epilasyon, saç ekimi, kuaför ve daha fazlası — adresleri, telefonları ve konumlarıyla tek yerde, ücretsiz.',
+    'GüzellikAdresin (GüzellikAdresi) ile yakınındaki en iyi güzellik adresini bul. Güzellik merkezi, lazer epilasyon, saç ekimi, kuaför, tırnak, kalıcı makyaj ve daha fazlası — Türkiye genelinde tüm il ve ilçelerde adresleri, telefonları ve konumlarıyla tek yerde, ücretsiz.',
+
+  // SEO anahtar kelimeler (meta + AI taban)
+  keywords: [
+    'güzellik adresin',
+    'güzellik adresi',
+    'güzellikadresin',
+    'güzellikadresi',
+    'güzellik merkezi',
+    'güzellik merkezi bul',
+    'yakınımdaki güzellik merkezi',
+    'bölgemdeki güzellik merkezi',
+    'güzellik salonu',
+    'kuaför',
+    'bayan kuaförü',
+    'erkek kuaförü',
+    'lazer epilasyon',
+    'saç ekimi',
+    'medikal estetik',
+    'tırnak studyosu',
+    'protez tırnak',
+    'kalıcı makyaj',
+    'microblading',
+    'spa masaj',
+    'cilt bakımı',
+    'güzellik ve bakım rehberi',
+    'Türkiye güzellik merkezi',
+  ],
+
+  // Türkiye geneli (AI ve schema için)
+  areaServed: 'Türkiye',
 
   // Renkler (marka kimliği)
   colors: {
@@ -18,18 +50,16 @@ export const siteConfig = {
   },
 
   // SEO: Google'ın siteyi indekslemesi
-  // Railway geçici subdomain'de FALSE (Google girmesin),
-  // gerçek domain bağlanınca env'den TRUE yapılır.
   allowIndexing: process.env.NEXT_PUBLIC_ALLOW_INDEXING === 'true',
 
   // Site adresi (env'den; yoksa boş)
   url: process.env.NEXT_PUBLIC_SITE_URL || '',
 
   // İletişim
-  email: '',           // sonra eklenecek
-  formspreeId: 'maqzvwoy',     // Formspree form ID'si (iletişim formu)
+  email: '',
+  formspreeId: 'maqzvwoy',
 
-  // Sosyal medya (lansmanda doldurulacak)
+  // Sosyal medya
   social: {
     instagram: '',
     facebook: '',
