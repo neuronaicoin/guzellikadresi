@@ -69,13 +69,6 @@ export default function YakinimdaClient({ provinces, categories }: { provinces: 
 
   return (
     <div style={{ padding: '20px 16px', maxWidth: 600, margin: '0 auto' }}>
-      {/* Adım göstergesi */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-        {[1, 2, 3].map((s) => (
-          <div key={s} style={{ flex: 1, height: 5, borderRadius: 3, background: step >= s ? 'var(--gold)' : 'var(--line)' }} />
-        ))}
-      </div>
-
       {/* Geri + seçim özeti */}
       {step > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
