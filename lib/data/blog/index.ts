@@ -28,9 +28,11 @@ import { post as sisliSacEkimi } from './sisli-sac-ekimi';
 import { post as bakirkoyUclu } from './bakirkoy-guzellik-tirnak-medikal-estetik';
 import { post as bakirkoyBotoks } from './bakirkoy-botoks-dolgu-genclik-asisi-cilt-bakimi';
 import { post as bakirkoySac } from './bakirkoy-sac-ekimi-bayan-erkek-kuaforu';
+import { post as bakirkoyLazerUclu } from './bakirkoy-lazer-epilasyon-agda-ipek-kirpik';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  bakirkoyLazerUclu,
   bakirkoySac,
   bakirkoyBotoks,
   bakirkoyUclu,
