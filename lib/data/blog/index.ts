@@ -28,9 +28,15 @@ import { post as sisliSacEkimi } from './sisli-sac-ekimi';
 import { post as antalyaGuzellik } from './antalya-guzellik-merkezi';
 import { post as antalyaLazer } from './antalya-lazer-epilasyon';
 import { post as antalyaMedikal } from './antalya-medikal-estetik';
+import { post as izmirGuzellik } from './izmir-guzellik-merkezi';
+import { post as izmirLazer } from './izmir-lazer-epilasyon';
+import { post as izmirMedikal } from './izmir-medikal-estetik';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  izmirGuzellik,
+  izmirLazer,
+  izmirMedikal,
   antalyaGuzellik,
   antalyaLazer,
   antalyaMedikal,
