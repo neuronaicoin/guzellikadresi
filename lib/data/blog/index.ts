@@ -25,17 +25,15 @@ import { post as bakirkoyGuzellik } from './bakirkoy-guzellik-merkezi';
 import { post as bakirkoyMedikal } from './bakirkoy-medikal-estetik';
 import { post as sisliMedikal } from './sisli-medikal-estetik';
 import { post as sisliSacEkimi } from './sisli-sac-ekimi';
-import { post as bakirkoyUclu } from './bakirkoy-guzellik-tirnak-medikal-estetik';
-import { post as bakirkoyBotoks } from './bakirkoy-botoks-dolgu-genclik-asisi-cilt-bakimi';
-import { post as bakirkoySac } from './bakirkoy-sac-ekimi-bayan-erkek-kuaforu';
-import { post as bakirkoyLazerUclu } from './bakirkoy-lazer-epilasyon-agda-ipek-kirpik';
+import { post as antalyaGuzellik } from './antalya-guzellik-merkezi';
+import { post as antalyaLazer } from './antalya-lazer-epilasyon';
+import { post as antalyaMedikal } from './antalya-medikal-estetik';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
-  bakirkoyLazerUclu,
-  bakirkoySac,
-  bakirkoyBotoks,
-  bakirkoyUclu,
+  antalyaGuzellik,
+  antalyaLazer,
+  antalyaMedikal,
   sisliSacEkimi,
   sisliMedikal,
   bakirkoyMedikal,
