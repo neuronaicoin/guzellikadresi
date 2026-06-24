@@ -31,9 +31,11 @@ import { post as antalyaMedikal } from './antalya-medikal-estetik';
 import { post as izmirGuzellik } from './izmir-guzellik-merkezi';
 import { post as izmirLazer } from './izmir-lazer-epilasyon';
 import { post as izmirMedikal } from './izmir-medikal-estetik';
+import { post as musteriCekmeRehberi } from './guzellik-isletmesi-daha-fazla-musteri-cekme-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  musteriCekmeRehberi,
   izmirGuzellik,
   izmirLazer,
   izmirMedikal,
