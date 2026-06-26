@@ -33,9 +33,11 @@ import { post as izmirLazer } from './izmir-lazer-epilasyon';
 import { post as izmirMedikal } from './izmir-medikal-estetik';
 import { post as musteriCekmeRehberi } from './guzellik-isletmesi-daha-fazla-musteri-cekme-rehberi';
 import { post as konyaRehber } from './konya-guzellik-merkezi-bakim-rehberi';
+import { post as konyaLazer } from './konya-lazer-epilasyon-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  konyaLazer,
   konyaRehber,
   musteriCekmeRehberi,
   izmirGuzellik,
