@@ -38,9 +38,10 @@ import { post as konyaMedikal } from './konya-medikal-estetik-rehberi';
 import { post as bursaRehber } from './bursa-guzellik-merkezi-bakim-rehberi';
 import { post as bursaLazer } from './bursa-lazer-epilasyon-rehberi';
 import { post as bursaMedikal } from './bursa-medikal-estetik-rehberi';
-
+import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  turkiyePillar,
   bursaMedikal,
   bursaLazer,
   bursaRehber,
@@ -81,15 +82,12 @@ export const allPosts: BlogPost[] = [
   salonMusteri,
   ciltBakimi,
 ];
-
 export function getAllPosts(): BlogPost[] {
   return [...allPosts].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
 }
-
 export function getPostBySlug(slug: string): BlogPost | null {
   return allPosts.find((p) => p.slug === slug) || null;
 }
-
 export function getRecentPosts(n: number): BlogPost[] {
   return getAllPosts().slice(0, n);
 }
