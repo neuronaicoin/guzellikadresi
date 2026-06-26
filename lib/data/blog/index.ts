@@ -37,9 +37,11 @@ import { post as konyaLazer } from './konya-lazer-epilasyon-rehberi';
 import { post as konyaMedikal } from './konya-medikal-estetik-rehberi';
 import { post as bursaRehber } from './bursa-guzellik-merkezi-bakim-rehberi';
 import { post as bursaLazer } from './bursa-lazer-epilasyon-rehberi';
+import { post as bursaMedikal } from './bursa-medikal-estetik-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  bursaMedikal,
   bursaLazer,
   bursaRehber,
   konyaMedikal,
