@@ -35,9 +35,11 @@ import { post as musteriCekmeRehberi } from './guzellik-isletmesi-daha-fazla-mus
 import { post as konyaRehber } from './konya-guzellik-merkezi-bakim-rehberi';
 import { post as konyaLazer } from './konya-lazer-epilasyon-rehberi';
 import { post as konyaMedikal } from './konya-medikal-estetik-rehberi';
+import { post as bursaRehber } from './bursa-guzellik-merkezi-bakim-rehberi';
 
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  bursaRehber,
   konyaMedikal,
   konyaLazer,
   konyaRehber,
