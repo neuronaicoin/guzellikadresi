@@ -209,6 +209,13 @@ export default function RegisterForm({
         // GA: işletme ekleme tamamlandı (+ yeni hesap oluştuysa üye kaydı)
         trackGA('isletme_ekleme', { method: needsAccount ? 'yeni_hesap' : 'mevcut_hesap' });
         if (needsAccount) trackGA('uye_kaydi');
+        // Meta Pixel: işletme kaydı tamamlandı (reklam dönüşüm takibi)
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'CompleteRegistration', {
+            content_name: 'isletme_ekleme',
+            status: needsAccount ? 'yeni_hesap' : 'mevcut_hesap',
+          });
+        }
         setDone(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
