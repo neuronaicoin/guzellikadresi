@@ -46,10 +46,12 @@ import { post as samsunKuafor } from './samsun-bayan-kuaforu-rehberi';
 import { post as gaziantepGuzellik } from './gaziantep-guzellik-merkezi-rehberi';
 import { post as kayseriLazer } from './kayseri-lazer-epilasyon-rehberi';
 import { post as kayseriGuzellik } from './kayseri-guzellik-merkezi-rehberi';
+import { post as kayseriTirnak } from './kayseri-tirnak-studyosu-rehberi';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
   turkiyePillar,
+  kayseriTirnak,
   kayseriGuzellik,
   kayseriLazer,
   gaziantepGuzellik,
