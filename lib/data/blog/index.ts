@@ -44,10 +44,12 @@ import { post as samsunLazer } from './samsun-lazer-epilasyon-rehberi';
 import { post as samsunMedikal } from './samsun-medikal-estetik-rehberi';
 import { post as samsunKuafor } from './samsun-bayan-kuaforu-rehberi';
 import { post as gaziantepGuzellik } from './gaziantep-guzellik-merkezi-rehberi';
+import { post as kayseriLazer } from './kayseri-lazer-epilasyon-rehberi';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
   turkiyePillar,
+  kayseriLazer,
   gaziantepGuzellik,
   samsunKuafor,
   samsunMedikal,
