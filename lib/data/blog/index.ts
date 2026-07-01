@@ -48,10 +48,14 @@ import { post as kayseriLazer } from './kayseri-lazer-epilasyon-rehberi';
 import { post as kayseriGuzellik } from './kayseri-guzellik-merkezi-rehberi';
 import { post as kayseriTirnak } from './kayseri-tirnak-studyosu-rehberi';
 import { post as mersinMedikal } from './mersin-medikal-estetik-rehberi';
+import { post as lazerVsAgda } from './lazer-epilasyon-mu-agda-mi-karsilastirma';
+import { post as botoksMuDolgu } from './botoks-mu-dolgu-mu-hangisi-uygun';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
   turkiyePillar,
+  botoksMuDolgu,
+  lazerVsAgda,
   mersinMedikal,
   kayseriTirnak,
   kayseriGuzellik,
