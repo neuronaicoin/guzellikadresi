@@ -38,10 +38,12 @@ import { post as konyaMedikal } from './konya-medikal-estetik-rehberi';
 import { post as bursaRehber } from './bursa-guzellik-merkezi-bakim-rehberi';
 import { post as bursaLazer } from './bursa-lazer-epilasyon-rehberi';
 import { post as bursaMedikal } from './bursa-medikal-estetik-rehberi';
+import { post as ankaraMedikal } from './ankara-medikal-estetik-rehberi';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
   turkiyePillar,
+  ankaraMedikal,
   bursaMedikal,
   bursaLazer,
   bursaRehber,
