@@ -40,10 +40,12 @@ import { post as bursaLazer } from './bursa-lazer-epilasyon-rehberi';
 import { post as bursaMedikal } from './bursa-medikal-estetik-rehberi';
 import { post as ankaraMedikal } from './ankara-medikal-estetik-rehberi';
 import { post as ankaraGuzellik } from './ankara-guzellik-merkezi-rehberi';
+import { post as samsunLazer } from './samsun-lazer-epilasyon-rehberi';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
   turkiyePillar,
+  samsunLazer,
   ankaraGuzellik,
   ankaraMedikal,
   bursaMedikal,
