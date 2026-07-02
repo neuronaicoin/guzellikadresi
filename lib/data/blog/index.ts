@@ -59,10 +59,14 @@ import { post as bursaMusteri } from './bursa-guzellik-bakim-musteri-rehberi';
 import { post as konyaMusteri } from './konya-guzellik-bakim-musteri-rehberi';
 import { post as antalyaMusteri } from './antalya-guzellik-bakim-musteri-rehberi';
 import { post as orduMusteri } from './ordu-guzellik-bakim-musteri-rehberi';
+import { post as istanbulMedikal } from './istanbul-medikal-estetik-rehberi';
+import { post as istanbulSacEkimi } from './istanbul-sac-ekimi-rehberi';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
   turkiyePillar,
+  istanbulSacEkimi,
+  istanbulMedikal,
   orduMusteri,
   antalyaMusteri,
   konyaMusteri,
