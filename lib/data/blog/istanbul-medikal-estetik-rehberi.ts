@@ -49,7 +49,7 @@ export const post: BlogPost = {
 <p>Mezoterapi (gençlik aşısı), cilde vitamin ve besleyici karışımların enjekte edilmesiyle cildi canlandırmayı amaçlar. Cilt yenileme işlemleri ise cildin genel kalitesini artırmaya yöneliktir. Bu işlemler de tıbbi uygulamalar olduğundan doktor gözetiminde yapılmalıdır.</p>
 
 <h2>İstanbul ve sağlık turizmi</h2>
-<p>İstanbul, gelişmiş sağlık altyapısı, deneyimli hekim kadrosu ve uluslararası ulaşım kolaylığıyla sağlık turizminde Türkiye'nin en önde gelen şehridir. Yurt dışından pek çok hasta, estetik ve sağlık işlemleri için İstanbul'u tercih eder. Uluslararası hasta kabul eden ve sağlık turizmi kapsamında hizmet veren kuruluşları değerlendirmek isteyenler, <a href="https://mediwayturkey.com" target="_blank" rel="noopener">MediWay</a> üzerinden uzman sağlık kuruluşlarını inceleyebilir. Yerel hizmetler için ise GüzellikAdresin'deki adresleri kullanabilirsiniz.</p>
+<p>İstanbul, gelişmiş sağlık altyapısı, deneyimli hekim kadrosu ve uluslararası ulaşım kolaylığıyla sağlık turizminde Türkiye'nin en önde gelen şehridir. Yurt dışından pek çok hasta, estetik ve sağlık işlemleri için İstanbul'u tercih eder. Uluslararası hasta kabul eden ve sağlık turizmi kapsamında hizmet veren kuruluşları değerlendirmek isteyenler, <a href="https://www.mediwayturkey.com" target="_blank" rel="noopener">MediWay</a> üzerinden uzman sağlık kuruluşlarını inceleyebilir. Yerel hizmetler için ise GüzellikAdresin'deki adresleri kullanabilirsiniz.</p>
 
 <h2>İstanbul'da medikal estetik fiyatlarını ne belirler?</h2>
 <p>Medikal estetik fiyatları sabit değildir ve pek çok faktöre bağlı olarak değişir:</p>
