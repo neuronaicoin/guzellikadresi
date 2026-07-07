@@ -44,7 +44,7 @@ export default function BusinessContact(p: Props) {
       {p.randevuAktif && (
         <button
           className="ga-c-btn ga-c-randevu"
-          onClick={() => { setShowBooking(true); trackEvent(p.businessId, 'booking_open'); }}
+          onClick={() => setShowBooking(true)}
         >
           📅 Randevu Al
         </button>
