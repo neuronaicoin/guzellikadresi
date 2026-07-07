@@ -23,6 +23,10 @@ export type BusinessDetail = {
   gallery: string[];
   works: string[];
   coverUrl: string | null;
+  // Randevu sistemi alanları
+  randevu_aktif: boolean;
+  staff_count: number;
+  show_price: boolean;
 };
 
 export async function getBusinessBySlug(slug: string): Promise<BusinessDetail | null> {
@@ -31,6 +35,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessDetail | 
     .select(`
       id, name, slug, description, address, lat, lng,
       phone, whatsapp, website, instagram, facebook, x_twitter, linkedin, created_at,
+      randevu_aktif, staff_count, show_price,
       categories(name, slug, emoji),
       provinces(name, slug),
       districts(name, slug),
@@ -40,15 +45,12 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessDetail | 
     .eq('slug', slug)
     .eq('status', 'approved')
     .single();
-
   if (error || !data) return null;
   const b: any = data;
-
   const photos = (b.business_photos || []).sort((a: any, c: any) => (a.sort_order ?? 0) - (c.sort_order ?? 0));
   const gallery = photos.filter((p: any) => p.kind !== 'work').map((p: any) => p.url);
   const works = photos.filter((p: any) => p.kind === 'work').map((p: any) => p.url);
   const cover = photos.find((p: any) => p.is_cover) || photos[0];
-
   return {
     id: b.id,
     name: b.name,
@@ -72,5 +74,8 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessDetail | 
     gallery,
     works,
     coverUrl: cover?.url ?? null,
+    randevu_aktif: b.randevu_aktif ?? false,
+    staff_count: b.staff_count ?? 1,
+    show_price: b.show_price ?? false,
   };
 }
