@@ -799,3 +799,54 @@ img {
   font-size: 15px;
 }
 .ga-c-randevu:hover { background: #d9b45f; }
+
+/* ============ RANDEVU YÖNETİMİ (panel) ============ */
+.ga-main-tabs, .ga-appt-tabs {
+  display: flex; gap: 6px; margin-bottom: 18px;
+  background: var(--navy-50); padding: 5px; border-radius: 12px;
+}
+.ga-main-tabs button, .ga-appt-tabs button {
+  flex: 1; padding: 10px; border: none; background: none; cursor: pointer;
+  font-family: inherit; font-size: 13.5px; font-weight: 700; color: var(--muted);
+  border-radius: 9px; transition: .12s;
+}
+.ga-main-tabs button.on, .ga-appt-tabs button.on {
+  background: #fff; color: var(--navy); box-shadow: 0 1px 4px rgba(14,33,72,.1);
+}
+.ga-appt-tabs { background: #fff; border: 1px solid var(--line); }
+.ga-appt-tabs button.on { background: var(--navy); color: #fff; }
+
+.ga-appt-list { display: flex; flex-direction: column; gap: 10px; }
+.ga-appt-card {
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 16px; display: flex; justify-content: space-between;
+  align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.ga-appt-card.past { opacity: .7; }
+.ga-appt-main { flex: 1; min-width: 200px; }
+.ga-appt-when { font-size: 14px; font-weight: 800; color: var(--navy); }
+.ga-appt-who { font-size: 13.5px; color: var(--ink); margin-top: 3px; }
+.ga-appt-svc { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.ga-appt-status { display: inline-block; margin-top: 6px; font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 6px; }
+.ga-appt-status.pending { background: #fff3e0; color: #d97706; }
+.ga-appt-status.confirmed { background: #ecfdf3; color: #067647; }
+.ga-appt-status.cancelled { background: #fdecea; color: #b3261e; }
+.ga-appt-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ga-appt-btn {
+  font-size: 12.5px; font-weight: 700; padding: 8px 14px; border-radius: 8px;
+  border: none; cursor: pointer; font-family: inherit; text-align: center;
+}
+.ga-appt-btn.ok { background: #1f9d6b; color: #fff; }
+.ga-appt-btn.wa { background: #25d366; color: #fff; }
+.ga-appt-btn.del { background: #fff0f0; color: #e05252; }
+
+.ga-blk-form { display: flex; gap: 8px; flex-wrap: wrap; }
+.ga-blk-form input {
+  flex: 1; min-width: 120px; padding: 10px 12px; border: 1px solid var(--line);
+  border-radius: 9px; font-size: 14px; font-family: inherit;
+}
+.ga-blk-row {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  padding: 11px 14px; font-size: 13.5px; font-weight: 600; color: var(--navy);
+}
