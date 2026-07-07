@@ -659,3 +659,143 @@ img {
   .ga-wh-row { flex-wrap: wrap; }
   .ga-wh-row input[type="time"] { flex: 1; min-width: 0; }
 }
+
+/* ============ RANDEVU MODAL (müşteri akışı) ============ */
+.ga-modal-overlay {
+  position: fixed; inset: 0; background: rgba(10,18,40,.55);
+  z-index: 200; display: flex; align-items: flex-end; justify-content: center;
+  padding: 0;
+}
+.ga-modal {
+  background: #fff; width: 100%; max-width: 480px;
+  border-radius: 20px 20px 0 0; max-height: 92vh; overflow-y: auto;
+  animation: ga-modal-up .25s ease;
+}
+@keyframes ga-modal-up { from { transform: translateY(40px); opacity: .6; } to { transform: translateY(0); opacity: 1; } }
+@media (min-width: 560px) {
+  .ga-modal-overlay { align-items: center; padding: 20px; }
+  .ga-modal { border-radius: 18px; }
+}
+.ga-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; background: #fff; z-index: 2;
+}
+.ga-modal-title { font-size: 18px; font-weight: 800; color: var(--navy); }
+.ga-modal-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.ga-modal-x {
+  background: none; border: none; font-size: 28px; color: #9aa1b2;
+  cursor: pointer; line-height: 1; padding: 0 4px;
+}
+.ga-modal-body { padding: 18px 20px 26px; }
+
+.ga-book-steps { display: flex; gap: 6px; margin-bottom: 18px; }
+.ga-book-steps span {
+  flex: 1; text-align: center; font-size: 11.5px; font-weight: 700;
+  color: #aab1c2; padding: 7px 4px; border-radius: 8px; background: var(--navy-50);
+}
+.ga-book-steps span.on { background: var(--navy); color: #fff; }
+
+/* Hizmet listesi */
+.ga-book-services { display: flex; flex-direction: column; gap: 10px; }
+.ga-book-svc {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 16px; border: 2px solid var(--line); border-radius: 12px;
+  background: #fff; cursor: pointer; text-align: left; transition: .12s; font-family: inherit;
+}
+.ga-book-svc:hover { border-color: var(--gold); background: var(--gold-50); }
+.ga-book-svc-name { font-size: 15px; font-weight: 700; color: var(--navy); }
+.ga-book-svc-dur { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.ga-book-svc-price { font-size: 15px; font-weight: 800; color: #1f9d6b; }
+.ga-book-svc-price.muted { font-size: 12.5px; font-weight: 600; color: #aab1c2; }
+
+/* Seçili hizmet çipi */
+.ga-book-picked {
+  background: var(--navy-50); border-radius: 10px; padding: 10px 14px;
+  font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 14px; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.ga-book-picked span { color: var(--gold); font-weight: 700; font-size: 12.5px; }
+
+/* Gün seçici (yatay kaydırma) */
+.ga-book-days {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px;
+}
+.ga-book-day {
+  flex: 0 0 auto; width: 62px; padding: 10px 4px; border: 2px solid var(--line);
+  border-radius: 12px; background: #fff; cursor: pointer; text-align: center;
+  display: flex; flex-direction: column; gap: 2px; font-family: inherit;
+}
+.ga-book-day .d-name { font-size: 11px; font-weight: 700; color: var(--muted); }
+.ga-book-day .d-num { font-size: 19px; font-weight: 800; color: var(--navy); }
+.ga-book-day .d-mon { font-size: 10.5px; color: var(--muted); }
+.ga-book-day.active { border-color: var(--navy); background: var(--navy); }
+.ga-book-day.active .d-name, .ga-book-day.active .d-num, .ga-book-day.active .d-mon { color: #fff; }
+.ga-book-day.closed { opacity: .35; cursor: not-allowed; }
+
+/* Saat slotları */
+.ga-book-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.ga-book-slot {
+  padding: 10px 4px; border: 2px solid var(--line); border-radius: 10px;
+  background: #fff; cursor: pointer; font-family: inherit;
+  font-size: 14px; font-weight: 700; color: var(--navy);
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+}
+.ga-book-slot .rem { font-size: 9.5px; font-weight: 600; color: #1f9d6b; }
+.ga-book-slot:hover:not(.full) { border-color: var(--gold); }
+.ga-book-slot.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+.ga-book-slot.active .rem { color: #d8e0f0; }
+.ga-book-slot.full {
+  opacity: .4; cursor: not-allowed; text-decoration: line-through;
+  background: #f6f7fa;
+}
+.ga-book-slot.full .rem { color: #c0554d; text-decoration: none; }
+
+.ga-book-next, .ga-book-confirm {
+  width: 100%; margin-top: 16px; background: var(--navy); color: #fff;
+  border: none; border-radius: 12px; padding: 14px; font-size: 15.5px;
+  font-weight: 700; cursor: pointer; font-family: inherit;
+}
+.ga-book-confirm { background: var(--gold); color: var(--navy); }
+.ga-book-confirm:disabled { opacity: .6; cursor: not-allowed; }
+.ga-book-back {
+  width: 100%; margin-top: 8px; background: none; border: none;
+  color: var(--muted); font-size: 13.5px; cursor: pointer; padding: 8px; font-family: inherit;
+}
+
+/* Özet kutusu */
+.ga-book-summary {
+  background: var(--gold-50); border: 1px solid var(--gold-soft);
+  border-radius: 12px; padding: 14px 16px; font-size: 14px; color: var(--navy);
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+/* Onaylandı ekranı */
+.ga-book-done { text-align: center; padding: 10px 6px; }
+.ga-book-check {
+  width: 64px; height: 64px; border-radius: 50%; background: #ecfdf3;
+  color: #1f9d6b; border: 2px solid #1f9d6b; font-size: 32px;
+  display: grid; place-items: center; margin: 0 auto 14px;
+}
+.ga-book-done h3 { font-size: 20px; font-weight: 800; color: var(--navy); margin: 0 0 12px; }
+.ga-book-done-sum {
+  background: var(--navy-50); border-radius: 12px; padding: 14px;
+  display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; color: var(--navy); margin-bottom: 16px;
+}
+.ga-book-wa {
+  display: block; background: #25d366; color: #fff; text-align: center;
+  padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; margin-bottom: 10px;
+}
+.ga-book-done-note { font-size: 12.5px; color: var(--muted); margin: 0 0 16px; line-height: 1.5; }
+.ga-book-close2 {
+  width: 100%; background: none; border: 1px solid var(--line); color: var(--muted);
+  border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+}
+
+/* Randevu Al butonu (İletişim kartında) */
+.ga-c-randevu {
+  background: var(--gold); color: var(--navy); font-weight: 800;
+  border: none; width: 100%; cursor: pointer; font-family: inherit;
+  font-size: 15px;
+}
+.ga-c-randevu:hover { background: #d9b45f; }
