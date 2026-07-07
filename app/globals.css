@@ -593,3 +593,63 @@ img {
 .ga-sk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .ga-sk-wrap { max-width: 1280px; margin: 0 auto; padding: 22px; }
 .ga-sk-title { height: 26px; width: 220px; margin-bottom: 18px; }
+
+/* ============ RANDEVU AYARLARI — toggle + sayı butonu ============ */
+.ga-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.ga-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.ga-slider {
+  position: absolute;
+  inset: 0;
+  background: #ccd3de;
+  border-radius: 26px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.ga-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.ga-switch input:checked + .ga-slider {
+  background: #1f9d6b;
+}
+.ga-switch input:checked + .ga-slider::before {
+  transform: translateX(20px);
+}
+.ga-np-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.ga-np-btn:hover {
+  background: var(--navy-700);
+}
+.ga-np-btn:active {
+  transform: scale(0.95);
+}
