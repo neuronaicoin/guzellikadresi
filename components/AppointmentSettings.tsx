@@ -276,7 +276,7 @@ export default function AppointmentSettings({ businessId }: { businessId: string
           </div>
         ))}
 
-        <button type="button" className="ga-btn-submit" style={{ marginLeft: 0, background: 'var(--navy, #0e2148)' }} onClick={addSvc}>
+        <button type="button" className="ga-btn-submit" style={{ marginLeft: 0, background: 'var(--navy, #0e2148)', color: '#fff' }} onClick={addSvc}>
           + Hizmet Ekle
         </button>
       </div>
