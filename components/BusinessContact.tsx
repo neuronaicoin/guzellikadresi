@@ -1,7 +1,7 @@
 'use client';
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { trackView, trackEvent } from '@/lib/track';
+import BookingModal from '@/components/BookingModal';
 
 type Props = {
   businessId: string;
@@ -14,8 +14,11 @@ type Props = {
   facebook: string | null;
   x_twitter: string | null;
   linkedin: string | null;
+  // Randevu sistemi (opsiyonel — sadece aktifse buton görünür)
+  randevuAktif?: boolean;
+  staffCount?: number;
+  showPrice?: boolean;
 };
-
 function normalizeSocial(val: string, type: string): string {
   const v = val.trim();
   if (v.startsWith('http')) return v;
@@ -28,15 +31,25 @@ function normalizeSocial(val: string, type: string): string {
     default: return v;
   }
 }
-
 export default function BusinessContact(p: Props) {
+  const [showBooking, setShowBooking] = useState(false);
   useEffect(() => {
     trackView(p.businessId);
   }, [p.businessId]);
-
   return (
     <div className="ga-contact-card">
       <h3>İletişim</h3>
+
+      {/* RANDEVU AL — sadece randevu sistemi aktifse */}
+      {p.randevuAktif && (
+        <button
+          className="ga-c-btn ga-c-randevu"
+          onClick={() => { setShowBooking(true); trackEvent(p.businessId, 'booking_open'); }}
+        >
+          📅 Randevu Al
+        </button>
+      )}
+
       {p.phone && (
         <a href={`tel:${p.phone}`} className="ga-c-btn ga-c-call" onClick={() => trackEvent(p.businessId, 'phone_click')}>
           📞 {p.phone}
@@ -55,14 +68,23 @@ export default function BusinessContact(p: Props) {
         {p.linkedin && <a href={normalizeSocial(p.linkedin, 'linkedin')} target="_blank" rel="noopener" onClick={() => trackEvent(p.businessId, 'linkedin_click')}>LinkedIn</a>}
       </div>
       <ShareButtons name={p.name} slug={p.slug} />
+
+      {showBooking && (
+        <BookingModal
+          businessId={p.businessId}
+          businessName={p.name || 'İşletme'}
+          whatsapp={p.whatsapp}
+          staffCount={p.staffCount || 1}
+          showPrice={p.showPrice || false}
+          onClose={() => setShowBooking(false)}
+        />
+      )}
     </div>
   );
 }
-
 function ShareButtons({ name, slug }: { name?: string; slug?: string }) {
   const url = slug ? `https://guzellikadresin.com/isletme/${slug}` : (typeof window !== 'undefined' ? window.location.href : '');
   const text = `${name || 'Bu işletme'} - GüzellikAdresin'de`;
-
   function shareWhatsApp() {
     window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n${url}`)}`, '_blank');
   }
@@ -76,7 +98,6 @@ function ShareButtons({ name, slug }: { name?: string; slug?: string }) {
       } catch {}
     }
   }
-
   return (
     <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #eee' }}>
       <div style={{ fontSize: 12, color: '#888', marginBottom: 8 }}>Bu işletmeyi paylaş</div>
