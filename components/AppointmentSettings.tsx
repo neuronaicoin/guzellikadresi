@@ -11,6 +11,7 @@ import {
 } from '@/lib/queries-appointment';
 import { getMyBusinessDetail } from '@/lib/queries-panel';
 import { APPOINTMENT_TEMPLATES, TYPE_NOTES } from '@/lib/appointment-templates';
+import AppointmentManager from '@/components/AppointmentManager';
 
 type SvcRow = { name: string; duration_min: number; price: number | null };
 
@@ -33,6 +34,7 @@ export default function AppointmentSettings({ businessId }: { businessId: string
   const [checking, setChecking] = useState(true);
   const [loadErr, setLoadErr] = useState('');
   const [catSlug, setCatSlug] = useState<string | null>(null);
+  const [mainTab, setMainTab] = useState<'settings' | 'appointments'>('settings');
 
   // Ayarlar
   const [randevuAktif, setRandevuAktif] = useState(false);
@@ -178,6 +180,20 @@ export default function AppointmentSettings({ businessId }: { businessId: string
 
   return (
     <div className="ga-edit">
+      {/* ÜST SEKMELER: Ayarlar | Randevular */}
+      <div className="ga-main-tabs">
+        <button className={mainTab === 'settings' ? 'on' : ''} onClick={() => setMainTab('settings')}>
+          ⚙️ Ayarlar
+        </button>
+        <button className={mainTab === 'appointments' ? 'on' : ''} onClick={() => setMainTab('appointments')}>
+          📋 Randevular
+        </button>
+      </div>
+
+      {mainTab === 'appointments' ? (
+        <AppointmentManager businessId={businessId} />
+      ) : (
+      <>
       {saved && <div className="ga-info-ok" style={{ marginBottom: 16 }}>✓ Randevu ayarları kaydedildi.</div>}
 
       {/* PREMIUM: Randevu sistemi aç/kapat */}
@@ -321,6 +337,8 @@ export default function AppointmentSettings({ businessId }: { businessId: string
           {saving ? 'Kaydediliyor…' : 'Randevu Ayarlarını Kaydet'}
         </button>
       </div>
+      </>
+      )}
     </div>
   );
 }
