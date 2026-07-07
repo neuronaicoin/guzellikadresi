@@ -107,3 +107,46 @@ export async function getBusinessCategorySlug(
   const cat: any = (data as any).categories;
   return cat?.slug ?? null;
 }
+
+// ---- Çalışma saatleri (working_hours tablosu) ----
+// day_of_week: 0=Pazartesi ... 6=Pazar
+export type WorkingHour = {
+  day_of_week: number;
+  open_time: string | null;   // "09:00"
+  close_time: string | null;  // "18:00"
+  is_closed: boolean;
+};
+
+export async function getWorkingHours(businessId: string): Promise<WorkingHour[]> {
+  const { data } = await supabaseAuth
+    .from('working_hours')
+    .select('day_of_week, open_time, close_time, is_closed')
+    .eq('business_id', businessId)
+    .order('day_of_week', { ascending: true });
+  return (data || []) as WorkingHour[];
+}
+
+// Tüm haftayı topluca kaydet (önce sil, sonra ekle — transaction gibi)
+export async function saveWorkingHours(
+  businessId: string,
+  hours: WorkingHour[]
+): Promise<{ ok: boolean; error?: string }> {
+  const { error: delErr } = await supabaseAuth
+    .from('working_hours')
+    .delete()
+    .eq('business_id', businessId);
+  if (delErr) return { ok: false, error: delErr.message };
+
+  const rows = hours.map((h) => ({
+    business_id: businessId,
+    day_of_week: h.day_of_week,
+    open_time: h.is_closed ? null : h.open_time,
+    close_time: h.is_closed ? null : h.close_time,
+    is_closed: h.is_closed,
+  }));
+  const { error: insErr } = await supabaseAuth
+    .from('working_hours')
+    .insert(rows);
+  if (insErr) return { ok: false, error: insErr.message };
+  return { ok: true };
+}
