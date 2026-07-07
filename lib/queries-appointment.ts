@@ -150,3 +150,89 @@ export async function saveWorkingHours(
   if (insErr) return { ok: false, error: insErr.message };
   return { ok: true };
 }
+
+// ---- Randevu yönetimi (appointments tablosu) ----
+export type Appointment = {
+  id: string;
+  service_id: string | null;
+  customer_name: string;
+  customer_phone: string;
+  appointment_date: string;   // "2026-07-12"
+  appointment_time: string;   // "14:00:00"
+  status: 'pending' | 'confirmed' | 'cancelled';
+  created_at: string;
+  service_name?: string | null;
+};
+
+// İşletmenin randevularını çek (hizmet adıyla birlikte)
+export async function getAppointments(businessId: string): Promise<Appointment[]> {
+  const { data } = await supabaseAuth
+    .from('appointments')
+    .select('id, service_id, customer_name, customer_phone, appointment_date, appointment_time, status, created_at, appointment_services(name)')
+    .eq('business_id', businessId)
+    .order('appointment_date', { ascending: true })
+    .order('appointment_time', { ascending: true });
+  return (data || []).map((a: any) => ({
+    id: a.id,
+    service_id: a.service_id,
+    customer_name: a.customer_name,
+    customer_phone: a.customer_phone,
+    appointment_date: a.appointment_date,
+    appointment_time: a.appointment_time,
+    status: a.status,
+    created_at: a.created_at,
+    service_name: a.appointment_services?.name ?? null,
+  }));
+}
+
+// Randevu durumu güncelle (onayla / iptal)
+export async function updateAppointmentStatus(
+  appointmentId: string,
+  status: 'confirmed' | 'cancelled'
+): Promise<{ ok: boolean; error?: string }> {
+  const { error } = await supabaseAuth
+    .from('appointments')
+    .update({ status })
+    .eq('id', appointmentId);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
+// ---- Elle saat bloklama (blocked_slots) ----
+export type BlockedSlot = {
+  id: string;
+  blocked_date: string;
+  blocked_time: string;
+};
+
+export async function getBlockedSlots(businessId: string): Promise<BlockedSlot[]> {
+  const { data } = await supabaseAuth
+    .from('blocked_slots')
+    .select('id, blocked_date, blocked_time')
+    .eq('business_id', businessId)
+    .order('blocked_date', { ascending: true });
+  return (data || []) as BlockedSlot[];
+}
+
+export async function addBlockedSlot(
+  businessId: string,
+  date: string,
+  time: string
+): Promise<{ ok: boolean; error?: string }> {
+  const { error } = await supabaseAuth
+    .from('blocked_slots')
+    .insert({ business_id: businessId, blocked_date: date, blocked_time: time });
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
+export async function removeBlockedSlot(
+  slotId: string
+): Promise<{ ok: boolean; error?: string }> {
+  const { error } = await supabaseAuth
+    .from('blocked_slots')
+    .delete()
+    .eq('id', slotId);
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
