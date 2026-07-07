@@ -7,11 +7,8 @@ import Gallery from '@/components/Gallery';
 import BackButton from '@/components/BackButton';
 import BusinessContact from '@/components/BusinessContact';
 import { getBusinessBySlug } from '@/lib/queries-business';
-
 const LocationMap = dynamic(() => import('@/components/LocationMap'), { ssr: false });
-
 export const revalidate = 600;
-
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const b = await getBusinessBySlug(params.slug);
   if (!b) return { title: 'İşletme bulunamadı' };
@@ -20,14 +17,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: `${b.name} — ${loc}`,
     description: b.description || `${b.name}, ${loc}. ${b.category?.name || ''} hizmetleri. GüzellikAdresin'de keşfedin.`,
   };
-}
-
-export default async function BusinessPage({ params }: { params: { slug: string } }) {
+}export default async function BusinessPage({ params }: { params: { slug: string } }) {
   const b = await getBusinessBySlug(params.slug);
   if (!b) notFound();
-
   const loc = [b.district?.name, b.province?.name].filter(Boolean).join(', ');
-
   // LocalBusiness schema (Google zengin sonuç)
   const pageUrl = `https://guzellikadresin.com/isletme/${b.slug}`;
   const sameAs = [b.instagram, b.facebook, b.website].filter(Boolean);
@@ -47,11 +40,9 @@ export default async function BusinessPage({ params }: { params: { slug: string 
       addressLocality: b.district?.name || undefined,
       addressRegion: b.province?.name || undefined,
       addressCountry: 'TR',
-    },
-    ...(b.lat && b.lng ? { geo: { '@type': 'GeoCoordinates', latitude: b.lat, longitude: b.lng } } : {}),
+    },...(b.lat && b.lng ? { geo: { '@type': 'GeoCoordinates', latitude: b.lat, longitude: b.lng } } : {}),
     ...(sameAs.length > 0 ? { sameAs } : {}),
   };
-
   // Breadcrumb schema (Google'da yol gösterimi)
   const breadcrumb = {
     '@context': 'https://schema.org',
@@ -63,7 +54,6 @@ export default async function BusinessPage({ params }: { params: { slug: string 
       { '@type': 'ListItem', position: 4, name: b.name },
     ],
   };
-
   return (
     <>
       <Header />
@@ -78,7 +68,6 @@ export default async function BusinessPage({ params }: { params: { slug: string 
           {b.province && <><a href={`/${b.province.slug}`}>{b.province.name}</a> › </>}
           {b.category && <a href={`/kategori/${b.category.slug}`}>{b.category.name}</a>}
         </div>
-
         <div className="ga-biz-grid">
           {/* SOL: içerik */}
           <div>
@@ -89,16 +78,13 @@ export default async function BusinessPage({ params }: { params: { slug: string 
                 <span className="ga-biz-loc">📍 {loc}</span>
               </div>
             </div>
-
             <Gallery images={b.gallery} alt={b.name} />
-
             {b.description && (
               <section className="ga-biz-sec">
                 <h2>Hakkında</h2>
                 <p>{b.description}</p>
               </section>
             )}
-
             {b.services.length > 0 && (
               <section className="ga-biz-sec">
                 <h2>Sunulan Hizmetler</h2>
@@ -107,7 +93,6 @@ export default async function BusinessPage({ params }: { params: { slug: string 
                 </div>
               </section>
             )}
-
             {b.works.length > 0 && (
               <section className="ga-biz-sec">
                 <h2>Örnek Çalışmalar</h2>
@@ -120,8 +105,7 @@ export default async function BusinessPage({ params }: { params: { slug: string 
                 </div>
               </section>
             )}
-
-            <section className="ga-biz-sec">
+   <section className="ga-biz-sec">
               <h2>Konum</h2>
               {b.address && <p className="ga-biz-addr">📍 {b.address}{loc ? `, ${loc}` : ''}</p>}
               {b.lat && b.lng ? (
@@ -153,7 +137,6 @@ export default async function BusinessPage({ params }: { params: { slug: string 
               )}
             </section>
           </div>
-
           {/* SAĞ: iletişim kartı */}
           <aside className="ga-biz-contact">
             <BusinessContact
@@ -167,12 +150,14 @@ export default async function BusinessPage({ params }: { params: { slug: string 
               facebook={b.facebook}
               x_twitter={b.x_twitter}
               linkedin={b.linkedin}
+              randevuAktif={b.randevu_aktif}
+              staffCount={b.staff_count}
+              showPrice={b.show_price}
             />
             <a href="/isletme-ekle" className="ga-own-cta">Bu sizin işletmeniz mi? <b>Ücretsiz ekleyin →</b></a>
           </aside>
         </div>
       </div>
-
       <Footer />
     </>
   );
