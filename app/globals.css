@@ -653,3 +653,9 @@ img {
 .ga-np-btn:active {
   transform: scale(0.95);
 }
+
+/* Çalışma saatleri satırı - mobil uyum */
+@media (max-width: 560px) {
+  .ga-wh-row { flex-wrap: wrap; }
+  .ga-wh-row input[type="time"] { flex: 1; min-width: 0; }
+}
