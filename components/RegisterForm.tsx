@@ -234,6 +234,19 @@ export default function RegisterForm({
         <div className="ga-reg-check">✓</div>
         <h2>İşletmeniz eklendi!</h2>
         <p>İşletmeniz yayında. {needsAccount && 'Oluşturduğunuz e-posta ve şifre ile giriş yaparak işletmenizi yönetebilirsiniz.'}</p>
+
+        {/* RANDEVU TEŞVİK KUTUSU */}
+        <div className="ga-randevu-promo">
+          <div className="ga-randevu-promo-icon">📅</div>
+          <h3>Yeni: Online Randevu Sistemi</h3>
+          <p>
+            Panelinden <b>online randevu sistemini</b> aktif et — müşterilerin sana
+            profilin üzerinden kolayca randevu alsın. Hizmetlerin ve çalışma saatlerin
+            hazır, tek yapman gereken açmak!
+          </p>
+          <a href="/panel" className="ga-randevu-promo-btn">Panelden Randevuyu Aç →</a>
+        </div>
+
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 18, flexWrap: 'wrap' }}>
           <a href="/panel" className="ga-list-cta">Panele Git →</a>
           <a href="/" className="ga-logout-btn" style={{ textDecoration: 'none', display: 'inline-block' }}>Ana Sayfa</a>
@@ -448,6 +461,9 @@ export default function RegisterForm({
             </div>
             <div className="ga-field"><label>LinkedIn <span className="opt">(opsiyonel)</span></label><input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="linkedin.com/company/…" /></div>
             <div className="ga-tip">✦ Bilgileriniz incelendikten sonra yayına alınır. Kayıt ve listelenme tamamen ücretsizdir.</div>
+            <div className="ga-randevu-hint">
+              📅 <b>İpucu:</b> İşletmeni ekledikten sonra panelinden <b>online randevu sistemini</b> açabilirsin. Müşterilerin sana profilin üzerinden randevu alır.
+            </div>
           </div>
         )}
 
