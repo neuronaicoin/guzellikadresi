@@ -462,7 +462,11 @@ export default function RegisterForm({
             <div className="ga-field"><label>LinkedIn <span className="opt">(opsiyonel)</span></label><input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="linkedin.com/company/…" /></div>
             <div className="ga-tip">✦ Bilgileriniz incelendikten sonra yayına alınır. Kayıt ve listelenme tamamen ücretsizdir.</div>
             <div className="ga-randevu-hint">
-              📅 <b>İpucu:</b> İşletmeni ekledikten sonra panelinden <b>online randevu sistemini</b> açabilirsin. Müşterilerin sana profilin üzerinden randevu alır.
+              <div className="ga-randevu-hint-icon">📅</div>
+              <div className="ga-randevu-hint-text">
+                <b>Online Randevu Sistemi!</b>
+                <span>İşletmeni ekledikten sonra panelinden randevu sistemini <b>tek tıkla aç</b> — müşterilerin sana profilin üzerinden kolayca randevu alsın. Hizmetlerin ve saatlerin hazır gelir!</span>
+              </div>
             </div>
           </div>
         )}
