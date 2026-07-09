@@ -70,8 +70,10 @@ import { post as hydrafacialRehber } from './hydrafacial-nedir-nasil-secilir-reh
 import { post as bolgeselIncelmeGercekci } from './bolgesel-incelme-nedir-gercekci-rehber';
 import { post as protezTirnakSecim } from './protez-tirnak-guvenli-mi-salon-nasil-secilir';
 import { post as sacBotoksuKeratin } from './sac-botoksu-mu-keratin-bakimi-mi-fark-rehberi';
+import { post as medikalEstetikSecim } from './medikal-estetik-merkezi-nasil-secilir';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  medikalEstetikSecim,
   sacBotoksuKeratin,
   protezTirnakSecim,
   bolgeselIncelmeGercekci,
