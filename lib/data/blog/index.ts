@@ -69,8 +69,10 @@ import { post as kaliciMakyajSecim } from './kalici-makyaj-microblading-uzmani-n
 import { post as hydrafacialRehber } from './hydrafacial-nedir-nasil-secilir-rehberi';
 import { post as bolgeselIncelmeGercekci } from './bolgesel-incelme-nedir-gercekci-rehber';
 import { post as protezTirnakSecim } from './protez-tirnak-guvenli-mi-salon-nasil-secilir';
+import { post as sacBotoksuKeratin } from './sac-botoksu-mu-keratin-bakimi-mi-fark-rehberi';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  sacBotoksuKeratin,
   protezTirnakSecim,
   bolgeselIncelmeGercekci,
   hydrafacialRehber,
