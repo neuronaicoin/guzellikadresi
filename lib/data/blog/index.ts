@@ -68,8 +68,10 @@ import { post as buzLazerAlexandrite } from './buz-lazer-mi-alexandrite-mi';
 import { post as kaliciMakyajSecim } from './kalici-makyaj-microblading-uzmani-nasil-secilir';
 import { post as hydrafacialRehber } from './hydrafacial-nedir-nasil-secilir-rehberi';
 import { post as bolgeselIncelmeGercekci } from './bolgesel-incelme-nedir-gercekci-rehber';
+import { post as protezTirnakSecim } from './protez-tirnak-guvenli-mi-salon-nasil-secilir';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  protezTirnakSecim,
   bolgeselIncelmeGercekci,
   hydrafacialRehber,
   kaliciMakyajSecim,
