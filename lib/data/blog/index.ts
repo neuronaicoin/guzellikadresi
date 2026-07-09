@@ -62,8 +62,10 @@ import { post as orduMusteri } from './ordu-guzellik-bakim-musteri-rehberi';
 import { post as istanbulMedikal } from './istanbul-medikal-estetik-rehberi';
 import { post as istanbulSacEkimi } from './istanbul-sac-ekimi-rehberi';
 import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate';
+import { post as lazerMerkezSecim } from './lazer-epilasyon-merkezi-nasil-secilir';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  lazerMerkezSecim,
   turkiyePillar,
   istanbulSacEkimi,
   istanbulMedikal,
