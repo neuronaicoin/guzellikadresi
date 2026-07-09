@@ -65,8 +65,10 @@ import { post as turkiyePillar } from './turkiye-guzellik-bakim-rehberi-ultimate
 import { post as lazerMerkezSecim } from './lazer-epilasyon-merkezi-nasil-secilir';
 import { post as sacEkimiMerkezSecim } from './sac-ekimi-merkezi-nasil-secilir';
 import { post as buzLazerAlexandrite } from './buz-lazer-mi-alexandrite-mi';
+import { post as kaliciMakyajSecim } from './kalici-makyaj-microblading-uzmani-nasil-secilir';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  kaliciMakyajSecim,
   buzLazerAlexandrite,
   sacEkimiMerkezSecim,
   lazerMerkezSecim,
