@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Bölgesel İncelme İşe Yarar mı? Yöntemler ve Gerçekçi Beklenti 2026',
   metaDescription: 'Bölgesel incelme gerçekten işe yarıyor mu? Kavitasyon, kriyolipoliz, radyofrekans ve lipoliz yöntemleri, kimlere uygun, ne beklemeli? Tarafsız ve gerçekçi bölgesel incelme rehberi.',
   excerpt: 'Bölgesel incelme kilo verme yöntemi değildir — inatçı yağ bölgelerini hedefleyen bir şekillendirme yaklaşımıdır. Yöntemleri, gerçekçi beklentileri ve doğru merkez seçimini abartısız biçimde anlatıyoruz.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://plus.unsplash.com/premium_photo-1661488246062-cb1ab73519d0?w=1600&auto=format&fit=crop&q=70',
   category: 'Bölgesel İncelme',
   audience: 'kullanici',
   readMinutes: 10,
