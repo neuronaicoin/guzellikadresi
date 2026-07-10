@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Hydrafacial Nedir? Kimlere Uygun ve Nasıl Merkez Seçilir (2026)',
   metaDescription: 'Hydrafacial cilt bakımı nedir, aşamaları neler, kimlere uygun değil? Orijinal uygulamayı nasıl anlarsınız ve doğru merkezi nasıl seçersiniz? Tarafsız cilt bakımı rehberi.',
   excerpt: 'Hydrafacial son yılların en popüler cilt bakımlarından biri — ama "hydrafacial" adı altında farklı uygulamalar da yapılıyor. Bu bakımın ne olduğunu, kimlere uygun olduğunu ve doğru merkezi nasıl seçeceğinizi tarafsız biçimde anlatıyoruz.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://images.unsplash.com/photo-1713085085470-fba013d67e65?w=1600&auto=format&fit=crop&q=70',
   category: 'Cilt Bakımı',
   audience: 'kullanici',
   readMinutes: 10,
