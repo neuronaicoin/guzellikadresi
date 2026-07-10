@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Saç Botoksu mu Keratin Bakımı mı? Fark ve Formaldehit Güvenliği 2026',
   metaDescription: 'Saç botoksu, keratin bakımı ve Brezilya fönü arasındaki fark nedir? Formaldehit zararlı mı, nasıl anlaşılır? Hangisi size uygun? Tarafsız ve güvenlik odaklı saç bakımı rehberi.',
   excerpt: 'Saç botoksu, keratin bakımı ve Brezilya fönü sürekli birbirine karıştırılıyor — oysa amaçları ve güvenlik profilleri farklı. Aralarındaki farkı, formaldehit riskini ve doğru salonu seçmeyi tarafsız biçimde anlatıyoruz.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=1600&auto=format&fit=crop&q=70',
   category: 'Saç Bakımı',
   audience: 'kullanici',
   readMinutes: 10,
