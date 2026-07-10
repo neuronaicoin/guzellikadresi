@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Protez Tırnak Zararlı mı? Güvenli Salon Seçim Rehberi 2026',
   metaDescription: 'Protez tırnak doğal tırnağa zarar verir mi, güvenli mi? Hijyen, uygulayıcı deneyimi ve salon seçiminde nelere dikkat etmelisiniz? Enfeksiyon riskinden korunma ve doğru tercih rehberi.',
   excerpt: 'Protez tırnak doğru koşullarda güvenli, yanlış koşullarda tırnak sağlığına zarar verebilir. Farkı yaratan, doğru salonu ve uygulayıcıyı seçmektir. Güvenli protez tırnak için tarafsız rehber.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=1600&auto=format&fit=crop&q=70',
   category: 'Protez Tırnak',
   audience: 'kullanici',
   readMinutes: 9,
