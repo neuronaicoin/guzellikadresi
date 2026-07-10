@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Kalıcı Makyaj / Microblading Uzmanı Nasıl Seçilir? 2026 Rehberi',
   metaDescription: 'Microblading ve kalıcı makyaj uzmanı seçerken hijyen, portföy, renk/pigment bilgisi ve cilt analizinde nelere dikkat etmelisiniz? Yanlış uygulamadan korunma ve doğru uzmanı bulma rehberi.',
   excerpt: 'Kalıcı makyaj aylarca yüzünüzde kalır — yanlış uzman seçimi turuncuya dönen kaşlar veya asimetri gibi telafisi zor sonuçlar doğurur. Doğru microblading uzmanını seçmenin tarafsız rehberi.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://plus.unsplash.com/premium_photo-1718626727207-854154e67324?w=1600&auto=format&fit=crop&q=70',
   category: 'Kalıcı Makyaj',
   audience: 'kullanici',
   readMinutes: 10,
