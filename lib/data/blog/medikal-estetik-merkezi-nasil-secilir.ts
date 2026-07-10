@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Medikal Estetik Merkezi Nasıl Seçilir? Yetki ve Güvenlik Rehberi 2026',
   metaDescription: 'Medikal estetik (botoks, dolgu, mezoterapi) yaptırmadan önce doktor yetkisi, ruhsat, ürün onayı ve hijyende nelere dikkat etmelisiniz? Yetkisiz uygulamadan korunma rehberi.',
   excerpt: 'Botoks, dolgu gibi medikal estetik işlemler yasal olarak yalnızca hekimler tarafından yapılabilir. Yetkisiz uygulama ciddi sağlık riski taşır. Güvenli ve yetkili medikal estetik merkezini seçmenin tarafsız rehberi.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://plus.unsplash.com/premium_photo-1661769358914-1d33c22bd7ba?w=1600&auto=format&fit=crop&q=70',
   category: 'Medikal Estetik',
   audience: 'kullanici',
   readMinutes: 11,
