@@ -6,7 +6,7 @@ export const post: BlogPost = {
   metaTitle: 'Saç Ekimi Merkezi Nasıl Seçilir? 2026 Güvenilir Klinik Rehberi',
   metaDescription: 'Saç ekimi merkezi seçerken doktor deneyimi, Sağlık Bakanlığı onayı, teknik (FUE/DHI), hijyen ve fiyat şeffaflığında nelere dikkat etmelisiniz? Dolandırılmadan doğru kliniği bulma rehberi.',
   excerpt: 'Saç ekimi yıllarca taşınan bir karardır ve yanlış merkez telafisi zor sonuçlar doğurur. Doktor deneyiminden Sağlık Bakanlığı onayına, teknik seçiminden kırmızı bayraklara kadar güvenli klinik seçiminin tüm püf noktaları.',
-  heroImage: 'https://plus.unsplash.com/premium_photo-1661386084694-0523d8d1fc9e?w=1600&auto=format&fit=crop&q=70',
+  heroImage: 'https://plus.unsplash.com/premium_photo-1741902728626-e00aec0bf055?w=1600&auto=format&fit=crop&q=70',
   category: 'Saç Ekimi',
   audience: 'kullanici',
   readMinutes: 12,
