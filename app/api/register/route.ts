@@ -29,7 +29,11 @@ export async function POST(req: NextRequest) {
     const serviceIds = JSON.parse(String(form.get('serviceIds') || '[]')) as number[];
 
     // Zorunlu alan kontrolü
-    if (!name || !categoryId || !provinceId || !districtId || !address || !phone || serviceIds.length === 0) {
+    // Not: hizmet seçimi ve adres artık opsiyonel (sonradan panelden eklenebilir) —
+    // istemci tarafı (RegisterForm.tsx) bunları zorunlu tutmuyor. Sunucu tarafı
+    // burada eskiden hâlâ ikisini de zorunlu sayıyordu, bu yüzden bazı kayıtlar
+    // istemci "her şey dolu" derken sunucudan "Zorunlu alanlar eksik" alıyordu.
+    if (!name || !categoryId || !provinceId || !districtId || !phone) {
       return NextResponse.json({ ok: false, error: 'Zorunlu alanlar eksik.' }, { status: 400 });
     }
 
