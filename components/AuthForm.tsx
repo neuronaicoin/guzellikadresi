@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { supabaseAuth } from '@/lib/supabase-auth';
 
 export default function AuthForm({ mode }: { mode: 'login' | 'register' }) {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [pw2, setPw2] = useState('');
@@ -37,12 +35,16 @@ export default function AuthForm({ mode }: { mode: 'login' | 'register' }) {
         const { error } = await supabaseAuth.auth.signUp({ email: email.trim(), password: pw });
         if (error) { setErr(cevirHata(error.message)); setBusy(false); return; }
         // mail doğrulama kapalı → direkt giriş yapılmış olur
-        router.push('/panel');
+        // Tam sayfa yönlendirme kullanılıyor: oturumun tarayıcıya tam
+        // olarak yazıldığından emin olunduktan sonra /panel açılır —
+        // istemci-taraflı router.push'ta bazı mobil tarayıcılarda görülen
+        // "giriş yapıp anında geri atılma" sorununu tamamen ortadan kaldırır.
+        window.location.href = '/panel';
       } else {
         const { error } = await supabaseAuth.auth.signInWithPassword({ email: email.trim(), password: pw });
         if (error) { setErr(cevirHata(error.message)); setBusy(false); return; }
         try { localStorage.setItem('ga_remember_email', email.trim()); } catch {}
-        router.push('/panel');
+        window.location.href = '/panel';
       }
     } catch {
       setErr('Bir hata oluştu. Tekrar deneyin.');
