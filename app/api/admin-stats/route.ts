@@ -32,22 +32,33 @@ export async function POST(req: NextRequest) {
       .neq('status', 'approved');
 
     // 2) Toplam etkinlikler (tüm zaman)
-    const { data: allEvents } = await supabaseAdmin
-      .from('business_events')
-      .select('type');
-    const totalAgg = { view: 0, phone: 0, whatsapp: 0, social: 0 };
-    (allEvents || []).forEach((e: any) => {
-      if (e.type === 'view') totalAgg.view++;
-      else if (e.type === 'phone_click') totalAgg.phone++;
-      else if (e.type === 'whatsapp_click') totalAgg.whatsapp++;
-      else totalAgg.social++;
-    });
+    // Önceden: business_events tablosunun TAMAMINI (limitsiz, tarihsiz) çekip
+    // JavaScript içinde sayıyordu — tablo büyüdükçe bu sorgu giderek daha
+    // pahalı hale geliyordu ve Supabase'in Disk IO bütçesini zorluyordu.
+    // Artık sayma işini veritabanının kendi COUNT'una devrediyoruz — ham
+    // satırları hiç sunucuya çekmeden, sadece sayıyı istiyoruz.
+    const [{ count: viewCount }, { count: phoneCount }, { count: whatsappCount }, { count: totalEventCount }] =
+      await Promise.all([
+        supabaseAdmin.from('business_events').select('*', { count: 'exact', head: true }).eq('type', 'view'),
+        supabaseAdmin.from('business_events').select('*', { count: 'exact', head: true }).eq('type', 'phone_click'),
+        supabaseAdmin.from('business_events').select('*', { count: 'exact', head: true }).eq('type', 'whatsapp_click'),
+        supabaseAdmin.from('business_events').select('*', { count: 'exact', head: true }),
+      ]);
+    const totalAgg = {
+      view: viewCount || 0,
+      phone: phoneCount || 0,
+      whatsapp: whatsappCount || 0,
+      social: (totalEventCount || 0) - (viewCount || 0) - (phoneCount || 0) - (whatsappCount || 0),
+    };
 
     // 3) Son 30 gün etkinlikler
+    // Güvenlik siniri: 30 gunluk filtre olsa da, cok yogun trafikte bu
+    // sorgu asiri buyumesin diye ust limit eklendi.
     const { data: recentEvents } = await supabaseAdmin
       .from('business_events')
       .select('type, business_id')
-      .gte('created_at', sinceIso);
+      .gte('created_at', sinceIso)
+      .limit(20000);
     const agg30 = { view: 0, phone: 0, whatsapp: 0, social: 0 };
     const viewByBiz: Record<string, number> = {};
     (recentEvents || []).forEach((e: any) => {
@@ -110,7 +121,8 @@ export async function POST(req: NextRequest) {
     const { data: searches } = await supabaseAdmin
       .from('search_events')
       .select('query, results_count')
-      .gte('created_at', sinceIso);
+      .gte('created_at', sinceIso)
+      .limit(20000);
 
     const queryCount: Record<string, number> = {};
     const emptyQueryCount: Record<string, number> = {};
@@ -134,7 +146,8 @@ export async function POST(req: NextRequest) {
     const { data: pages } = await supabaseAdmin
       .from('page_events')
       .select('page_type, page_label')
-      .gte('created_at', sinceIso);
+      .gte('created_at', sinceIso)
+      .limit(20000);
 
     const catViews: Record<string, number> = {};
     const locViews: Record<string, number> = {};
