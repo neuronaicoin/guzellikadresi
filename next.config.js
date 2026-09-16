@@ -3,6 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  // Supabase sorguları build sırasında yavaş kalabiliyor (paylaşılan nano compute) —
+  // varsayılan 60 saniyelik zaman aşımını 180 saniyeye çıkarıyoruz.
+  staticPageGenerationTimeout: 180,
   images: {
     // WebP/AVIF otomatik dönüşüm + responsive boyutlar (hız için)
     formats: ['image/avif', 'image/webp'],
