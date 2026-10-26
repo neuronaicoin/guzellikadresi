@@ -1,0 +1,48 @@
+name: apply-update
+
+on:
+  push:
+    paths:
+      - "update-*.zip"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-update
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack every update zip
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          zips=(update-*.zip)
+          if [ ${#zips[@]} -eq 0 ]; then echo "Nothing to apply."; exit 0; fi
+          for z in "${zips[@]}"; do
+            unzip -l "$z"
+            if unzip -Z1 "$z" | grep -Eq '(^/|\.\./)'; then echo "Unsafe path in $z"; exit 1; fi
+            unzip -o -q "$z" -d .
+            git rm -q "$z"
+            if [ -f update-delete.txt ]; then
+              while IFS= read -r p || [ -n "$p" ]; do
+                p="${p%$'\r'}"
+                [ -z "$p" ] && continue
+                case "$p" in /*|*..*) echo "Unsafe delete path: $p"; exit 1 ;; esac
+                if [ -e "$p" ]; then git rm -q -r -- "$p"; fi
+              done < update-delete.txt
+              rm -f update-delete.txt
+            fi
+          done
+      - name: Save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Apply update" || echo "No changes."
+          git pull --rebase && git push
