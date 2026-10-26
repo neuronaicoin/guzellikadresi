@@ -3,21 +3,31 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BackButton from '@/components/BackButton';
 import { getPostBySlug, getRecentPosts } from '@/lib/data/blog';
+import { ldJson, breadcrumbSchema } from '@/lib/seo';
 
 export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug);
-  if (!post) return { title: 'Yazı bulunamadı' };
+  if (!post) return { title: 'Yazı bulunamadı', robots: { index: false } };
+  const url = `https://guzellikadresin.com/rehber/${post.slug}`;
+  // metaTitle + marka eki 60'ı aşıyorsa markasız kullan
+  const title = post.metaTitle.length + ' | GüzellikAdresin'.length <= 60 ? post.metaTitle : { absolute: post.metaTitle };
   return {
-    title: post.metaTitle,
+    title,
     description: post.metaDescription,
+    alternates: { canonical: url },
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
+      url,
       images: [post.heroImage],
       type: 'article',
+      locale: 'tr_TR',
+      siteName: 'GüzellikAdresin',
+      publishedTime: post.publishedAt,
     },
+    twitter: { card: 'summary_large_image', title: post.metaTitle, description: post.metaDescription, images: [post.heroImage] },
   };
 }
 
@@ -28,15 +38,30 @@ export default function RehberPostPage({ params }: { params: { slug: string } })
   const related = getRecentPosts(4).filter((p) => p.slug !== post.slug).slice(0, 3);
 
   // BlogPosting + FAQPage schema
+  const postUrl = `https://guzellikadresin.com/rehber/${post.slug}`;
   const blogSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
+    '@id': `${postUrl}#article`,
     headline: post.title,
     description: post.metaDescription,
     image: post.heroImage,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
-    author: { '@type': 'Organization', name: 'Editör Ekibi' },
+    inLanguage: 'tr-TR',
+    url: postUrl,
+    mainEntityOfPage: postUrl,
+    articleSection: post.category,
+    author: { '@type': 'Organization', name: 'GüzellikAdresin Editör Ekibi', url: 'https://guzellikadresin.com/hakkimizda' },
+    publisher: { '@id': 'https://guzellikadresin.com/#organization' },
+  };
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    ...breadcrumbSchema([
+      { name: 'Ana Sayfa', path: '/' },
+      { name: 'Rehber', path: '/rehber' },
+      { name: post.title, path: `/rehber/${post.slug}` },
+    ]),
   };
   const faqSchema = post.faq.length > 0 ? {
     '@context': 'https://schema.org',
@@ -51,8 +76,9 @@ export default function RehberPostPage({ params }: { params: { slug: string } })
   return (
     <>
       <Header />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
-      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(blogSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(breadcrumbLd) }} />
+      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(faqSchema) }} />}
 
       <article className="ga-post-wrap">
         <BackButton label="Tüm Rehber" />

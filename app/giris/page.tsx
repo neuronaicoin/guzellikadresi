@@ -5,6 +5,7 @@ import AuthForm from '@/components/AuthForm';
 export const metadata = {
   title: 'İşletme Girişi',
   description: 'İşletme hesabınıza giriş yapın. Profilinizi yönetin, istatistiklerinizi görün.',
+  robots: { index: false, follow: true },
 };
 
 export default function LoginPage() {

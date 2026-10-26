@@ -2,59 +2,68 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ListingView from '@/components/ListingView';
+import SeoBlock from '@/components/SeoBlock';
 import {
   getProvinceBySlug,
   getDistrictBySlug,
   getCategoryBySlug,
   getBusinessList,
 } from '@/lib/queries-list';
+import { getProvinceFacets } from '@/lib/queries-seo';
 import { siteConfig } from '@/lib/siteConfig';
 import { trackPage } from '@/lib/track-server';
+import {
+  SITE, OG_IMAGES, abs, ldJson, fitTitle, clampDesc, joinTr, trLower, catSeo, fillFaqs,
+  faqSchema, itemListSchema, breadcrumbSchema, relatedPosts,
+} from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
+async function load(params: { il: string; ilce: string; hizmet: string }) {
+  const prov = await getProvinceBySlug(params.il);
+  if (!prov) return null;
+  const [dist, cat] = await Promise.all([getDistrictBySlug(prov.id, params.ilce), getCategoryBySlug(params.hizmet)]);
+  if (!dist || !cat) return null;
+  return { prov, dist, cat };
+}
+
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: { il: string; ilce: string; hizmet: string };
+  searchParams: { sayfa?: string };
 }) {
-  const prov = await getProvinceBySlug(params.il);
-  if (!prov) return { title: 'Sayfa bulunamadı' };
-  const dist = await getDistrictBySlug(prov.id, params.ilce);
-  if (!dist) return { title: 'Sayfa bulunamadı' };
-  const cat = await getCategoryBySlug(params.hizmet);
-  if (!cat) return { title: 'Sayfa bulunamadı' };
+  const r = await load(params);
+  if (!r) return { title: 'Sayfa bulunamadı', robots: { index: false } };
+  const { prov, dist, cat } = r;
+  const seo = catSeo(cat.slug, cat.name);
+  const catLower = trLower(cat.name);
 
-  const catLower = cat.name.toLocaleLowerCase('tr-TR');
-  // Başlıkta İLÇE + KATEGORİ + İL + MARKA (tam eşleşme aramaları için)
-  const title = `${dist.name} ${cat.name} - ${prov.name} | ${siteConfig.brandName}`;
-  const description = `${dist.name}, ${prov.name} bölgesinde ${catLower} arıyorsanız doğru yerdesiniz. ${dist.name} ${catLower} adresleri, telefonları ve konumlarıyla ${siteConfig.brandName}'de. ${prov.name} ${dist.name} en iyi ${catLower} işletmelerini ücretsiz keşfedin.`;
-  const url = `/${prov.slug}/${dist.slug}/${cat.slug}`;
-
-  // Sayfaya özel anahtar kelimeler
-  const keywords = [
-    `${dist.name} ${catLower}`,
-    `${prov.name} ${catLower}`,
-    `${dist.name} ${prov.name} ${catLower}`,
-    `${dist.name} ${catLower} fiyatları`,
-    `${dist.name} en iyi ${catLower}`,
-    `yakınımdaki ${catLower}`,
-    catLower,
-    siteConfig.brandName,
-    siteConfig.alternateName,
-  ];
-
-  // Bu kombinasyonda işletme var mı? Yoksa Google sıralamasın (noindex)
   const { total } = await getBusinessList({ provinceId: prov.id, districtId: dist.id, categoryId: cat.id, page: 1 });
-  const robots = total === 0 ? { index: false, follow: true } : undefined;
+
+  const title = fitTitle([
+    `${dist.name} ${seo.plural} - ${prov.name}`,
+    `${dist.name} ${seo.plural}`,
+    `${dist.name} ${cat.name}`,
+  ]);
+  const description = clampDesc(
+    total > 0
+      ? `${dist.name} ${catLower}: ${prov.name} ${dist.name} bölgesindeki ${total} ${catLower} işletmesinin adresi, telefonu ve konumu; seçerken sorulacaklar ve SSS.`
+      : `${dist.name} ${catLower} işletmeleri (${prov.name}). Bu bölgede henüz kayıtlı işletme yok; yakın ilçelerdeki ${catLower} adreslerine göz atın.`
+  );
+  const page = Number(searchParams.sayfa) || 1;
+  const path = `/${prov.slug}/${dist.slug}/${cat.slug}`;
+  const canonical = abs(page > 1 ? `${path}?sayfa=${page}` : path);
+  const ogTitle = typeof title === 'string' ? title : title.absolute;
 
   return {
     title,
     description,
-    keywords,
-    alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', siteName: siteConfig.brandName },
-    ...(robots ? { robots } : {}),
+    alternates: { canonical },
+    openGraph: { title: ogTitle, description, url: canonical, type: 'website', siteName: siteConfig.brandName, locale: 'tr_TR', images: OG_IMAGES },
+    // Bu kombinasyonda işletme yoksa Google sıralamasın (noindex)
+    ...(total === 0 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -65,108 +74,132 @@ export default async function ServiceInDistrictPage({
   params: { il: string; ilce: string; hizmet: string };
   searchParams: { sayfa?: string };
 }) {
-  const prov = await getProvinceBySlug(params.il);
-  if (!prov) notFound();
-  const dist = await getDistrictBySlug(prov.id, params.ilce);
-  if (!dist) notFound();
-  const cat = await getCategoryBySlug(params.hizmet);
-  if (!cat) notFound();
+  const r = await load(params);
+  if (!r) notFound();
+  const { prov, dist, cat } = r;
 
   const page = Number(searchParams.sayfa) || 1;
-  const { items, total, perPage } = await getBusinessList({
-    provinceId: prov.id,
-    districtId: dist.id,
-    categoryId: cat.id,
-    page,
-  });
+  const [{ items, total, perPage }, facets] = await Promise.all([
+    getBusinessList({ provinceId: prov.id, districtId: dist.id, categoryId: cat.id, page }),
+    getProvinceFacets(prov.id),
+  ]);
 
   const isEmpty = total === 0;
 
   await trackPage('hizmet', `${dist.name} ${cat.name}`, `${prov.slug}/${dist.slug}/${cat.slug}`);
 
-  const catLower = cat.name.toLocaleLowerCase('tr-TR');
-  const base = siteConfig.url || 'https://guzellikadresin.com';
-  const pageUrl = `${base}/${prov.slug}/${dist.slug}/${cat.slug}`;
+  const seo = catSeo(cat.slug, cat.name);
+  const catLower = trLower(cat.name);
+  const pluralLower = trLower(seo.plural);
+  const path = `/${prov.slug}/${dist.slug}/${cat.slug}`;
+  const pageUrl = `${SITE}${path}`;
 
-  // BreadcrumbList + Service + CollectionPage schema (AI/Google için zengin)
+  // Veriye dayalı, sayfaya özgü giriş metni
+  const catInProv = (facets.byCategory[cat.slug] || []);
+  const provCatTotal = catInProv.reduce((s, f) => s + f.count, 0);
+  const otherDistricts = catInProv.filter((f) => f.slug !== dist.slug);
+  const otherCatsHere = (facets.byDistrict[dist.slug] || []).filter((f) => f.slug !== cat.slug);
+  const names = items.slice(0, 3).map((b) => b.name);
+
+  const paragraphs: string[] = [];
+  if (!isEmpty) {
+    paragraphs.push(
+      `${dist.name} (${prov.name}) bölgesinde ${siteConfig.brandName}'de listelenen ${total} ${catLower} işletmesi bulunuyor${names.length ? `; aralarında ${joinTr(names)} yer alıyor` : ''}. İşletme sayfalarında adres, harita konumu ve işletmenin paylaştığı iletişim bilgileri yer alır.`
+    );
+  } else {
+    paragraphs.push(`${dist.name} (${prov.name}) bölgesinde henüz listelenmiş bir ${catLower} işletmesi yok. Aşağıdaki yakın ilçelere ve ${prov.name} genelindeki işletmelere göz atabilirsiniz.`);
+  }
+  if (provCatTotal > 0) {
+    paragraphs.push(
+      `${prov.name} genelinde bu kategoride ${catInProv.length} ilçede toplam ${provCatTotal} işletme listeleniyor` +
+        (otherDistricts.length
+          ? `; ${dist.name} dışında en çok seçenek ${joinTr(otherDistricts.slice(0, 3).map((f) => `${f.name} (${f.count})`))} ilçelerinde.`
+          : '.')
+    );
+  }
+  paragraphs.push(seo.tips);
+  if (otherCatsHere.length) {
+    paragraphs.push(`${dist.name} bölgesinde ayrıca ${joinTr(otherCatsHere.slice(0, 3).map((f) => trLower(f.name)))} kategorilerinde de işletmeler bulunuyor.`);
+  }
+
+  const faqs = fillFaqs(seo.faqs, dist.name);
+  const posts = relatedPosts({ il: prov.slug, ilce: dist.slug, catSlug: cat.slug, catName: cat.name });
+  const provCatSlugs = new Set(Object.keys(facets.byCategory));
+
+  const linkGroups = [
+    {
+      title: `${prov.name} içindeki diğer ilçelerde ${pluralLower}`,
+      links: otherDistricts.slice(0, 10).map((f) => ({ href: `/${prov.slug}/${f.slug}/${cat.slug}`, label: `${f.name} ${seo.plural} (${f.count})` })),
+    },
+    {
+      title: `${dist.name} bölgesindeki diğer hizmetler`,
+      links: otherCatsHere.slice(0, 10).map((f) => ({ href: `/${prov.slug}/${dist.slug}/${f.slug}`, label: `${dist.name} ${catSeo(f.slug, f.name).plural}` })),
+    },
+    {
+      title: 'İlgili sayfalar',
+      links: [
+        { href: `/${prov.slug}/${dist.slug}`, label: `${dist.name} güzellik ve bakım işletmeleri` },
+        ...(provCatTotal > 0 ? [{ href: `/kategori/${cat.slug}?il=${prov.slug}`, label: `${prov.name} ${seo.plural}` }] : []),
+        ...seo.related
+          .filter((s) => provCatSlugs.has(s))
+          .map((s) => {
+            const f = facets.categories.find((c) => c.slug === s)!;
+            return { href: `/kategori/${s}?il=${prov.slug}`, label: `${prov.name} ${catSeo(s, f.name).plural}` };
+          }),
+        { href: `/kategori/${cat.slug}`, label: `Türkiye geneli ${pluralLower}` },
+        { href: `/${prov.slug}`, label: `${prov.name} güzellik merkezleri ve kuaförleri` },
+      ],
+    },
+    { title: 'Rehber yazıları', links: posts.map((p) => ({ href: `/rehber/${p.slug}`, label: p.title })) },
+  ];
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: base },
-          { '@type': 'ListItem', position: 2, name: prov.name, item: `${base}/${prov.slug}` },
-          { '@type': 'ListItem', position: 3, name: dist.name, item: `${base}/${prov.slug}/${dist.slug}` },
-          { '@type': 'ListItem', position: 4, name: cat.name, item: pageUrl },
-        ],
-      },
+      breadcrumbSchema([
+        { name: 'Ana Sayfa', path: '/' },
+        { name: prov.name, path: `/${prov.slug}` },
+        { name: dist.name, path: `/${prov.slug}/${dist.slug}` },
+        { name: `${dist.name} ${cat.name}`, path },
+      ]),
       {
         '@type': 'CollectionPage',
         '@id': pageUrl,
-        name: `${dist.name} ${cat.name} - ${prov.name}`,
-        description: `${dist.name}, ${prov.name} bölgesinde ${catLower} hizmeti veren işletmeler.`,
+        name: `${dist.name} ${seo.plural} - ${prov.name}`,
         url: pageUrl,
-        isPartOf: { '@id': `${base}/#website` },
+        inLanguage: 'tr-TR',
+        isPartOf: { '@id': `${SITE}/#website` },
         about: {
           '@type': 'Service',
           name: cat.name,
           serviceType: cat.name,
-          areaServed: {
-            '@type': 'AdministrativeArea',
-            name: `${dist.name}, ${prov.name}`,
-          },
-          provider: { '@id': `${base}/#organization` },
+          areaServed: { '@type': 'AdministrativeArea', name: `${dist.name}, ${prov.name}` },
         },
-        ...(total > 0
-          ? {
-              mainEntity: {
-                '@type': 'ItemList',
-                numberOfItems: total,
-                itemListElement: items.slice(0, 10).map((b: any, i: number) => ({
-                  '@type': 'ListItem',
-                  position: i + 1,
-                  item: {
-                    '@type': 'LocalBusiness',
-                    name: b.name,
-                    address: {
-                      '@type': 'PostalAddress',
-                      addressLocality: dist.name,
-                      addressRegion: prov.name,
-                      addressCountry: 'TR',
-                    },
-                    ...(b.slug ? { url: `${base}/isletme/${b.slug}` } : {}),
-                  },
-                })),
-              },
-            }
-          : {}),
+        ...(items.length ? { mainEntity: itemListSchema(items, total) } : {}),
       },
+      ...(isEmpty ? [] : [faqSchema(faqs)]),
     ],
   };
 
   return (
     <>
       <Header />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(schema) }} />
 
       <ListingView
-        title={`${dist.name} ${cat.name}`}
+        title={`${dist.name} ${seo.plural}`}
         subtitle={`${dist.name}, ${prov.name}`}
         items={items}
         total={total}
         perPage={perPage}
         page={page}
-        basePath={`/${prov.slug}/${dist.slug}/${cat.slug}`}
+        basePath={path}
       />
 
       {isEmpty && (
         <section style={{ maxWidth: 700, margin: '0 auto', padding: '30px 20px', textAlign: 'center' }}>
           <p style={{ fontSize: 18, color: '#0e2148', fontWeight: 700, marginBottom: 10 }}>
-            {dist.name}&apos;de henüz {catLower} işletmesi eklenmemiş
+            {dist.name} bölgesinde henüz {catLower} işletmesi eklenmemiş
           </p>
           <p style={{ fontSize: 15, color: '#666', marginBottom: 20 }}>
             Bu bölgede {catLower} hizmeti veren bir işletme misiniz? Ücretsiz ekleyin,
@@ -186,45 +219,13 @@ export default async function ServiceInDistrictPage({
         </section>
       )}
 
-      {/* SEO içerik bloğu */}
-      <section className="ga-seo-block" style={{ maxWidth: 900, margin: '0 auto', padding: '24px 20px 48px', lineHeight: 1.7, color: '#333' }}>
-        <h2 style={{ fontSize: 22, marginBottom: 12, color: '#0e2148' }}>
-          {dist.name} {cat.name} - {prov.name}
-        </h2>
-        <p>
-          {dist.name} ({prov.name}) bölgesinde {catLower} hizmeti arayanlar için
-          en iyi adresleri {siteConfig.brandName} olarak bir araya getirdik. Bu sayfada {dist.name}&apos;de {catLower}{' '}
-          hizmeti veren işletmeleri adresleri, telefon numaraları ve konumlarıyla
-          birlikte bulabilir, size en yakın ve en uygun olanı kolayca seçebilirsiniz.
-        </p>
-        <p>
-          {prov.name} {dist.name} bölgesinde {catLower} arıyorsanız, listelenen işletmeler
-          arasından konuma, sunulan hizmetlere ve iletişim bilgilerine göz atarak
-          ihtiyacınıza en uygun {catLower} adresini belirleyebilirsiniz. Yeni işletmeler
-          eklendikçe bu liste güncellenir.
-        </p>
-
-        <h3 style={{ fontSize: 18, margin: '20px 0 10px', color: '#0e2148' }}>
-          İlgili sayfalar
-        </h3>
-        <ul style={{ paddingLeft: 20 }}>
-          <li>
-            <a href={`/${prov.slug}/${dist.slug}`} style={{ color: '#c9a24b' }}>
-              {dist.name}&apos;deki tüm güzellik ve bakım işletmeleri
-            </a>
-          </li>
-          <li>
-            <a href={`/kategori/${cat.slug}`} style={{ color: '#c9a24b' }}>
-              Tüm {cat.name} işletmeleri
-            </a>
-          </li>
-          <li>
-            <a href={`/${prov.slug}`} style={{ color: '#c9a24b' }}>
-              {prov.name} geneli işletmeler
-            </a>
-          </li>
-        </ul>
-      </section>
+      <SeoBlock
+        heading={`${dist.name} ${seo.plural} - ${prov.name}`}
+        paragraphs={paragraphs}
+        faqTitle={`${dist.name} ${catLower} hakkında sık sorulanlar`}
+        faqs={isEmpty ? [] : faqs}
+        linkGroups={linkGroups}
+      />
 
       <Footer />
     </>

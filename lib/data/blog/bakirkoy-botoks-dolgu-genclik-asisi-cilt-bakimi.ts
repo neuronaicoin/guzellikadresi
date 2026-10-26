@@ -56,7 +56,7 @@ export const post: BlogPost = {
 <li><strong>Peeling:</strong> Cilt yenileme ve pürüzsüzlük kazandırma.</li>
 <li><strong>Leke ve akne bakımı:</strong> Cilt problemlerine yönelik çözümler.</li>
 </ul>
-<p>Cilt bakımı, medikal estetik işlemlerini tamamlayıcı niteliktedir. Bakırköy'deki <a href="/kategori/guzellik-merkezi">güzellik merkezlerini</a> inceleyerek cildinize uygun bakım programını bulabilirsiniz. Profesyonel cilt bakımı hakkında daha fazla bilgi için <a href="/rehber/profesyonel-cilt-bakimi">cilt bakımı rehberimizi</a> de okuyabilirsiniz.</p>
+<p>Cilt bakımı, medikal estetik işlemlerini tamamlayıcı niteliktedir. Bakırköy'deki <a href="/kategori/guzellik-merkezi">güzellik merkezlerini</a> inceleyerek cildinize uygun bakım programını bulabilirsiniz. Profesyonel cilt bakımı hakkında daha fazla bilgi için <a href="/rehber/profesyonel-cilt-bakimi-neden-onemli">cilt bakımı rehberimizi</a> de okuyabilirsiniz.</p>
 
 <h2>Botoks, dolgu, gençlik aşısı ve cilt bakımı: kısa karşılaştırma</h2>
 <p>Hangi işlemin sizin için uygun olduğunu anlamak için temel farkları özetleyelim:</p>

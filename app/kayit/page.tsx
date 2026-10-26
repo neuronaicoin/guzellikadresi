@@ -5,6 +5,7 @@ import AuthForm from '@/components/AuthForm';
 export const metadata = {
   title: 'İşletme Kaydı',
   description: 'Ücretsiz işletme hesabı oluşturun. İşletmenizi ekleyin, müşterilere ulaşın.',
+  robots: { index: false, follow: true },
 };
 
 export default function RegisterPage() {

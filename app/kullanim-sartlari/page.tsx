@@ -1,7 +1,11 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export const metadata = { title: 'Kullanım Şartları' };
+export const metadata = {
+  title: 'Kullanım Şartları',
+  description: 'GüzellikAdresin kullanım şartları: platformun kullanımı, işletme kayıtları, içerik sorumluluğu ve kullanıcı yükümlülükleri hakkında koşullar.',
+  alternates: { canonical: 'https://guzellikadresin.com/kullanim-sartlari' },
+};
 
 export default function TermsPage() {
   return (

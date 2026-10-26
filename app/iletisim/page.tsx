@@ -4,7 +4,8 @@ import ContactForm from '@/components/ContactForm';
 
 export const metadata = {
   title: 'İletişim',
-  description: 'GüzellikAdresin ile iletişime geçin. Soru, öneri ve işbirliği talepleriniz için bize ulaşın.',
+  description: 'GüzellikAdresin ile iletişime geçin: işletme kaydı, bilgi güncelleme, soru, öneri ve işbirliği talepleriniz için formu doldurun, en kısa sürede dönüş yapalım.',
+  alternates: { canonical: 'https://guzellikadresin.com/iletisim' },
 };
 
 export default function ContactPage() {

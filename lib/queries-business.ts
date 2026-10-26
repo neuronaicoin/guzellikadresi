@@ -19,6 +19,10 @@ export type BusinessDetail = {
   x_twitter: string | null;
   linkedin: string | null;
   created_at: string;
+  // İç linkler için (aynı ilçe/il + kategori)
+  category_id: number | null;
+  province_id: number | null;
+  district_id: number | null;
   services: string[];
   gallery: string[];
   works: string[];
@@ -36,6 +40,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessDetail | 
       id, name, slug, description, address, lat, lng,
       phone, whatsapp, website, instagram, facebook, x_twitter, linkedin, created_at,
       randevu_aktif, staff_count, show_price,
+      category_id, province_id, district_id,
       categories(name, slug, emoji),
       provinces(name, slug),
       districts(name, slug),
@@ -70,6 +75,9 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessDetail | 
     x_twitter: b.x_twitter,
     linkedin: b.linkedin,
     created_at: b.created_at,
+    category_id: b.category_id ?? null,
+    province_id: b.province_id ?? null,
+    district_id: b.district_id ?? null,
     services: (b.business_services || []).map((bs: any) => bs.services?.name).filter(Boolean),
     gallery,
     works,

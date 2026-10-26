@@ -28,7 +28,7 @@ export const post: BlogPost = {
 <li><strong>Kimlere uygun:</strong> Saç dökülmesi yaşayanlar — uygunluk hekim değerlendirmesiyle belirlenir.</li>
 <li><strong>Önemli not:</strong> İşlem öncesi detaylı muayene ve doğru bilgilendirme önemlidir.</li>
 </ul>
-<p>Bakırköy'de saç ekimi için doktor gözetimli kuruluşları tercih etmeniz güvenliğiniz açısından önemlidir. Bölgedeki <a href="/kategori/sac-ekimi">saç ekimi</a> hizmeti sunan adresleri inceleyebilirsiniz. Saç ekimi süreci hakkında daha fazla bilgi için <a href="/rehber/sac-ekimi-rehberi">saç ekimi rehberimizi</a> de okuyabilirsiniz.</p>
+<p>Bakırköy'de saç ekimi için doktor gözetimli kuruluşları tercih etmeniz güvenliğiniz açısından önemlidir. Bölgedeki <a href="/kategori/sac-ekimi">saç ekimi</a> hizmeti sunan adresleri inceleyebilirsiniz. Saç ekimi süreci hakkında daha fazla bilgi için <a href="/rehber/istanbul-sac-ekimi-rehberi">saç ekimi rehberimizi</a> de okuyabilirsiniz.</p>
 
 <h2>Bakırköy'de bayan kuaförü: saç bakımı ve şekillendirme</h2>
 <p>Bakırköy'deki bayan kuaförleri, saç bakımı ve şekillendirme konusunda geniş bir hizmet yelpazesi sunar. Düzenli saç bakımı, saçın sağlığını ve görünümünü korumaya yardımcı olur.</p>

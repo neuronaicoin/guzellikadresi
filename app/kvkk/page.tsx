@@ -1,7 +1,11 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export const metadata = { title: 'KVKK Aydınlatma Metni' };
+export const metadata = {
+  title: 'KVKK Aydınlatma Metni',
+  description: 'GüzellikAdresin KVKK aydınlatma metni: 6698 sayılı Kanun kapsamında kişisel verilerin hangi amaçla işlendiği, saklanması ve haklarınız hakkında bilgilendirme.',
+  alternates: { canonical: 'https://guzellikadresin.com/kvkk' },
+};
 
 export default function KvkkPage() {
   return (

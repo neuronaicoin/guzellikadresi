@@ -3,8 +3,10 @@ import Footer from '@/components/Footer';
 import { getAllPosts } from '@/lib/data/blog';
 
 export const metadata = {
-  title: 'Rehber — Güzellik ve Bakım İpuçları',
-  description: 'Lazer epilasyon, saç ekimi, cilt bakımı, kalıcı makyaj ve daha fazlası hakkında bilmeniz gereken her şey. Uzman bilgileriyle hazırlanmış güzellik ve bakım rehberi.',
+  title: 'Güzellik ve Bakım Rehberi, İpuçları',
+  description: 'Lazer epilasyon, saç ekimi, medikal estetik, cilt bakımı ve kalıcı makyaj rehberleri: merkez seçerken sorulacaklar, karşılaştırmalar ve şehir rehberleri.',
+  alternates: { canonical: 'https://guzellikadresin.com/rehber' },
+  openGraph: { url: 'https://guzellikadresin.com/rehber', type: 'website', siteName: 'GüzellikAdresin', locale: 'tr_TR', images: [{ url: 'https://guzellikadresin.com/og-image.png', width: 1200, height: 630 }] },
 };
 
 export const revalidate = 3600;

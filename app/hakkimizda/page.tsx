@@ -3,7 +3,8 @@ import Footer from '@/components/Footer';
 
 export const metadata = {
   title: 'Hakkımızda',
-  description: "GüzellikAdresin, Türkiye genelinde güzellik ve bakım işletmelerini müşterilerle buluşturan ücretsiz bir rehberdir.",
+  description: "GüzellikAdresin, Türkiye genelinde güzellik merkezi, kuaför, lazer epilasyon ve medikal estetik işletmelerini il ve ilçeye göre listeleyen ücretsiz bir rehberdir.",
+  alternates: { canonical: 'https://guzellikadresin.com/hakkimizda' },
 };
 
 export default function AboutPage() {

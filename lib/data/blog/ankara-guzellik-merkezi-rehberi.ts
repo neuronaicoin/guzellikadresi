@@ -37,13 +37,13 @@ export const post: BlogPost = {
 <p>Güzellik merkezleri, kozmetik bakımın geniş bir yelpazesini sunar. Ankara'da yaygın olarak sunulan hizmetleri tanıyalım.</p>
 
 <h3>Cilt bakımı</h3>
-<p>Cilt bakımı, güzellik merkezlerinin temel hizmetlerindendir. Derin temizlik, hydrafacial, nemlendirme ve peeling gibi uygulamalarla cildin sağlığı ve görünümü desteklenir. Leke ve akne bakımı gibi cilt problemlerine yönelik programlar da sunulur. Profesyonel cilt bakımı hakkında daha fazla bilgi için <a href="/rehber/profesyonel-cilt-bakimi">cilt bakımı rehberimizi</a> inceleyebilirsiniz.</p>
+<p>Cilt bakımı, güzellik merkezlerinin temel hizmetlerindendir. Derin temizlik, hydrafacial, nemlendirme ve peeling gibi uygulamalarla cildin sağlığı ve görünümü desteklenir. Leke ve akne bakımı gibi cilt problemlerine yönelik programlar da sunulur. Profesyonel cilt bakımı hakkında daha fazla bilgi için <a href="/rehber/profesyonel-cilt-bakimi-neden-onemli">cilt bakımı rehberimizi</a> inceleyebilirsiniz.</p>
 
 <h3>Ağda ve epilasyon</h3>
 <p>İstenmeyen tüylerin uzaklaştırılması için ağda ve epilasyon hizmetleri güzellik merkezlerinde yaygın olarak sunulur. Kalıcı çözüm için lazer epilasyon isteyenler, ayrıca <a href="/kategori/lazer-epilasyon">lazer epilasyon</a> hizmeti sunan kuruluşları inceleyebilir.</p>
 
 <h3>Kaş, kirpik ve kalıcı makyaj</h3>
-<p>Kaş tasarımı, ipek kirpik uygulaması ve kalıcı makyaj (microblading) gibi hizmetler, bakımlı bir görünüm için tercih edilir. Kalıcı makyaj hakkında detaylı bilgi için <a href="/rehber/kalici-makyaj-microblading">kalıcı makyaj rehberimize</a> göz atabilirsiniz.</p>
+<p>Kaş tasarımı, ipek kirpik uygulaması ve kalıcı makyaj (microblading) gibi hizmetler, bakımlı bir görünüm için tercih edilir. Kalıcı makyaj hakkında detaylı bilgi için <a href="/rehber/kalici-makyaj-mi-microblading-mi">kalıcı makyaj rehberimize</a> göz atabilirsiniz.</p>
 
 <h3>El ve ayak bakımı</h3>
 <p>Manikür, pedikür ve protez tırnak gibi el-ayak bakım hizmetleri de birçok güzellik merkezinde ya da <a href="/kategori/tirnak-studyosu">tırnak stüdyolarında</a> sunulur.</p>

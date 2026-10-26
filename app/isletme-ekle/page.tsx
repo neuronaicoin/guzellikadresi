@@ -4,8 +4,9 @@ import RegisterForm from '@/components/RegisterForm';
 import { getCategoriesForForm, getProvincesForForm } from '@/lib/queries-form';
 
 export const metadata = {
-  title: 'İşletme Ekle — Ücretsiz Kayıt',
-  description: 'Güzellik veya bakım işletmenizi ücretsiz ekleyin, binlerce yeni müşteriyle buluşun.',
+  title: 'İşletmeni Ücretsiz Ekle: Salon Kaydı',
+  description: 'Güzellik merkezi, kuaför, lazer epilasyon veya tırnak stüdyonuzu ücretsiz ekleyin; adres, telefon, hizmet ve fotoğraflarınızla bölgenizdeki müşterilere görünün.',
+  alternates: { canonical: 'https://guzellikadresin.com/isletme-ekle' },
 };
 
 export const revalidate = 3600;

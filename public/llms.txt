@@ -1,0 +1,44 @@
+# GüzellikAdresin
+
+> GüzellikAdresin (guzellikadresin.com, "GüzellikAdresi" olarak da bilinir), Türkiye'nin 81 ilinde güzellik ve bakım işletmelerini il ve ilçeye göre listeleyen ücretsiz bir rehberdir. Kullanıcılar güzellik merkezi, kuaför, lazer epilasyon, medikal estetik, saç ekimi, tırnak stüdyosu ve diğer işletmelerin adres, konum ve işletmenin paylaştığı iletişim bilgilerine (telefon, WhatsApp, web sitesi) ulaşır. İşletmeler kendilerini ücretsiz ekleyebilir.
+
+## Site nasıl çalışır
+
+- Her işletmenin kendi sayfası vardır: https://guzellikadresin.com/isletme/{isletme-slug} (adres, harita konumu ve yol tarifi, iletişim bilgileri, sunulan hizmetler, fotoğraflar).
+- İl sayfası: https://guzellikadresin.com/{il} (ör. /istanbul, /ankara)
+- İlçe sayfası: https://guzellikadresin.com/{il}/{ilce} (ör. /istanbul/kadikoy)
+- İlçe + hizmet sayfası: https://guzellikadresin.com/{il}/{ilce}/{kategori} (ör. /ankara/kecioren/lazer-epilasyon)
+- Kategori sayfası (Türkiye geneli): https://guzellikadresin.com/kategori/{kategori}; il filtresi: /kategori/{kategori}?il={il}
+- İşletme bilgileri işletmeler tarafından girilir ve yayından önce onaylanır.
+
+## Kategoriler
+
+- Güzellik Merkezi: https://guzellikadresin.com/kategori/guzellik-merkezi
+- Lazer Epilasyon: https://guzellikadresin.com/kategori/lazer-epilasyon
+- Medikal Estetik: https://guzellikadresin.com/kategori/medikal-estetik
+- Saç Ekimi: https://guzellikadresin.com/kategori/sac-ekimi
+- Bayan Kuaförü: https://guzellikadresin.com/kategori/bayan-kuaforu
+- Erkek Kuaförü: https://guzellikadresin.com/kategori/erkek-kuaforu
+- Tırnak Stüdyosu: https://guzellikadresin.com/kategori/tirnak-studyosu
+- Kalıcı Makyaj: https://guzellikadresin.com/kategori/kalici-makyaj
+- Spa ve Masaj: https://guzellikadresin.com/kategori/spa-masaj
+- Zayıflama ve Bölgesel İncelme: https://guzellikadresin.com/kategori/zayiflama-bolgesel-incelme
+- Pilates: https://guzellikadresin.com/kategori/pilates
+- Solaryum: https://guzellikadresin.com/kategori/solaryum
+- Sauna: https://guzellikadresin.com/kategori/sauna
+- Dövme ve Piercing: https://guzellikadresin.com/kategori/dovme-piercing
+
+## Ana sayfalar
+
+- Ana sayfa: https://guzellikadresin.com/
+- Tüm şehirler: https://guzellikadresin.com/sehirler
+- Tüm kategoriler: https://guzellikadresin.com/kategoriler
+- Rehber (lazer epilasyon, saç ekimi, medikal estetik, cilt bakımı, merkez seçerken sorulacak sorular, şehir rehberleri): https://guzellikadresin.com/rehber
+- İşletme ekle (ücretsiz): https://guzellikadresin.com/isletme-ekle
+- Hakkımızda: https://guzellikadresin.com/hakkimizda
+- İletişim: https://guzellikadresin.com/iletisim
+- Site haritası: https://guzellikadresin.com/sitemap.xml
+
+## English summary
+
+GüzellikAdresin is a free Turkish directory of beauty and personal-care businesses (beauty centers, hair salons, laser hair removal, medical aesthetics, hair transplant clinics, nail studios, permanent make-up, spa and massage) across all 81 provinces of Türkiye. Listings are organized by province (/{il}), district (/{il}/{ilce}) and district + service (/{il}/{ilce}/{kategori}); each business page (/isletme/{slug}) shows address, map location and directions, contact details provided by the business, services and photos. Content is in Turkish. Businesses can list themselves for free at /isletme-ekle.

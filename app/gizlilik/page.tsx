@@ -1,7 +1,11 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export const metadata = { title: 'Gizlilik Politikası' };
+export const metadata = {
+  title: 'Gizlilik Politikası',
+  description: 'GüzellikAdresin gizlilik politikası: sitede toplanan bilgiler, çerezler, verilerin nasıl kullanıldığı ve korunduğu hakkında açıklamalar.',
+  alternates: { canonical: 'https://guzellikadresin.com/gizlilik' },
+};
 
 export default function PrivacyPage() {
   return (

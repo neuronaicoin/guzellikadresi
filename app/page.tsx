@@ -15,6 +15,13 @@ import {
 
 export const revalidate = 600; // 10 dk cache (hız)
 
+export const metadata = {
+  title: { absolute: 'Güzellik Merkezi ve Kuaför Bul | GüzellikAdresin' },
+  description:
+    'Yakınındaki güzellik merkezi, kuaför, lazer epilasyon, medikal estetik ve tırnak stüdyosunu bul: 81 ilde ilçe ilçe adres, telefon ve konum, ücretsiz.',
+  alternates: { canonical: 'https://guzellikadresin.com/' },
+};
+
 export default async function HomePage() {
   const [categories, provinces, recent, featured, total] = await Promise.all([
     getCategoriesWithCounts(),

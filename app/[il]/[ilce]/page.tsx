@@ -2,43 +2,58 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ListingView from '@/components/ListingView';
+import SeoBlock from '@/components/SeoBlock';
 import { getProvinceBySlug, getDistrictBySlug, getBusinessList } from '@/lib/queries-list';
+import { getProvinceFacets } from '@/lib/queries-seo';
 import { siteConfig } from '@/lib/siteConfig';
 import { trackPage } from '@/lib/track-server';
+import {
+  SITE, OG_IMAGES, abs, ldJson, fitTitle, clampDesc, joinTr, trLower, catSeo, fillFaqs, GENERAL_FAQS,
+  faqSchema, itemListSchema, breadcrumbSchema, relatedPosts,
+} from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { il: string; ilce: string } }) {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: { il: string; ilce: string };
+  searchParams: { sayfa?: string };
+}) {
   const prov = await getProvinceBySlug(params.il);
-  if (!prov) return { title: 'Sayfa bulunamadı' };
+  if (!prov) return { title: 'Sayfa bulunamadı', robots: { index: false } };
   const dist = await getDistrictBySlug(prov.id, params.ilce);
-  if (!dist) return { title: 'Sayfa bulunamadı' };
+  if (!dist) return { title: 'Sayfa bulunamadı', robots: { index: false } };
 
-  const title = `${dist.name} Güzellik Merkezi ve Bakım - ${prov.name} | ${siteConfig.brandName}`;
-  const description = `${dist.name}, ${prov.name} bölgesindeki güzellik merkezi, kuaför, medikal estetik, lazer epilasyon, tırnak ve bakım işletmelerini ${siteConfig.brandName}'de keşfedin. ${prov.name} ${dist.name} yakınınızdaki güzellik adresini bulun.`;
-  const url = `/${prov.slug}/${dist.slug}`;
+  const [facets, { total }] = await Promise.all([
+    getProvinceFacets(prov.id),
+    getBusinessList({ provinceId: prov.id, districtId: dist.id, page: 1 }),
+  ]);
+  const cats = (facets.byDistrict[dist.slug] || []).slice(0, 3).map((c) => trLower(c.name));
 
-  const keywords = [
-    `${dist.name} güzellik merkezi`,
-    `${dist.name} kuaför`,
-    `${dist.name} ${prov.name} güzellik`,
-    `${prov.name} ${dist.name} güzellik merkezi`,
-    `yakınımdaki güzellik merkezi`,
-    siteConfig.brandName,
-    siteConfig.alternateName,
-  ];
-
-  // Boş ilçeyi noindex yap (Google cezasından korunma)
-  const { total } = await getBusinessList({ provinceId: prov.id, districtId: dist.id, page: 1 });
-  const robots = total === 0 ? { index: false, follow: true } : undefined;
+  const title = fitTitle([
+    `${dist.name} Güzellik Merkezleri ve Kuaförleri`,
+    `${dist.name} Güzellik Merkezleri - ${prov.name}`,
+    `${dist.name} Güzellik Merkezleri`,
+  ]);
+  const description = clampDesc(
+    total > 0
+      ? `${dist.name} güzellik merkezi ve kuaför adresleri: ${prov.name} ${dist.name} bölgesinde ${total} işletme${cats.length ? ` (${joinTr(cats)})` : ''}. Adres, telefon ve konum bilgileri.`
+      : `${dist.name} (${prov.name}) güzellik merkezi, kuaför ve bakım işletmeleri. Bu ilçede henüz kayıtlı işletme yok; yakın ilçelere göz atın.`
+  );
+  const page = Number(searchParams.sayfa) || 1;
+  const path = `/${prov.slug}/${dist.slug}`;
+  const canonical = abs(page > 1 ? `${path}?sayfa=${page}` : path);
+  const ogTitle = typeof title === 'string' ? title : title.absolute;
 
   return {
     title,
     description,
-    keywords,
-    alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', siteName: siteConfig.brandName },
-    ...(robots ? { robots } : {}),
+    alternates: { canonical },
+    openGraph: { title: ogTitle, description, url: canonical, type: 'website', siteName: siteConfig.brandName, locale: 'tr_TR', images: OG_IMAGES },
+    // Boş ilçeyi noindex yap (ince içerik)
+    ...(total === 0 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -57,62 +72,98 @@ export default async function DistrictPage({
   await trackPage('ilce', `${dist.name}, ${prov.name}`, `${prov.slug}/${dist.slug}`);
 
   const page = Number(searchParams.sayfa) || 1;
-  const { items, total, perPage } = await getBusinessList({ provinceId: prov.id, districtId: dist.id, page });
+  const [{ items, total, perPage }, facets] = await Promise.all([
+    getBusinessList({ provinceId: prov.id, districtId: dist.id, page }),
+    getProvinceFacets(prov.id),
+  ]);
 
-  const base = siteConfig.url || 'https://guzellikadresin.com';
+  const path = `/${prov.slug}/${dist.slug}`;
+  const pageUrl = `${SITE}${path}`;
+  const catsHere = facets.byDistrict[dist.slug] || [];
+  const otherDistricts = facets.districts.filter((d) => d.slug !== dist.slug);
+  const isEmpty = total === 0;
+
+  const paragraphs: string[] = [];
+  if (!isEmpty) {
+    paragraphs.push(
+      `${dist.name} (${prov.name}) bölgesinde ${siteConfig.brandName}'de ${total} güzellik ve bakım işletmesi listeleniyor` +
+        (catsHere.length
+          ? `. En çok işletme bulunan kategoriler: ${joinTr(catsHere.slice(0, 4).map((c) => `${trLower(c.name)} (${c.count})`))}.`
+          : '.')
+    );
+  } else {
+    paragraphs.push(`${dist.name} (${prov.name}) bölgesinde henüz listelenmiş bir işletme yok. ${prov.name} genelindeki işletmelere ve aşağıdaki ilçelere göz atabilirsiniz.`);
+  }
+  if (facets.total > 0) {
+    paragraphs.push(
+      `${prov.name} genelinde ${facets.districts.length} ilçede toplam ${facets.total} işletme bulunuyor` +
+        (otherDistricts.length ? `; komşu arama için ${joinTr(otherDistricts.slice(0, 3).map((d) => d.name))} ilçelerine de bakabilirsiniz.` : '.')
+    );
+  }
+  paragraphs.push(
+    'Bir işletmeyi seçmeden önce sayfasındaki hizmet listesine, fotoğraflara ve konuma göz atın; hijyen koşullarını, uygulamayı yapan kişinin deneyimini ve fiyata nelerin dahil olduğunu telefonla sormak en sağlıklı yoldur.'
+  );
+
+  const faqs = fillFaqs(GENERAL_FAQS, dist.name);
+  const posts = relatedPosts({ il: prov.slug, ilce: dist.slug, catSlug: catsHere[0]?.slug, catName: catsHere[0]?.name });
+
+  const linkGroups = [
+    {
+      title: `${dist.name} hizmet kategorileri`,
+      links: catsHere.map((c) => ({ href: `/${prov.slug}/${dist.slug}/${c.slug}`, label: `${dist.name} ${catSeo(c.slug, c.name).plural} (${c.count})` })),
+    },
+    {
+      title: `${prov.name} içindeki diğer ilçeler`,
+      links: otherDistricts.slice(0, 12).map((d) => ({ href: `/${prov.slug}/${d.slug}`, label: `${d.name} güzellik merkezleri (${d.count})` })),
+    },
+    {
+      title: 'İlgili sayfalar',
+      links: [{ href: `/${prov.slug}`, label: `${prov.name} güzellik merkezleri ve kuaförleri` }, { href: '/kategoriler', label: 'Tüm kategoriler' }],
+    },
+    { title: 'Rehber yazıları', links: posts.map((p) => ({ href: `/rehber/${p.slug}`, label: p.title })) },
+  ];
 
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: base },
-          { '@type': 'ListItem', position: 2, name: prov.name, item: `${base}/${prov.slug}` },
-          { '@type': 'ListItem', position: 3, name: dist.name, item: `${base}/${prov.slug}/${dist.slug}` },
-        ],
-      },
+      breadcrumbSchema([
+        { name: 'Ana Sayfa', path: '/' },
+        { name: prov.name, path: `/${prov.slug}` },
+        { name: dist.name, path },
+      ]),
       {
         '@type': 'CollectionPage',
-        '@id': `${base}/${prov.slug}/${dist.slug}`,
-        name: `${dist.name} Güzellik ve Bakım İşletmeleri - ${prov.name}`,
-        description: `${dist.name}, ${prov.name} bölgesindeki güzellik ve bakım işletmeleri.`,
-        url: `${base}/${prov.slug}/${dist.slug}`,
-        isPartOf: { '@id': `${base}/#website` },
+        '@id': pageUrl,
+        name: `${dist.name} Güzellik Merkezleri ve Kuaförleri - ${prov.name}`,
+        url: pageUrl,
+        inLanguage: 'tr-TR',
+        isPartOf: { '@id': `${SITE}/#website` },
+        ...(items.length ? { mainEntity: itemListSchema(items, total) } : {}),
       },
+      ...(isEmpty ? [] : [faqSchema(faqs)]),
     ],
   };
 
   return (
     <>
       <Header />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(schema) }} />
       <ListingView
-        title={`${dist.name} Güzellik & Bakım`}
+        title={`${dist.name} Güzellik Merkezleri ve Kuaförleri`}
         subtitle={`${dist.name}, ${prov.name}`}
         items={items}
         total={total}
         perPage={perPage}
         page={page}
-        basePath={`/${prov.slug}/${dist.slug}`}
+        basePath={path}
       />
 
-      {/* SEO içerik bloğu */}
-      <section className="ga-seo-block" style={{ maxWidth: 900, margin: '0 auto', padding: '24px 20px 48px', lineHeight: 1.7, color: '#333' }}>
-        <h2 style={{ fontSize: 22, marginBottom: 12, color: '#0e2148' }}>
-          {dist.name} Güzellik Merkezi ve Bakım İşletmeleri - {prov.name}
-        </h2>
-        <p>
-          {dist.name} ({prov.name}) bölgesinde güzellik merkezi, kuaför, medikal estetik,
-          lazer epilasyon, tırnak studyosu, kalıcı makyaj ve daha birçok bakım hizmeti
-          veren işletmeyi {siteConfig.brandName} olarak tek sayfada topladık.
-          {dist.name}&apos;de yakınınızdaki güzellik adresini adres, telefon ve konum
-          bilgileriyle kolayca bulabilirsiniz.
-        </p>
-      </section>
+      <SeoBlock
+        heading={`${dist.name} Güzellik ve Bakım İşletmeleri - ${prov.name}`}
+        paragraphs={paragraphs}
+        faqs={isEmpty ? [] : faqs}
+        linkGroups={linkGroups}
+      />
 
       <Footer />
     </>

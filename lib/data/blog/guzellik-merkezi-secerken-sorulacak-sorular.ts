@@ -49,7 +49,7 @@ export const post: BlogPost = {
 <p>Bu 8 soru, aslında tek bir amaca hizmet eder: <strong>bilinçli bir seçim yapmak.</strong> İyi bir güzellik merkezi, bu soruların hepsini açıklıkla ve memnuniyetle yanıtlar. Sorulardan kaçınan, net cevap vermeyen veya sizi aceleye getiren bir merkez konusunda ise temkinli olmak gerekir. Unutmayın: Doğru soruları sormak, sizi hem memnuniyetsizlikten hem de olası risklerden korur.</p>
 
 <h2>Doğru güzellik merkezine nasıl ulaşırım?</h2>
-<p>Yukarıdaki soruları sorabileceğiniz güvenilir bir adres bulmak için, bölgenizdeki <a href="/kategori/guzellik-merkezi">güzellik merkezlerini</a> adres ve iletişim bilgileriyle inceleyebilirsiniz. Güzellik merkezleri hakkında daha fazla bilgi için ise <a href="/rehber/profesyonel-cilt-bakimi">cilt bakımı rehberimize</a> ve diğer bakım rehberlerimize göz atabilirsiniz.</p>
+<p>Yukarıdaki soruları sorabileceğiniz güvenilir bir adres bulmak için, bölgenizdeki <a href="/kategori/guzellik-merkezi">güzellik merkezlerini</a> adres ve iletişim bilgileriyle inceleyebilirsiniz. Güzellik merkezleri hakkında daha fazla bilgi için ise <a href="/rehber/profesyonel-cilt-bakimi-neden-onemli">cilt bakımı rehberimize</a> ve diğer bakım rehberlerimize göz atabilirsiniz.</p>
 
 <h2>Sıkça sorulan sorular</h2>
 <p>Güzellik merkezi seçimiyle ilgili en çok merak edilen konuları yukarıdaki sıkça sorulan sorular bölümünde ele aldık: en önemli kriterin ne olduğu, hijyenin nasıl anlaşılacağı, fiyat sormanın doğallığı, ilk kez gidecekler için ipuçları ve güzellik merkezi ile medikal estetik farkı. Bu bilgiler, doğru ve güvenli bir adres seçmenize yardımcı olacaktır.</p>

@@ -5,8 +5,9 @@ import { getProvinces } from '@/lib/queries';
 export const revalidate = 3600;
 
 export const metadata = {
-  title: 'Şehirler',
-  description: 'Türkiye genelinde 81 ilde güzellik ve bakım işletmelerini keşfedin. Şehrinizi seçin, bölgenizdeki uzmanları bulun.',
+  title: 'İllere Göre Güzellik Merkezleri',
+  description: 'Türkiye\'nin 81 ilinde güzellik merkezi, kuaför, lazer epilasyon ve medikal estetik işletmeleri. Şehrinizi seçin, ilçenizdeki adres ve telefonlara ulaşın.',
+  alternates: { canonical: 'https://guzellikadresin.com/sehirler' },
 };
 
 export default async function CitiesPage() {

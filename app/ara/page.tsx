@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Ara',
-  robots: { index: false },
+  robots: { index: false, follow: true },
 };
 
 export default async function SearchPage({ searchParams }: { searchParams: { q?: string; il?: string; ilce?: string } }) {

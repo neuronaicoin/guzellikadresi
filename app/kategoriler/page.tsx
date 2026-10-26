@@ -5,8 +5,9 @@ import { getCategoriesWithCounts } from '@/lib/queries';
 export const revalidate = 600;
 
 export const metadata = {
-  title: 'Tüm Kategoriler',
-  description: 'Güzellik merkezi, kuaför, medikal estetik, tırnak, saç ekimi ve daha fazlası — tüm güzellik ve bakım kategorileri.',
+  title: 'Tüm Güzellik ve Bakım Kategorileri',
+  description: 'Güzellik merkezi, lazer epilasyon, kuaför, medikal estetik, saç ekimi, tırnak stüdyosu, kalıcı makyaj ve spa: tüm kategoriler ve işletme sayıları tek sayfada.',
+  alternates: { canonical: 'https://guzellikadresin.com/kategoriler' },
 };
 
 export default async function CategoriesPage() {

@@ -39,7 +39,7 @@ export const post: BlogPost = {
 <li><strong>Önceki sonuçlar:</strong> Merkezin daha önceki çalışmalarını ve hasta yorumlarını inceleyin.</li>
 <li><strong>Gerçekçi bilgilendirme:</strong> Süreç ve beklentiler konusunda dürüst yönlendirme yapan merkezleri tercih edin.</li>
 </ul>
-<p>Şişli ve çevresindeki <a href="/kategori/sac-ekimi">saç ekimi merkezlerini</a> adres, telefon ve hizmetleriyle karşılaştırarak size en uygun ve güvenilir adresi kolayca bulabilirsiniz. Daha kapsamlı bilgi için <a href="/rehber/sac-ekimi-rehberi">saç ekimi rehberimizi</a> de inceleyebilirsiniz.</p>
+<p>Şişli ve çevresindeki <a href="/kategori/sac-ekimi">saç ekimi merkezlerini</a> adres, telefon ve hizmetleriyle karşılaştırarak size en uygun ve güvenilir adresi kolayca bulabilirsiniz. Daha kapsamlı bilgi için <a href="/rehber/istanbul-sac-ekimi-rehberi">saç ekimi rehberimizi</a> de inceleyebilirsiniz.</p>
 
 <h2>Karar vermeden önce</h2>
 <p>Saç ekimi tıbbi bir işlem olduğu için, karar vermeden önce bir uzmanla detaylı bir değerlendirme yapılması önemlidir. Saç ekiminin size uygun olup olmadığını, hangi tekniğin daha doğru olacağını yalnızca bir uzman değerlendirebilir. Gerçekçi beklentiyle ilerlemek en sağlıklı yaklaşımdır.</p>

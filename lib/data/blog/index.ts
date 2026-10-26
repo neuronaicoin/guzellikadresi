@@ -1,6 +1,5 @@
 import type { BlogPost } from './types';
 import { post as lazerEpilasyon } from './lazer-epilasyon-rehberi';
-import { post as sacEkimi } from './sac-ekimi-rehberi';
 import { post as kaliciMakyaj } from './kalici-makyaj-microblading';
 import { post as salonMusteri } from './guzellik-salonu-musteri-cekme';
 import { post as ciltBakimi } from './profesyonel-cilt-bakimi';
@@ -71,8 +70,18 @@ import { post as bolgeselIncelmeGercekci } from './bolgesel-incelme-nedir-gercek
 import { post as protezTirnakSecim } from './protez-tirnak-guvenli-mi-salon-nasil-secilir';
 import { post as sacBotoksuKeratin } from './sac-botoksu-mu-keratin-bakimi-mi-fark-rehberi';
 import { post as medikalEstetikSecim } from './medikal-estetik-merkezi-nasil-secilir';
+import { post as sacEkimiSonrasi } from './sac-ekimi-sonrasi-gun-gun-iyilesme-sureci';
+import { post as microbladingIyilesme } from './microblading-kalici-makyaj-sonrasi-iyilesme-sureci';
+import { post as ipekKirpikLifting } from './ipek-kirpik-mi-kirpik-lifting-mi';
+import { post as botoksSonrasi } from './botoks-sonrasi-dikkat-edilmesi-gerekenler';
+import { post as protezMiKaliciOje } from './protez-tirnak-mi-kalici-oje-mi';
 // Yeni yazı ekleme: import et + bu listeye ekle (en yeni en üstte)
 export const allPosts: BlogPost[] = [
+  sacEkimiSonrasi,
+  microbladingIyilesme,
+  ipekKirpikLifting,
+  botoksSonrasi,
+  protezMiKaliciOje,
   medikalEstetikSecim,
   sacBotoksuKeratin,
   protezTirnakSecim,
@@ -141,7 +150,6 @@ export const allPosts: BlogPost[] = [
   beylikduzuLazer,
   beylikduzuSacEkimi,
   lazerEpilasyon,
-  sacEkimi,
   kaliciMakyaj,
   salonMusteri,
   ciltBakimi,
